@@ -1,0 +1,63 @@
+@import 'tailwindcss';
+@plugin '@tailwindcss/typography';
+@plugin 'daisyui';
+@plugin 'daisyui/theme' {
+	name: 'crisis-theme';
+	default: true; /* set as default */
+	prefersdark: false; /* light mode by default */
+	color-scheme: light;
+
+	/* Base background / surfaces */
+	--color-base-100: oklch(98% 0.02 90); /* Creamy caramel */
+	--color-base-200: oklch(95% 0.04 90);
+	--color-base-300: oklch(92% 0.06 90);
+	--color-base-content: oklch(20% 0.1 40); /* Cocoa brown for text */
+
+	/* Primary: Toffee caramel */
+	--color-primary: oklch(55% 0.3 45); /* warm toffee */
+	--color-primary-content: oklch(98% 0.02 90); /* light text on primary */
+
+	/* Secondary / playful accent */
+	--color-secondary: oklch(70% 0.25 60); /* warm honey accent */
+	--color-secondary-content: oklch(98% 0.02 90);
+
+	/* Additional accent for highlights/buttons */
+	--color-accent: oklch(65% 0.25 80); /* lighter caramel */
+	--color-accent-content: oklch(20% 0.05 40);
+
+	/* Neutral for UI elements */
+	--color-neutral: oklch(50% 0.05 90); /* soft tan/brown */
+	--color-neutral-content: oklch(20% 0.05 40);
+
+	/* Semantic colors */
+	--color-info: oklch(70% 0.2 200); /* soft sky blue */
+	--color-info-content: oklch(98% 0.02 90);
+	--color-success: oklch(65% 0.25 120); /* soft green */
+	--color-success-content: oklch(98% 0.02 90);
+	--color-warning: oklch(80% 0.25 60); /* warm yellow/gold */
+	--color-warning-content: oklch(20% 0.05 40);
+	--color-error: oklch(65% 0.3 20); /* reddish-brown */
+	--color-error-content: oklch(98% 0.02 90);
+
+	/* Border radius: more rounded for friendly feel */
+	--radius-selector: 1.25rem;
+	--radius-field: 0.5rem;
+	--radius-box: 0.75rem;
+
+	/* Base sizes */
+	--size-selector: 0.25rem;
+	--size-field: 0.25rem;
+
+	/* Border size */
+	--border: 1px;
+
+	/* Effects */
+	--depth: 2; /* slightly raised, friendly look */
+	--noise: 0.03; /* subtle texture for warmth */
+}
+
+@layer base {
+	body {
+		letter-spacing: theme('letterSpacing.widest');
+	}
+}

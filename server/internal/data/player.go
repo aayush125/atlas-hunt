@@ -1,0 +1,87 @@
+package data
+
+import (
+	"context"
+	"fmt"
+	"time"
+
+	"github.com/google/uuid"
+	"github.com/redis/go-redis/v9"
+)
+
+type Player struct {
+	Nickname            string    `json:"nickname"`
+	GameID              string    `json:"game_id"`
+	JoinTimestamp       time.Time `json:"join_timestamp"`
+	LastRejoinTimestamp time.Time `json:"last_rejoin_timestamp"`
+	PlayerID            uuid.UUID `json:"id"`
+	SessionToken        string    `json:"-"`
+}
+
+type PlayerModel struct {
+	RDB *redis.Client
+}
+
+func (m *PlayerModel) Insert(player *Player) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	key := fmt.Sprintf("player:%s", player.SessionToken)
+
+	if err := m.RDB.HSet(ctx, key, map[string]any{
+		"id":                    player.PlayerID.String(),
+		"nickname":              player.Nickname,
+		"game_id":               player.GameID,
+		"join_timestamp":        player.JoinTimestamp,
+		"last_rejoin_timestamp": player.LastRejoinTimestamp,
+	}).Err(); err != nil {
+		return err
+	}
+
+	if err := m.RDB.Expire(ctx, key, 30*time.Minute).Err(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *PlayerModel) GetForSessionToken(token string) (*Player, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	key := fmt.Sprintf("player:%s", token)
+
+	data, err := m.RDB.HGetAll(ctx, key).Result()
+	if err != nil {
+		return nil, err
+	}
+
+	if len(data) == 0 {
+		return nil, ErrRecordNotFound
+	}
+
+	joinTimestamp, err := time.Parse(time.RFC3339, data["join_timestamp"])
+	if err != nil {
+		return nil, fmt.Errorf("parsing join_timestamp: %w", err)
+	}
+
+	lastRejoinTimestamp, err := time.Parse(time.RFC3339, data["last_rejoin_timestamp"])
+	if err != nil {
+		return nil, fmt.Errorf("parsing last_rejoin_timestamp: %w", err)
+	}
+
+	playerID, err := uuid.Parse(data["id"])
+	if err != nil {
+		return nil, fmt.Errorf("parsing player id: %w", err)
+	}
+
+	player := &Player{
+		Nickname:            data["nickname"],
+		GameID:              data["game_id"],
+		JoinTimestamp:       joinTimestamp,
+		LastRejoinTimestamp: lastRejoinTimestamp,
+		PlayerID:            playerID,
+	}
+
+	return player, nil
+}

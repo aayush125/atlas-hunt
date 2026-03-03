@@ -1,0 +1,15 @@
+# Binaries
+bin/
+
+# Environment variables
+.envrc
+
+# macOS
+**/.DS_Store
+.DS_Store
+
+# VSCode
+.vscode
+
+# redis
+dump.rdb
