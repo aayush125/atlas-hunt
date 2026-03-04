@@ -45,6 +45,15 @@ func (app *application) serve() error {
 			shutdownError <- err
 		}
 
+		app.logger.Info("shutting down active game rooms", "count", len(app.gameRooms))
+
+		app.mu.Lock()
+		for room := range app.gameRooms {
+			close(app.gameRooms[room].Shutdown)
+			delete(app.gameRooms, room)
+		}
+		app.mu.Unlock()
+
 		app.logger.Info("completing background tasks", "addr", srv.Addr)
 
 		app.wg.Wait()

@@ -1,12 +1,14 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 	"time"
 
 	"game.crisis-control.com/internal/data"
 	"game.crisis-control.com/internal/gameauth"
 	"game.crisis-control.com/internal/validator"
+	"game.crisis-control.com/internal/ws"
 	"github.com/google/uuid"
 )
 
@@ -37,6 +39,15 @@ func (app *application) createGameHandler(w http.ResponseWriter, r *http.Request
 	gameID, err := gameauth.GenerateGameID()
 	if err != nil {
 		app.serverErrorResponse(w, r, err)
+		return
+	}
+
+	app.mu.Lock()
+	_, ok := app.gameRooms[gameID.Plaintext]
+	app.mu.Unlock()
+
+	if ok {
+		app.serverErrorResponse(w, r, fmt.Errorf("duplicate room"))
 		return
 	}
 
@@ -72,15 +83,23 @@ func (app *application) createGameHandler(w http.ResponseWriter, r *http.Request
 
 	err = app.models.Player.Insert(&player)
 	if err != nil {
+		app.models.Game.Delete(gameRequest.GameID)
 		app.serverErrorResponse(w, r, err)
 		return
 	}
 
-	err = app.models.Game.AddPlayerToGame(gameRequest.GameID)
-	if err != nil {
-		app.serverErrorResponse(w, r, err)
+	room := ws.NewRoom()
+
+	app.mu.Lock()
+	if _, ok := app.gameRooms[gameRequest.GameID]; ok {
+		app.mu.Unlock()
+		app.serverErrorResponse(w, r, fmt.Errorf("duplicate room"))
 		return
 	}
+	app.gameRooms[gameRequest.GameID] = room
+	app.mu.Unlock()
+
+	app.background(room.Run)
 
 	cookie := &http.Cookie{
 		Name:     "session_token",

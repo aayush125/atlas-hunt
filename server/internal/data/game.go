@@ -61,6 +61,19 @@ func (m *GameModel) Insert(game *Game) error {
 	return nil
 }
 
+func (m *GameModel) Delete(gameCode string) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	key := fmt.Sprintf("game:%s", gameCode)
+
+	if err := m.RDB.Del(ctx, key).Err(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (m *GameModel) AddPlayerToGame(gameID string) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()

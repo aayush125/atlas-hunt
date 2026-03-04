@@ -10,6 +10,7 @@ import (
 
 	"game.crisis-control.com/internal/data"
 	"game.crisis-control.com/internal/validator"
+	"game.crisis-control.com/internal/ws"
 	"github.com/redis/go-redis/v9"
 )
 
@@ -28,6 +29,7 @@ type application struct {
 	wg           sync.WaitGroup
 	mu           sync.Mutex
 	shuttingDown bool
+	gameRooms    map[string]*ws.Room
 }
 
 func main() {
@@ -71,6 +73,7 @@ func main() {
 		rdb:          rdb,
 		logger:       logger,
 		shuttingDown: false,
+		gameRooms:    make(map[string]*ws.Room),
 	}
 
 	err := app.serve()

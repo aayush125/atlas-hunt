@@ -57,3 +57,7 @@ func (app *application) noSessionTokenResponse(w http.ResponseWriter, r *http.Re
 func (app *application) invalidSessionTokenResponse(w http.ResponseWriter, r *http.Request) {
 	app.errorResponse(w, r, http.StatusUnauthorized, envelope{"unauthorized": "invalid session token"})
 }
+
+func (app *application) roomNotFoundResponse(w http.ResponseWriter, r *http.Request) {
+	app.errorResponse(w, r, http.StatusNotFound, envelope{"message": "the requested game room does not exist"})
+}

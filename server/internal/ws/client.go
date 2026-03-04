@@ -44,6 +44,7 @@ func (c *Client) Send(v wsmessages.WSMessage) error {
 
 func (c *Client) ReadPump() {
 	defer func() {
+		close(c.send)
 		close(c.done)
 		c.conn.Close()
 	}()
@@ -70,6 +71,18 @@ func (c *Client) WritePump() {
 		ticker.Stop()
 		c.conn.Close()
 	}()
+
+	// notify the client that the websocket connection has been established
+	c.conn.SetWriteDeadline(time.Now().Add(writeWait))
+	data, err := json.Marshal(wsmessages.WSMessage{Type: wsmessages.ConnectionEstablished})
+	if err != nil {
+		c.logger.Error("failed to marshal websocket connection established message")
+		return
+	}
+
+	if err := c.conn.WriteMessage(websocket.TextMessage, data); err != nil {
+		return
+	}
 
 	for {
 		select {
