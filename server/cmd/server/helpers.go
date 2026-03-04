@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"net/url"
 	"strings"
 )
 
@@ -126,14 +125,4 @@ func (app *application) constructReturnReponse(code string, message any) struct 
 	}
 
 	return response
-}
-
-func (app *application) readString(qs url.Values, key string, defaultValue string) string {
-	s := qs.Get(key)
-
-	if s == "" {
-		return defaultValue
-	}
-
-	return s
 }

@@ -26,14 +26,8 @@ func (app *application) websocketHandler(w http.ResponseWriter, r *http.Request)
 	}
 
 	client := ws.NewClient(conn, app.logger)
-
-	err = app.models.Game.AddPlayerToGame(player.GameID)
-	if err != nil {
-		app.logger.Error("error adding player to game", "game_code", player.GameID, "error", err)
-	}
-
-	room.Register <- client
-
 	app.background(client.WritePump)
 	app.background(client.ReadPump)
+
+	room.Register <- client
 }

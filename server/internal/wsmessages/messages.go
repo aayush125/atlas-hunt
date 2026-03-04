@@ -4,6 +4,7 @@ type WSEvent string
 
 const (
 	ConnectionEstablished = WSEvent("connection:established")
+	WelcomeToTheGame      = WSEvent("game:welcome")
 )
 
 type WSMessage struct {
