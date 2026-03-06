@@ -9,6 +9,7 @@ import (
 var (
 	ErrRecordNotFound    = errors.New("record not found")
 	ErrMaxPlayersReached = errors.New("max players reached")
+	ErrNoPlayersInGame   = errors.New("no players found in game")
 )
 
 type Models struct {

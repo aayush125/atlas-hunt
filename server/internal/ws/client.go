@@ -22,14 +22,16 @@ type Client struct {
 	send   chan wsmessages.WSMessage
 	logger *slog.Logger
 	done   chan struct{}
+	room   *Room
 }
 
-func NewClient(conn *websocket.Conn, logger *slog.Logger) *Client {
+func NewClient(conn *websocket.Conn, room *Room, logger *slog.Logger) *Client {
 	return &Client{
 		conn:   conn,
 		send:   make(chan wsmessages.WSMessage, 1),
 		logger: logger,
 		done:   make(chan struct{}),
+		room:   room,
 	}
 }
 
@@ -47,6 +49,7 @@ func (c *Client) ReadPump() {
 		close(c.send)
 		close(c.done)
 		c.conn.Close()
+		c.room.Unregister <- c
 	}()
 
 	c.conn.SetReadLimit(maxMessageSize)

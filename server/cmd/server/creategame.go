@@ -89,7 +89,7 @@ func (app *application) createGameHandler(w http.ResponseWriter, r *http.Request
 		return
 	}
 
-	room := ws.NewRoom(app.models, gameRequest.GameID, app.logger)
+	room := ws.NewRoom(app.models, gameRequest.GameID, app.models.Game, app.models.Player, app.logger)
 
 	app.mu.Lock()
 	if _, ok := app.gameRooms[gameRequest.GameID]; ok {

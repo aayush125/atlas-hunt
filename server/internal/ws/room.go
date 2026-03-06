@@ -8,24 +8,26 @@ import (
 )
 
 type Room struct {
-	Players    map[*Client]bool
-	Register   chan *Client
-	Unregister chan *Client
-	Shutdown   chan struct{}
-	Models     *data.Models
-	Code       string
-	logger     *slog.Logger
+	Players     map[*Client]bool
+	Register    chan *Client
+	Unregister  chan *Client
+	Shutdown    chan struct{}
+	GameModel   *data.GameModel
+	PlayerModel *data.PlayerModel
+	Code        string
+	logger      *slog.Logger
 }
 
-func NewRoom(models *data.Models, code string, logger *slog.Logger) *Room {
+func NewRoom(models *data.Models, code string, gm *data.GameModel, pm *data.PlayerModel, logger *slog.Logger) *Room {
 	return &Room{
-		Players:    make(map[*Client]bool),
-		Register:   make(chan *Client),
-		Unregister: make(chan *Client),
-		Shutdown:   make(chan struct{}),
-		Models:     models,
-		Code:       code,
-		logger:     logger,
+		Players:     make(map[*Client]bool),
+		Register:    make(chan *Client),
+		Unregister:  make(chan *Client),
+		Shutdown:    make(chan struct{}),
+		GameModel:   gm,
+		PlayerModel: pm,
+		Code:        code,
+		logger:      logger,
 	}
 }
 
@@ -36,7 +38,7 @@ func (r *Room) Run() {
 			return
 		case player := <-r.Register:
 			r.Players[player] = true
-			err := r.Models.Game.AddPlayerToGame(r.Code)
+			err := r.GameModel.AddPlayerToGame(r.Code)
 			if err != nil {
 				r.logger.Error("error incrementing player count in redis", "error", err)
 			}
@@ -46,6 +48,10 @@ func (r *Room) Run() {
 				r.logger.Error("error sending welcome message to player", "error", err)
 			}
 		case player := <-r.Unregister:
+			err := r.GameModel.RemovePlayerFromGame(r.Code)
+			if err != nil {
+				r.logger.Error("error decrementing player count in redis", "error", err)
+			}
 			delete(r.Players, player)
 		}
 	}

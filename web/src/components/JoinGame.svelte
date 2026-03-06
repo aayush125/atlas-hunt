@@ -1,8 +1,33 @@
 <script lang="ts">
-	let { onCreateGame }: { onCreateGame: () => void } = $props();
+	import type { Player } from '$lib/types/player';
+
+	let {
+		onCreateGame,
+		onGameJoined
+	}: { onCreateGame: () => void; onGameJoined: (player: Player) => void } = $props();
 
 	let gameCode = $state('');
 	let nickname = $state('');
+
+	async function joinGame() {
+		const res = await fetch('/api/game/join', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				nickname: nickname,
+				game_code: gameCode
+			})
+		});
+
+		if (res.ok) {
+			const player = (await res.json()).player;
+			onGameJoined(player);
+		} else {
+			console.error('Error joining game:', await res.json());
+		}
+	}
 </script>
 
 <div class="flex w-full max-w-sm flex-col gap-6">
@@ -34,7 +59,7 @@
 			class="input w-full rounded-xl border-2 px-4 py-3 text-lg font-semibold tracking-wide input-neutral placeholder:text-gray-300 focus:ring-2 focus:ring-offset-2 focus:outline-none"
 		/>
 	</div>
-	<button class="btn btn-primary">Play</button>
+	<button class="btn btn-primary" onclick={joinGame}>Join</button>
 </div>
 
 <div class="h-px w-full bg-linear-to-r from-transparent via-gray-300 to-transparent"></div>

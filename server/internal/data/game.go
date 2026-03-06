@@ -122,28 +122,30 @@ func (m *GameModel) Delete(gameCode string) error {
 	return nil
 }
 
-func (m *GameModel) AddPlayerToGame(gameID string) error {
+func (m *GameModel) AddPlayerToGame(gameCode string) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
-
-	key := fmt.Sprintf("game:%s", gameID)
-
-	cmd := m.RDB.HGetAll(ctx, key)
-	if err := cmd.Err(); err != nil {
+	game, err := m.GetForCode(gameCode)
+	if err != nil {
 		return err
 	}
-	if len(cmd.Val()) == 0 {
-		return ErrRecordNotFound
-	}
-
-	var game Game
-	if err := cmd.Scan(&game); err != nil {
-		return err
-	}
-
 	if game.CurrentPlayerCount >= game.MaxPlayerCount {
 		return ErrMaxPlayersReached
 	}
-
+	key := fmt.Sprintf("game:%s", gameCode)
 	return m.RDB.HSet(ctx, key, "current_player_count", game.CurrentPlayerCount+1).Err()
+}
+
+func (m *GameModel) RemovePlayerFromGame(gameCode string) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+	game, err := m.GetForCode(gameCode)
+	if err != nil {
+		return err
+	}
+	if game.CurrentPlayerCount <= 0 {
+		return ErrNoPlayersInGame
+	}
+	key := fmt.Sprintf("game:%s", gameCode)
+	return m.RDB.HSet(ctx, key, "current_player_count", game.CurrentPlayerCount-1).Err()
 }
