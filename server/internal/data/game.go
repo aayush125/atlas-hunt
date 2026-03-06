@@ -3,19 +3,40 @@ package data
 import (
 	"context"
 	"fmt"
-	"strconv"
 	"time"
 
 	"game.crisis-control.com/internal/validator"
 	"github.com/redis/go-redis/v9"
 )
 
+type GameState string
+
+func (g GameState) MarshalBinary() ([]byte, error) {
+	return []byte(g), nil
+}
+
+func (g *GameState) UnmarshalBinary(data []byte) error {
+	*g = GameState(data)
+	return nil
+}
+
+const (
+	GameStateLobby      GameState = "lobby"
+	GameStateInProgress GameState = "in_progress"
+)
+
 type Game struct {
-	NumberOfPlayers    int       `json:"number_of_players"`
-	CurrentPlayerCount int       `json:"current_player_count"`
-	GameID             string    `json:"id"`
-	CreatedAt          time.Time `json:"created_at"`
-	CreatorNickname    string    `json:"creator_nickname"`
+	MaxPlayerCount     int       `json:"max_players" redis:"max_players"`
+	CurrentPlayerCount int       `json:"current_player_count" redis:"current_player_count"`
+	GameID             string    `json:"id" redis:"id"`
+	CreatedAt          time.Time `json:"created_at" redis:"created_at"`
+	CreatorNickname    string    `json:"creator_nickname" redis:"creator_nickname"`
+	State              GameState `json:"state" redis:"state"`
+}
+
+type JoinGame struct {
+	Nickname string `json:"nickname"`
+	GameCode string `json:"game_code"`
 }
 
 func validateNickname(v *validator.Validator, nickname string) {
@@ -29,9 +50,19 @@ func validateNumberOfPlayers(v *validator.Validator, numberOfPlayers int) {
 	v.Check(numberOfPlayers >= 6 && numberOfPlayers <= 10, "number_of_players", "Number of players must be between 6 and 10")
 }
 
+func validateGameCode(v *validator.Validator, code string) {
+	v.Check(code != "", "game_code", "Game code is required to join a game.")
+	v.Check(len(code) == 6, "game_code", "Game code must be exactly 6 characters long.")
+}
+
 func ValidateCreateGame(v *validator.Validator, game *Game) {
 	validateNickname(v, game.CreatorNickname)
-	validateNumberOfPlayers(v, game.NumberOfPlayers)
+	validateNumberOfPlayers(v, game.MaxPlayerCount)
+}
+
+func ValidateJoinGame(v *validator.Validator, request *JoinGame) {
+	validateNickname(v, request.Nickname)
+	validateGameCode(v, request.GameCode)
 }
 
 type GameModel struct {
@@ -44,13 +75,7 @@ func (m *GameModel) Insert(game *Game) error {
 
 	key := fmt.Sprintf("game:%s", game.GameID)
 
-	if err := m.RDB.HSet(ctx, key, map[string]any{
-		"id":                   game.GameID,
-		"max_players":          game.NumberOfPlayers,
-		"current_player_count": game.CurrentPlayerCount,
-		"created_at":           game.CreatedAt.Format(time.RFC3339),
-		"creator_nickname":     game.CreatorNickname,
-	}).Err(); err != nil {
+	if err := m.RDB.HSet(ctx, key, game).Err(); err != nil {
 		return err
 	}
 
@@ -59,6 +84,29 @@ func (m *GameModel) Insert(game *Game) error {
 	}
 
 	return nil
+}
+
+func (m *GameModel) GetForCode(gameCode string) (*Game, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	key := fmt.Sprintf("game:%s", gameCode)
+
+	cmd := m.RDB.HGetAll(ctx, key)
+	if err := cmd.Err(); err != nil {
+		return nil, err
+	}
+
+	if len(cmd.Val()) == 0 {
+		return nil, ErrRecordNotFound
+	}
+
+	var game Game
+	if err := cmd.Scan(&game); err != nil {
+		return nil, err
+	}
+
+	return &game, nil
 }
 
 func (m *GameModel) Delete(gameCode string) error {
@@ -79,33 +127,23 @@ func (m *GameModel) AddPlayerToGame(gameID string) error {
 	defer cancel()
 
 	key := fmt.Sprintf("game:%s", gameID)
-	game, err := m.RDB.HGetAll(ctx, key).Result()
-	if err != nil {
+
+	cmd := m.RDB.HGetAll(ctx, key)
+	if err := cmd.Err(); err != nil {
 		return err
 	}
-
-	if len(game) == 0 {
+	if len(cmd.Val()) == 0 {
 		return ErrRecordNotFound
 	}
 
-	currentPlayerCount, err := strconv.Atoi(game["current_player_count"])
-	if err != nil {
+	var game Game
+	if err := cmd.Scan(&game); err != nil {
 		return err
 	}
 
-	maxPlayers, err := strconv.Atoi(game["max_players"])
-	if err != nil {
-		return err
-	}
-
-	if currentPlayerCount >= maxPlayers {
+	if game.CurrentPlayerCount >= game.MaxPlayerCount {
 		return ErrMaxPlayersReached
 	}
 
-	err = m.RDB.HSet(ctx, key, "current_player_count", currentPlayerCount+1).Err()
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return m.RDB.HSet(ctx, key, "current_player_count", game.CurrentPlayerCount+1).Err()
 }

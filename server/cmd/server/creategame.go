@@ -26,7 +26,7 @@ func (app *application) createGameHandler(w http.ResponseWriter, r *http.Request
 
 	gameRequest := data.Game{
 		CreatorNickname: input.Nickname,
-		NumberOfPlayers: input.NumberOfPlayers,
+		MaxPlayerCount:  input.NumberOfPlayers,
 	}
 
 	v := validator.New()
@@ -59,6 +59,7 @@ func (app *application) createGameHandler(w http.ResponseWriter, r *http.Request
 
 	gameRequest.GameID = gameID.Plaintext
 	gameRequest.CreatedAt = time.Now()
+	gameRequest.State = data.GameStateLobby
 
 	err = app.models.Game.Insert(&gameRequest)
 	if err != nil {
@@ -66,7 +67,7 @@ func (app *application) createGameHandler(w http.ResponseWriter, r *http.Request
 		return
 	}
 
-	user_uuid, err := uuid.NewRandom()
+	userUUID, err := uuid.NewRandom()
 	if err != nil {
 		app.serverErrorResponse(w, r, err)
 		return
@@ -77,7 +78,7 @@ func (app *application) createGameHandler(w http.ResponseWriter, r *http.Request
 		GameID:              gameRequest.GameID,
 		JoinTimestamp:       time.Now(),
 		LastRejoinTimestamp: time.Now(),
-		PlayerID:            user_uuid,
+		PlayerID:            userUUID,
 		SessionToken:        token,
 	}
 

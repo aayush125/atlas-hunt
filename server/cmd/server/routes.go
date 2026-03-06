@@ -18,7 +18,8 @@ func (app *application) routes() http.Handler {
 	// routes
 	router.HandlerFunc(http.MethodGet, "/healthcheck", app.healthcheckHandler)
 	router.HandlerFunc(http.MethodPost, "/game/create", app.createGameHandler)
-	router.HandlerFunc(http.MethodGet, "/ws", app.requireSessionToken(app.websocketHandler)) // TODO: should require a session cookie
+	router.HandlerFunc(http.MethodPost, "/game/join", app.registerPlayerHandler)
+	router.HandlerFunc(http.MethodGet, "/ws", app.requireSessionToken(app.websocketHandler))
 
 	// profiler
 	if app.config.env == "development" {

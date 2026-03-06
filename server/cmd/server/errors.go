@@ -61,3 +61,7 @@ func (app *application) invalidSessionTokenResponse(w http.ResponseWriter, r *ht
 func (app *application) roomNotFoundResponse(w http.ResponseWriter, r *http.Request) {
 	app.errorResponse(w, r, http.StatusNotFound, envelope{"message": "the requested game room does not exist"})
 }
+
+func (app *application) roomFullResponse(w http.ResponseWriter, r *http.Request) {
+	app.errorResponse(w, r, http.StatusConflict, envelope{"message": "the requested game room is already full"})
+}
