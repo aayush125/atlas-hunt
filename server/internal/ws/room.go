@@ -16,6 +16,7 @@ type Room struct {
 	PlayerModel *data.PlayerModel
 	Code        string
 	logger      *slog.Logger
+	Broadcast   chan *wsmessages.WSMessage
 }
 
 func NewRoom(models *data.Models, code string, gm *data.GameModel, pm *data.PlayerModel, logger *slog.Logger) *Room {
@@ -28,6 +29,7 @@ func NewRoom(models *data.Models, code string, gm *data.GameModel, pm *data.Play
 		PlayerModel: pm,
 		Code:        code,
 		logger:      logger,
+		Broadcast:   make(chan *wsmessages.WSMessage),
 	}
 }
 
@@ -47,12 +49,23 @@ func (r *Room) Run() {
 			if err != nil {
 				r.logger.Error("error sending welcome message to player", "error", err)
 			}
+
+			for p := range r.Players {
+				p.Send(wsmessages.WSMessage{Type: wsmessages.PlayerJoined, Data: map[string]any{
+					"nickname": player.nickname,
+					"id":       player.id,
+				}})
+			}
 		case player := <-r.Unregister:
 			err := r.GameModel.RemovePlayerFromGame(r.Code)
 			if err != nil {
 				r.logger.Error("error decrementing player count in redis", "error", err)
 			}
 			delete(r.Players, player)
+		case message := <-r.Broadcast:
+			for player := range r.Players {
+				player.Send(*message)
+			}
 		}
 	}
 }

@@ -18,20 +18,24 @@ const (
 )
 
 type Client struct {
-	conn   *websocket.Conn
-	send   chan wsmessages.WSMessage
-	logger *slog.Logger
-	done   chan struct{}
-	room   *Room
+	conn     *websocket.Conn
+	send     chan wsmessages.WSMessage
+	logger   *slog.Logger
+	done     chan struct{}
+	room     *Room
+	nickname string
+	id       string
 }
 
-func NewClient(conn *websocket.Conn, room *Room, logger *slog.Logger) *Client {
+func NewClient(conn *websocket.Conn, room *Room, nickname, id string, logger *slog.Logger) *Client {
 	return &Client{
-		conn:   conn,
-		send:   make(chan wsmessages.WSMessage, 1),
-		logger: logger,
-		done:   make(chan struct{}),
-		room:   room,
+		conn:     conn,
+		send:     make(chan wsmessages.WSMessage, 1),
+		logger:   logger,
+		done:     make(chan struct{}),
+		room:     room,
+		nickname: nickname,
+		id:       id,
 	}
 }
 

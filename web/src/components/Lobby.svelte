@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { gameStore } from '../stores/gameStore';
 	import avatarSrc from '$lib/assets/avatars/avatar.jpg';
+
+	let { onLeaveGame }: { onLeaveGame: () => void } = $props();
 </script>
 
 <div class="flex w-full flex-col items-center justify-center gap-6 p-4 sm:p-6">
@@ -26,7 +28,9 @@
 				<h3 class="text-xs font-semibold tracking-wide text-base-content/80 uppercase sm:text-sm">
 					Players
 				</h3>
-				<span class="text-xs text-base-content/60 sm:text-sm"> 4 / 8 Joined </span>
+				<span class="text-xs text-base-content/60 sm:text-sm">
+					{$gameStore.otherPlayers.length} / {$gameStore.maxPlayers} Joined
+				</span>
 			</div>
 
 			<div class="grid grid-cols-3 gap-4 sm:grid-cols-4 md:grid-cols-5">
@@ -42,32 +46,18 @@
 					</span>
 				</div>
 
-				<div class="flex flex-col items-center space-y-1 sm:space-y-2">
-					<img
-						src={avatarSrc}
-						alt="Player avatar"
-						class="h-16 w-16 rounded-full object-cover shadow-md ring-2 ring-secondary sm:h-20 sm:w-20"
-					/>
-					<span class="text-center text-xs font-medium text-base-content sm:text-sm">CoolNick</span>
-				</div>
-
-				<div class="flex flex-col items-center space-y-1 sm:space-y-2">
-					<img
-						src={avatarSrc}
-						alt="Player avatar"
-						class="h-16 w-16 rounded-full object-cover shadow-md ring-2 ring-secondary sm:h-20 sm:w-20"
-					/>
-					<span class="text-center text-xs font-medium text-base-content sm:text-sm">GamerX</span>
-				</div>
-
-				<div class="flex flex-col items-center space-y-1 sm:space-y-2">
-					<img
-						src={avatarSrc}
-						alt="Player avatar"
-						class="h-16 w-16 rounded-full object-cover shadow-md ring-2 ring-secondary sm:h-20 sm:w-20"
-					/>
-					<span class="text-center text-xs font-medium text-base-content sm:text-sm">GamerX</span>
-				</div>
+				{#each $gameStore.otherPlayers as player (player.id)}
+					<div class="flex flex-col items-center space-y-1 sm:space-y-2">
+						<img
+							src={avatarSrc}
+							alt="Player avatar"
+							class="h-16 w-16 rounded-full object-cover shadow-md ring-2 ring-secondary sm:h-20 sm:w-20"
+						/>
+						<span class="text-center text-xs font-medium text-base-content sm:text-sm"
+							>{player.nickname}</span
+						>
+					</div>
+				{/each}
 
 				<!-- Empty Slot -->
 				<div class="flex flex-col items-center space-y-1 opacity-60 sm:space-y-2">
@@ -82,5 +72,14 @@
 		</div>
 	</div>
 
-	<button class="btn mt-4 w-full max-w-lg btn-primary sm:mt-6">Start Game</button>
+	{#if $gameStore.playerIsCreator}
+		<button class="btn mt-4 w-full max-w-lg btn-primary sm:mt-6">Start Game</button>
+	{:else}
+		<button
+			class="btn mt-4 w-full max-w-lg btn-primary sm:mt-6"
+			onclick={() => {
+				onLeaveGame(); // TODO: Clear the cookie and transition back to JOIN card
+			}}>Leave Game</button
+		>
+	{/if}
 </div>

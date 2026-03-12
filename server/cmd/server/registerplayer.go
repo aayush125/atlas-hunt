@@ -69,6 +69,7 @@ func (app *application) registerPlayerHandler(w http.ResponseWriter, r *http.Req
 		JoinTimestamp:       time.Now(),
 		LastRejoinTimestamp: time.Now(),
 		PlayerID:            userUUID,
+		IsCreator:           false,
 		SessionToken:        token,
 	}
 
@@ -88,7 +89,7 @@ func (app *application) registerPlayerHandler(w http.ResponseWriter, r *http.Req
 		Expires:  time.Now().Add(30 * time.Minute),
 	}
 
-	err = app.writeJSON(w, http.StatusAccepted, envelope{"player": player}, nil, cookie)
+	err = app.writeJSON(w, http.StatusAccepted, envelope{"player": player, "game": game}, nil, cookie)
 	if err != nil {
 		app.serverErrorResponse(w, r, err)
 	}

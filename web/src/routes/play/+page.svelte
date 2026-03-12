@@ -1,5 +1,7 @@
 <script lang="ts">
+	import type { Game } from '$lib/types/game';
 	import type { Player } from '$lib/types/player';
+	import type { WSMessage } from '$lib/types/wsmessage';
 	import CreateGame from '../../components/CreateGame.svelte';
 	import JoinGame from '../../components/JoinGame.svelte';
 	import Lobby from '../../components/Lobby.svelte';
@@ -30,7 +32,11 @@
 		ws.onmessage = (event) => {
 			try {
 				const data = JSON.parse(event.data);
-				handleMessage(data);
+				const message: WSMessage = {
+					type: data.type,
+					data: data.data
+				};
+				handleMessage(message);
 			} catch {
 				console.warn('Received non-JSON message:', event.data);
 			}
@@ -57,9 +63,15 @@
 		};
 	}
 
-	function handleMessage(data: unknown) {
+	function handleMessage(data: WSMessage) {
 		// Route incoming server messages to your store
 		console.log('Message received:', data);
+		if (data.type === 'player:joined') {
+			const info = data.data as { id: string; nickname: string };
+			if (info.id !== $gameStore.playerId) {
+				gameStore.addPlayer(info.id, info.nickname);
+			}
+		}
 		// e.g. gameStore.handleServerMessage(data);
 	}
 
@@ -92,21 +104,25 @@
 
 <div class="flex flex-col items-center justify-center gap-8 p-8">
 	{#if $gameStore.state === 'waiting'}
-		<Lobby />
+		<Lobby onLeaveGame={disconnectWs} />
 	{:else if gate === 'join'}
 		<JoinGame
 			onCreateGame={() => (gate = 'create')}
-			onGameJoined={(player: Player) => {
+			onGameJoined={(player: Player, game: Game) => {
 				connectToWs();
 				console.log('Player received:', player);
+				console.log('Game received:', game);
+				gameStore.setupGame(game, player);
 			}}
 		/>
 	{:else}
 		<CreateGame
 			onJoinGame={() => (gate = 'join')}
-			onGameCreated={(joinCode: string, nickname: string, numPlayers: number, createdAt: Date) => {
+			onGameCreated={(game: Game, player: Player) => {
 				connectToWs();
-				gameStore.setupGame(joinCode, numPlayers, nickname, createdAt);
+				console.log('Player received:', player);
+				console.log('Game received:', game);
+				gameStore.setupGame(game, player);
 			}}
 		/>
 	{/if}

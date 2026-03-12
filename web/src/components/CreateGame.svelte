@@ -1,15 +1,13 @@
 <script lang="ts">
+	import type { Game } from '$lib/types/game';
+	import type { Player } from '$lib/types/player';
+
 	let {
 		onJoinGame,
 		onGameCreated
 	}: {
 		onJoinGame: () => void;
-		onGameCreated: (
-			joinCode: string,
-			nickname: string,
-			numPlayers: number,
-			createdAt: Date
-		) => void;
+		onGameCreated: (game: Game, player: Player) => void;
 	} = $props();
 
 	let numberOfPlayers = $state(6);
@@ -28,12 +26,16 @@
 		});
 
 		if (res.ok) {
-			const game = (await res.json()).game;
+			const json = await res.json();
+			const game = json.game;
+			const player = json.player;
 			onGameCreated(
-				game.id,
-				game.creator_nickname,
-				game.number_of_players,
-				new Date(game.created_at)
+				{ ...game, created_at: new Date(game.created_at) },
+				{
+					...player,
+					join_timestamp: new Date(player.join_timestamp),
+					last_rejoin_timestamp: new Date(player.last_rejoin_timestamp)
+				}
 			);
 		} else {
 			console.error('Error creating game:', await res.json());

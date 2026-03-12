@@ -79,6 +79,7 @@ func (app *application) createGameHandler(w http.ResponseWriter, r *http.Request
 		JoinTimestamp:       time.Now(),
 		LastRejoinTimestamp: time.Now(),
 		PlayerID:            userUUID,
+		IsCreator:           true,
 		SessionToken:        token,
 	}
 
@@ -112,7 +113,7 @@ func (app *application) createGameHandler(w http.ResponseWriter, r *http.Request
 		Expires:  time.Now().Add(30 * time.Minute),
 	}
 
-	err = app.writeJSON(w, http.StatusCreated, envelope{"game": gameRequest}, nil, cookie)
+	err = app.writeJSON(w, http.StatusCreated, envelope{"game": gameRequest, "player": player}, nil, cookie)
 	if err != nil {
 		app.serverErrorResponse(w, r, err)
 	}
