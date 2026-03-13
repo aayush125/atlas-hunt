@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Game } from '$lib/types/game';
-	import type { Player } from '$lib/types/player';
+	import type { Member, Player } from '$lib/types/player';
 	import type { WSMessage } from '$lib/types/wsmessage';
 	import CreateGame from '../../components/CreateGame.svelte';
 	import JoinGame from '../../components/JoinGame.svelte';
@@ -71,8 +71,10 @@
 			if (info.id !== $gameStore.playerId) {
 				gameStore.addPlayer(info.id, info.nickname);
 			}
+		} else if (data.type === 'player:left') {
+			const info = data.data as { id: string };
+			gameStore.removePlayer(info.id);
 		}
-		// e.g. gameStore.handleServerMessage(data);
 	}
 
 	function disconnectWs() {
@@ -108,11 +110,12 @@
 	{:else if gate === 'join'}
 		<JoinGame
 			onCreateGame={() => (gate = 'create')}
-			onGameJoined={(player: Player, game: Game) => {
+			onGameJoined={(player: Player, game: Game, members: Member[]) => {
 				connectToWs();
 				console.log('Player received:', player);
 				console.log('Game received:', game);
-				gameStore.setupGame(game, player);
+				console.log('Members received:', members);
+				gameStore.setupGame(game, player, members);
 			}}
 		/>
 	{:else}
@@ -122,7 +125,7 @@
 				connectToWs();
 				console.log('Player received:', player);
 				console.log('Game received:', game);
-				gameStore.setupGame(game, player);
+				gameStore.setupGame(game, player, []);
 			}}
 		/>
 	{/if}

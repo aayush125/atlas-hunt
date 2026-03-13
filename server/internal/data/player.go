@@ -24,6 +24,11 @@ type PlayerModel struct {
 	RDB *redis.Client
 }
 
+type PlayerInfo struct {
+	Nickname string `json:"nickname"`
+	ID       string `json:"id"`
+}
+
 func (m *PlayerModel) Insert(player *Player) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
@@ -91,4 +96,17 @@ func (m *PlayerModel) GetForSessionToken(token string) (*Player, error) {
 	}
 
 	return player, nil
+}
+
+func (m *PlayerModel) Delete(sessionToken string) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	key := fmt.Sprintf("player:%s", sessionToken)
+
+	if err := m.RDB.Del(ctx, key).Err(); err != nil {
+		return err
+	}
+
+	return nil
 }

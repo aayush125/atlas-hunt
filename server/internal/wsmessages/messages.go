@@ -6,6 +6,7 @@ const (
 	ConnectionEstablished = WSEvent("connection:established")
 	WelcomeToTheGame      = WSEvent("game:welcome")
 	PlayerJoined          = WSEvent("player:joined")
+	PlayerLeft            = WSEvent("player:left")
 )
 
 type WSMessage struct {

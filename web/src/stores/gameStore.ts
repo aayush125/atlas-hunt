@@ -33,7 +33,7 @@ function createGameStore() {
 
 	return {
 		subscribe,
-		setupGame: (game: Game, player: Player) =>
+		setupGame: (game: Game, player: Player, members: Member[]) =>
 			update(() => ({
 				joinCode: game.id,
 				maxPlayers: game.max_players,
@@ -43,13 +43,18 @@ function createGameStore() {
 				createdAt: new Date(game.created_at),
 				playerIsCreator: player.is_creator,
 				currentPlayerCount: game.current_player_count,
-				otherPlayers: []
+				otherPlayers: members
 			})),
 		setGameState: (state: GamePhase) => update((game) => ({ ...game, state })),
 		addPlayer: (id: string, nickname: string) =>
 			update((game) => ({
 				...game,
 				otherPlayers: [...game.otherPlayers, { id, nickname }]
+			})),
+		removePlayer: (id: string) =>
+			update((game) => ({
+				...game,
+				otherPlayers: game.otherPlayers.filter((member) => member.id !== id)
 			})),
 		reset: () => set(initial)
 	};

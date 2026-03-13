@@ -90,6 +90,14 @@ func (app *application) createGameHandler(w http.ResponseWriter, r *http.Request
 		return
 	}
 
+	err = app.models.Game.AddPlayerToSet(gameRequest.GameID, player.SessionToken)
+	if err != nil {
+		app.models.Game.Delete(gameRequest.GameID)
+		app.models.Player.Delete(player.SessionToken)
+		app.serverErrorResponse(w, r, err)
+		return
+	}
+
 	room := ws.NewRoom(app.models, gameRequest.GameID, app.models.Game, app.models.Player, app.logger)
 
 	app.mu.Lock()

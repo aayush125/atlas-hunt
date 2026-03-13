@@ -25,9 +25,10 @@ type Client struct {
 	room     *Room
 	nickname string
 	id       string
+	session  string
 }
 
-func NewClient(conn *websocket.Conn, room *Room, nickname, id string, logger *slog.Logger) *Client {
+func NewClient(conn *websocket.Conn, room *Room, nickname, id, session string, logger *slog.Logger) *Client {
 	return &Client{
 		conn:     conn,
 		send:     make(chan wsmessages.WSMessage, 1),
@@ -36,6 +37,7 @@ func NewClient(conn *websocket.Conn, room *Room, nickname, id string, logger *sl
 		room:     room,
 		nickname: nickname,
 		id:       id,
+		session:  session,
 	}
 }
 

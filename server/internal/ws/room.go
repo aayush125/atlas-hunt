@@ -40,7 +40,7 @@ func (r *Room) Run() {
 			return
 		case player := <-r.Register:
 			r.Players[player] = true
-			err := r.GameModel.AddPlayerToGame(r.Code)
+			err := r.GameModel.IncrementPlayerCount(r.Code)
 			if err != nil {
 				r.logger.Error("error incrementing player count in redis", "error", err)
 			}
@@ -57,11 +57,23 @@ func (r *Room) Run() {
 				}})
 			}
 		case player := <-r.Unregister:
-			err := r.GameModel.RemovePlayerFromGame(r.Code)
+			err := r.GameModel.DecrementPlayerCount(r.Code)
 			if err != nil {
 				r.logger.Error("error decrementing player count in redis", "error", err)
 			}
+
+			err = r.GameModel.RemovePlayerFromSet(r.Code, player.session)
+			if err != nil {
+				r.logger.Error("error removing player from set", "error", err)
+			}
+
 			delete(r.Players, player)
+
+			for p := range r.Players {
+				p.Send(wsmessages.WSMessage{Type: wsmessages.PlayerLeft, Data: map[string]any{
+					"id": player.id,
+				}})
+			}
 		case message := <-r.Broadcast:
 			for player := range r.Players {
 				player.Send(*message)

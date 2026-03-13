@@ -122,7 +122,49 @@ func (m *GameModel) Delete(gameCode string) error {
 	return nil
 }
 
-func (m *GameModel) AddPlayerToGame(gameCode string) error {
+func (m *GameModel) AddPlayerToSet(gameCode, playerSessionToken string) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	key := fmt.Sprintf("game:%s:players", gameCode)
+	if err := m.RDB.SAdd(ctx, key, playerSessionToken).Err(); err != nil {
+		return err
+	}
+
+	if err := m.RDB.Expire(ctx, key, 30*time.Minute).Err(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *GameModel) RemovePlayerFromSet(gameCode, playerSessionToken string) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	key := fmt.Sprintf("game:%s:players", gameCode)
+	return m.RDB.SRem(ctx, key, playerSessionToken).Err()
+}
+
+func (m *GameModel) GetAllPlayers(gameCode string) ([]string, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	key := fmt.Sprintf("game:%s:players", gameCode)
+
+	players, err := m.RDB.SMembers(ctx, key).Result()
+	if err != nil {
+		return nil, err
+	}
+
+	if len(players) == 0 {
+		return nil, ErrRecordNotFound
+	}
+
+	return players, nil
+}
+
+func (m *GameModel) IncrementPlayerCount(gameCode string) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 	game, err := m.GetForCode(gameCode)
@@ -136,7 +178,7 @@ func (m *GameModel) AddPlayerToGame(gameCode string) error {
 	return m.RDB.HSet(ctx, key, "current_player_count", game.CurrentPlayerCount+1).Err()
 }
 
-func (m *GameModel) RemovePlayerFromGame(gameCode string) error {
+func (m *GameModel) DecrementPlayerCount(gameCode string) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 	game, err := m.GetForCode(gameCode)

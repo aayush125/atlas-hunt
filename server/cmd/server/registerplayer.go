@@ -51,6 +51,25 @@ func (app *application) registerPlayerHandler(w http.ResponseWriter, r *http.Req
 		return
 	}
 
+	var existingPlayers []data.PlayerInfo
+	allPlayers, err := app.models.Game.GetAllPlayers(joinRequest.GameCode)
+	if err != nil {
+		app.serverErrorResponse(w, r, err)
+		return
+	}
+
+	for _, token := range allPlayers {
+		info, err := app.models.Player.GetForSessionToken(token)
+		if err != nil {
+			app.serverErrorResponse(w, r, err)
+			return
+		}
+		existingPlayers = append(existingPlayers, data.PlayerInfo{
+			Nickname: info.Nickname,
+			ID:       info.PlayerID.String(),
+		})
+	}
+
 	token, err := gameauth.GenerateSessionToken()
 	if err != nil {
 		app.serverErrorResponse(w, r, err)
@@ -79,6 +98,13 @@ func (app *application) registerPlayerHandler(w http.ResponseWriter, r *http.Req
 		return
 	}
 
+	err = app.models.Game.AddPlayerToSet(player.GameID, player.SessionToken)
+	if err != nil {
+		app.models.Player.Delete(player.SessionToken)
+		app.serverErrorResponse(w, r, err)
+		return
+	}
+
 	cookie := &http.Cookie{
 		Name:     "session_token",
 		Value:    token,
@@ -89,7 +115,7 @@ func (app *application) registerPlayerHandler(w http.ResponseWriter, r *http.Req
 		Expires:  time.Now().Add(30 * time.Minute),
 	}
 
-	err = app.writeJSON(w, http.StatusAccepted, envelope{"player": player, "game": game}, nil, cookie)
+	err = app.writeJSON(w, http.StatusAccepted, envelope{"player": player, "game": game, "existing_players": existingPlayers}, nil, cookie)
 	if err != nil {
 		app.serverErrorResponse(w, r, err)
 	}

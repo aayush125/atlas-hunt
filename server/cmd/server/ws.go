@@ -25,7 +25,7 @@ func (app *application) websocketHandler(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	client := ws.NewClient(conn, room, player.Nickname, player.PlayerID.String(), app.logger)
+	client := ws.NewClient(conn, room, player.Nickname, player.PlayerID.String(), player.SessionToken, app.logger)
 	app.background(client.WritePump)
 	app.background(client.ReadPump)
 
