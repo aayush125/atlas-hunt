@@ -29,10 +29,16 @@ type PlayerInfo struct {
 	ID       string `json:"id"`
 }
 
+func getPlayerKey(sessionToken string) string {
+	return fmt.Sprintf("player:%s", sessionToken)
+}
+
 func (m *PlayerModel) Insert(player *Player) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
-	key := fmt.Sprintf("player:%s", player.SessionToken)
+
+	key := getPlayerKey(player.SessionToken)
+
 	if err := m.RDB.HSet(ctx, key, map[string]any{
 		"nickname":              player.Nickname,
 		"game_id":               player.GameID,
@@ -44,9 +50,11 @@ func (m *PlayerModel) Insert(player *Player) error {
 	}).Err(); err != nil {
 		return err
 	}
+
 	if err := m.RDB.Expire(ctx, key, 30*time.Minute).Err(); err != nil {
 		return err
 	}
+
 	return nil
 }
 
@@ -54,7 +62,7 @@ func (m *PlayerModel) GetForSessionToken(token string) (*Player, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
-	key := fmt.Sprintf("player:%s", token)
+	key := getPlayerKey(token)
 
 	data, err := m.RDB.HGetAll(ctx, key).Result()
 	if err != nil {
@@ -102,7 +110,7 @@ func (m *PlayerModel) Delete(sessionToken string) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
-	key := fmt.Sprintf("player:%s", sessionToken)
+	key := getPlayerKey(sessionToken)
 
 	if err := m.RDB.Del(ctx, key).Err(); err != nil {
 		return err

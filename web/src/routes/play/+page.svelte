@@ -80,7 +80,7 @@
 	function disconnectWs() {
 		manualClose = true;
 		if (retryTimeout) clearTimeout(retryTimeout);
-		ws?.close();
+		ws?.close(1000, 'User left game');
 		ws = null;
 	}
 
@@ -106,27 +106,44 @@
 
 <div class="flex flex-col items-center justify-center gap-8 p-8">
 	{#if $gameStore.state === 'waiting'}
-		<Lobby onLeaveGame={disconnectWs} />
-	{:else if gate === 'join'}
-		<JoinGame
-			onCreateGame={() => (gate = 'create')}
-			onGameJoined={(player: Player, game: Game, members: Member[]) => {
-				connectToWs();
-				console.log('Player received:', player);
-				console.log('Game received:', game);
-				console.log('Members received:', members);
-				gameStore.setupGame(game, player, members);
+		<Lobby
+			onLeaveGame={async () => {
+				const res = await fetch('/api/game/leave', {
+					method: 'POST'
+				});
+
+				if (!res.ok) {
+					console.log('failed to logout');
+				}
+
+				disconnectWs();
+
+				gameStore.reset();
+				gate = 'join';
 			}}
 		/>
-	{:else}
-		<CreateGame
-			onJoinGame={() => (gate = 'join')}
-			onGameCreated={(game: Game, player: Player) => {
-				connectToWs();
-				console.log('Player received:', player);
-				console.log('Game received:', game);
-				gameStore.setupGame(game, player, []);
-			}}
-		/>
+	{:else if $gameStore.state === 'idle'}
+		{#if gate === 'join'}
+			<JoinGame
+				onCreateGame={() => (gate = 'create')}
+				onGameJoined={(player: Player, game: Game, members: Member[]) => {
+					connectToWs();
+					console.log('Player received:', player);
+					console.log('Game received:', game);
+					console.log('Members received:', members);
+					gameStore.setupGame(game, player, members);
+				}}
+			/>
+		{:else}
+			<CreateGame
+				onJoinGame={() => (gate = 'join')}
+				onGameCreated={(game: Game, player: Player) => {
+					connectToWs();
+					console.log('Player received:', player);
+					console.log('Game received:', game);
+					gameStore.setupGame(game, player, []);
+				}}
+			/>
+		{/if}
 	{/if}
 </div>

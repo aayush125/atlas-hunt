@@ -19,6 +19,7 @@ func (app *application) routes() http.Handler {
 	router.HandlerFunc(http.MethodGet, "/healthcheck", app.healthcheckHandler)
 	router.HandlerFunc(http.MethodPost, "/game/create", app.createGameHandler)
 	router.HandlerFunc(http.MethodPost, "/game/join", app.registerPlayerHandler)
+	router.HandlerFunc(http.MethodPost, "/game/leave", app.requireSessionToken(app.leaveGameHandler))
 	router.HandlerFunc(http.MethodGet, "/ws", app.requireSessionToken(app.websocketHandler))
 
 	// profiler

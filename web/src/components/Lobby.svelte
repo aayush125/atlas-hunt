@@ -2,7 +2,7 @@
 	import { gameStore } from '../stores/gameStore';
 	import avatarSrc from '$lib/assets/avatars/avatar.jpg';
 
-	let { onLeaveGame }: { onLeaveGame: () => void } = $props();
+	let { onLeaveGame }: { onLeaveGame: () => Promise<void> } = $props();
 </script>
 
 <div class="flex w-full flex-col items-center justify-center gap-6 p-4 sm:p-6">
@@ -77,8 +77,8 @@
 	{:else}
 		<button
 			class="btn mt-4 w-full max-w-lg btn-primary sm:mt-6"
-			onclick={() => {
-				onLeaveGame(); // TODO: Clear the cookie and transition back to JOIN card
+			onclick={async () => {
+				await onLeaveGame();
 			}}>Leave Game</button
 		>
 	{/if}

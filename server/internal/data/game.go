@@ -69,11 +69,19 @@ type GameModel struct {
 	RDB *redis.Client
 }
 
+func getGameKey(code string) string {
+	return fmt.Sprintf("game:%s", code)
+}
+
+func getGamePlayerKey(code string) string {
+	return fmt.Sprintf("game:%s:players", code)
+}
+
 func (m *GameModel) Insert(game *Game) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
-	key := fmt.Sprintf("game:%s", game.GameID)
+	key := getGameKey(game.GameID)
 
 	if err := m.RDB.HSet(ctx, key, game).Err(); err != nil {
 		return err
@@ -90,7 +98,7 @@ func (m *GameModel) GetForCode(gameCode string) (*Game, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
-	key := fmt.Sprintf("game:%s", gameCode)
+	key := getGameKey(gameCode)
 
 	cmd := m.RDB.HGetAll(ctx, key)
 	if err := cmd.Err(); err != nil {
@@ -113,7 +121,7 @@ func (m *GameModel) Delete(gameCode string) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
-	key := fmt.Sprintf("game:%s", gameCode)
+	key := getGameKey(gameCode)
 
 	if err := m.RDB.Del(ctx, key).Err(); err != nil {
 		return err
@@ -122,11 +130,47 @@ func (m *GameModel) Delete(gameCode string) error {
 	return nil
 }
 
+func (m *GameModel) IncrementPlayerCount(gameCode string) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	game, err := m.GetForCode(gameCode)
+	if err != nil {
+		return err
+	}
+
+	if game.CurrentPlayerCount >= game.MaxPlayerCount {
+		return ErrMaxPlayersReached
+	}
+
+	key := getGameKey(gameCode)
+
+	return m.RDB.HSet(ctx, key, "current_player_count", game.CurrentPlayerCount+1).Err()
+}
+
+func (m *GameModel) DecrementPlayerCount(gameCode string) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	game, err := m.GetForCode(gameCode)
+	if err != nil {
+		return err
+	}
+
+	if game.CurrentPlayerCount <= 0 {
+		return ErrNoPlayersInGame
+	}
+
+	key := getGameKey(gameCode)
+
+	return m.RDB.HSet(ctx, key, "current_player_count", game.CurrentPlayerCount-1).Err()
+}
+
 func (m *GameModel) AddPlayerToSet(gameCode, playerSessionToken string) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
-	key := fmt.Sprintf("game:%s:players", gameCode)
+	key := getGamePlayerKey(gameCode)
 	if err := m.RDB.SAdd(ctx, key, playerSessionToken).Err(); err != nil {
 		return err
 	}
@@ -142,7 +186,8 @@ func (m *GameModel) RemovePlayerFromSet(gameCode, playerSessionToken string) err
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
-	key := fmt.Sprintf("game:%s:players", gameCode)
+	key := getGamePlayerKey(gameCode)
+
 	return m.RDB.SRem(ctx, key, playerSessionToken).Err()
 }
 
@@ -150,7 +195,7 @@ func (m *GameModel) GetAllPlayers(gameCode string) ([]string, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
-	key := fmt.Sprintf("game:%s:players", gameCode)
+	key := getGamePlayerKey(gameCode)
 
 	players, err := m.RDB.SMembers(ctx, key).Result()
 	if err != nil {
@@ -162,32 +207,4 @@ func (m *GameModel) GetAllPlayers(gameCode string) ([]string, error) {
 	}
 
 	return players, nil
-}
-
-func (m *GameModel) IncrementPlayerCount(gameCode string) error {
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
-	defer cancel()
-	game, err := m.GetForCode(gameCode)
-	if err != nil {
-		return err
-	}
-	if game.CurrentPlayerCount >= game.MaxPlayerCount {
-		return ErrMaxPlayersReached
-	}
-	key := fmt.Sprintf("game:%s", gameCode)
-	return m.RDB.HSet(ctx, key, "current_player_count", game.CurrentPlayerCount+1).Err()
-}
-
-func (m *GameModel) DecrementPlayerCount(gameCode string) error {
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
-	defer cancel()
-	game, err := m.GetForCode(gameCode)
-	if err != nil {
-		return err
-	}
-	if game.CurrentPlayerCount <= 0 {
-		return ErrNoPlayersInGame
-	}
-	key := fmt.Sprintf("game:%s", gameCode)
-	return m.RDB.HSet(ctx, key, "current_player_count", game.CurrentPlayerCount-1).Err()
 }
