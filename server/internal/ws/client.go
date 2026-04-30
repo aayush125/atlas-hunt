@@ -18,26 +18,28 @@ const (
 )
 
 type Client struct {
-	conn     *websocket.Conn
-	send     chan wsmessages.WSMessage
-	logger   *slog.Logger
-	done     chan struct{}
-	room     *Room
-	nickname string
-	id       string
-	session  string
+	conn      *websocket.Conn
+	send      chan wsmessages.WSMessage
+	logger    *slog.Logger
+	done      chan struct{}
+	room      *Room
+	nickname  string
+	id        string
+	session   string
+	isCreator bool
 }
 
-func NewClient(conn *websocket.Conn, room *Room, nickname, id, session string, logger *slog.Logger) *Client {
+func NewClient(conn *websocket.Conn, room *Room, nickname, id, session string, logger *slog.Logger, isCreator bool) *Client {
 	return &Client{
-		conn:     conn,
-		send:     make(chan wsmessages.WSMessage, 1),
-		logger:   logger,
-		done:     make(chan struct{}),
-		room:     room,
-		nickname: nickname,
-		id:       id,
-		session:  session,
+		conn:      conn,
+		send:      make(chan wsmessages.WSMessage, 1),
+		logger:    logger,
+		done:      make(chan struct{}),
+		room:      room,
+		nickname:  nickname,
+		id:        id,
+		session:   session,
+		isCreator: isCreator,
 	}
 }
 
@@ -47,6 +49,34 @@ func (c *Client) Send(v wsmessages.WSMessage) error {
 		return nil
 	case <-c.done:
 		return fmt.Errorf("client disconnected")
+	}
+}
+
+func (c *Client) HandleMessage(message []byte) {
+	var msg wsmessages.WSMessage
+	err := json.Unmarshal(message, &msg)
+	if err != nil {
+		c.logger.Error("ws message unmarshal error", "error", err.Error())
+		return
+	}
+
+	switch msg.Type {
+	case wsmessages.StartGameRequest:
+		// verify this client is the creator
+		if c.isCreator {
+			if c.room.IsReadyToPlay() {
+				err = c.Send(wsmessages.WSMessage{Type: wsmessages.AcknowledgeStartRequest})
+				if err != nil {
+					c.logger.Error("error sending start game acknowledgement", "error", err.Error())
+					return
+				}
+			}
+		} else {
+			c.logger.Warn("non-creator player sent start game request", "nickname", c.nickname, "game room", c.room.Code)
+			return
+		}
+	default:
+		c.logger.Warn("unknown ws request", "type", msg.Type)
 	}
 }
 
@@ -63,13 +93,15 @@ func (c *Client) ReadPump() {
 	c.conn.SetPongHandler(func(string) error { c.conn.SetReadDeadline(time.Now().Add(pongWait)); return nil })
 
 	for {
-		_, _, err := c.conn.ReadMessage()
+		_, message, err := c.conn.ReadMessage()
 		if err != nil {
 			if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway, websocket.CloseAbnormalClosure, websocket.CloseNormalClosure) {
 				c.logger.Error("unexpected websocket close", "error", err)
 			}
 			break
 		}
+
+		c.HandleMessage(message)
 	}
 }
 

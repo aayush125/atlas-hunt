@@ -1,27 +1,59 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import type { TreasureIcon } from '$lib/types/treasureIcon';
+	import type { Treasure } from '$lib/types/treasure';
 	import * as Panzoom from '@panzoom/panzoom';
 	// import firstMap from '$lib/assets/maps/round_1.svg';
 	// import secondMap from '$lib/assets/maps/round_2.svg';
 	import thirdMap from '$lib/assets/maps/round_3.svg';
 	import { SvelteSet } from 'svelte/reactivity';
 	import { thirdMapPoints as validPoints } from '$lib/points';
+	import TreasureDialog from './TreasureDialog.svelte';
+	import { gameStore } from '../../stores/gameStore';
 
 	let svgEl: SVGSVGElement;
 
 	const usedIndices = new SvelteSet<number>();
-	const icons: TreasureIcon[] = Array.from({ length: Math.min(50, validPoints.length) }, (_, i) => {
-		let idx;
-		do {
-			idx = Math.floor(Math.random() * validPoints.length);
-		} while (usedIndices.has(idx));
-		usedIndices.add(idx);
-		return { id: String(i), icon: '💎', x: validPoints[idx].x, y: validPoints[idx].y };
-	});
+	let icons: Treasure[] = $state(
+		Array.from({ length: Math.min(50, validPoints.length) }, (_, i) => {
+			let idx;
+			do {
+				idx = Math.floor(Math.random() * validPoints.length);
+			} while (usedIndices.has(idx));
+			usedIndices.add(idx);
+			return {
+				id: String(i),
+				name: 'randomname',
+				icon: '💎',
+				x: validPoints[idx].x,
+				y: validPoints[idx].y,
+				question: {
+					text: 'What are the answers to this question?',
+					options: ['Answer One', 'Answer Two', 'Answer Three', 'Answer Four']
+				}
+			};
+		})
+	);
 
-	function handleIconClick(icon: TreasureIcon) {
+	let selectedTreasure = $state<Treasure | null>(null);
+	let claimResult = $state<'correct' | 'incorrect' | null>(null);
+	let claimResultTimer: ReturnType<typeof setTimeout>;
+
+	function handleIconClick(icon: Treasure) {
 		console.log('Clicked icon', icon.id, 'at', icon.x, icon.y);
+		selectedTreasure = icon;
+	}
+
+	function handleTreasureClaim(treasure: Treasure, selectedIndex: number) {
+		console.log('selected answer:', selectedIndex);
+		claimResult = 'correct';
+		gameStore.addTreasure(treasure);
+		icons = icons.filter((ic) => ic.id !== treasure.id);
+
+		clearTimeout(claimResultTimer);
+		claimResultTimer = setTimeout(() => {
+			selectedTreasure = null;
+			claimResult = null;
+		}, 1000);
 	}
 
 	onMount(() => {
@@ -90,6 +122,18 @@
 		</svg>
 	</div>
 </div>
+
+{#if selectedTreasure}
+	<TreasureDialog
+		treasure={selectedTreasure}
+		onClose={() => {
+			selectedTreasure = null;
+			claimResult = null;
+		}}
+		onTreasureClaim={handleTreasureClaim}
+		{claimResult}
+	/>
+{/if}
 
 <style>
 	.map-icon {

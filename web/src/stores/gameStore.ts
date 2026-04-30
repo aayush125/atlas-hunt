@@ -1,5 +1,6 @@
 import type { Game } from '$lib/types/game';
 import type { Member, Player } from '$lib/types/player';
+import type { TreasureItem } from '$lib/types/treasure';
 import { writable } from 'svelte/store';
 
 type GamePhase = 'idle' | 'waiting' | 'in-game' | 'game-over';
@@ -16,6 +17,7 @@ interface GameState {
 	currentPlayerCount: number;
 	otherPlayers: Member[];
 	round: GameRound | null;
+	treasures: TreasureItem[];
 }
 
 const initial: GameState = {
@@ -28,7 +30,8 @@ const initial: GameState = {
 	playerIsCreator: false,
 	currentPlayerCount: 0,
 	otherPlayers: [],
-	round: null
+	round: null,
+	treasures: []
 };
 
 function createGameStore() {
@@ -47,13 +50,19 @@ function createGameStore() {
 				playerIsCreator: player.is_creator,
 				currentPlayerCount: game.current_player_count,
 				otherPlayers: members,
-				round: null
+				round: null,
+				treasures: []
 			})),
 		setGameState: (state: GamePhase) => update((game) => ({ ...game, state })),
 		addPlayer: (id: string, nickname: string) =>
 			update((game) => ({
 				...game,
 				otherPlayers: [...game.otherPlayers, { id, nickname }]
+			})),
+		addTreasure: (treasure: TreasureItem) =>
+			update((game) => ({
+				...game,
+				treasures: [...game.treasures, treasure]
 			})),
 		removePlayer: (id: string) =>
 			update((game) => ({
@@ -65,4 +74,4 @@ function createGameStore() {
 }
 
 export const gameStore = createGameStore();
-export type { GameState, GamePhase };
+export type { GamePhase, GameState };

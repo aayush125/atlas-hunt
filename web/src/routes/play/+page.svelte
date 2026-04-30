@@ -78,6 +78,14 @@
 		}
 	}
 
+	function sendMessage(msg: WSMessage) {
+		if (ws?.readyState === WebSocket.OPEN) {
+			ws.send(JSON.stringify(msg));
+		} else {
+			console.warn('WebSocket not open, cannot send:', msg);
+		}
+	}
+
 	function disconnectWs() {
 		manualClose = true;
 		if (retryTimeout) clearTimeout(retryTimeout);
@@ -108,6 +116,10 @@
 <div class="flex flex-col items-center justify-center gap-8 p-8">
 	{#if $gameStore.state === 'waiting'}
 		<Lobby
+			onStartGame={async () => {
+				console.log('Starting game');
+				sendMessage({ type: 'request:game:start', data: null });
+			}}
 			onLeaveGame={async () => {
 				const res = await fetch('/api/game/leave', {
 					method: 'POST'

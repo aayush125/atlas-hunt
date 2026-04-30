@@ -4,6 +4,8 @@
 	import GameInfoDialog from './GameInfoDialog.svelte';
 	import LeaveGameDialog from './LeaveGameDialog.svelte';
 	import Map from './Map.svelte';
+	import { gameStore } from '../../stores/gameStore';
+	import InventoryGrid from './InventoryGrid.svelte';
 
 	let showInfoModal = false;
 	let showLeaveConfirm = false;
@@ -61,7 +63,7 @@
 				class="tab {activeTab === 'inventory' ? 'tab-active' : ''}"
 				onclick={() => (activeTab = 'inventory')}
 			>
-				Inventory
+				Inventory ({$gameStore.treasures.length})
 			</button>
 			<button
 				role="tab"
@@ -75,7 +77,13 @@
 		<!-- Tab content -->
 		<div class="h-48 overflow-y-auto p-4">
 			{#if activeTab === 'inventory'}
-				<div class="mt-8 text-center text-sm text-base-content/50">No items in inventory yet.</div>
+				<div class="mt-8 text-center text-sm text-base-content/50">
+					{#if $gameStore.treasures.length === 0}
+						No items in inventory yet.
+					{:else}
+						<InventoryGrid treasures={$gameStore.treasures} />
+					{/if}
+				</div>
 			{:else}
 				<div class="mt-8 text-center text-sm text-base-content/50">No players to show.</div>
 			{/if}
