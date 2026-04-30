@@ -5,6 +5,7 @@
 	import CreateGame from '../../components/CreateGame.svelte';
 	import JoinGame from '../../components/JoinGame.svelte';
 	import Lobby from '../../components/Lobby.svelte';
+	// import GamePlay from '../../components/ingame/GamePlay.svelte';
 	import { gameStore } from '../../stores/gameStore';
 	import { onDestroy } from 'svelte';
 
@@ -134,6 +135,7 @@
 					gameStore.setupGame(game, player, members);
 				}}
 			/>
+			<!-- <GamePlay /> -->
 		{:else}
 			<CreateGame
 				onJoinGame={() => (gate = 'join')}

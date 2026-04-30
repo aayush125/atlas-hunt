@@ -3,6 +3,7 @@ import type { Member, Player } from '$lib/types/player';
 import { writable } from 'svelte/store';
 
 type GamePhase = 'idle' | 'waiting' | 'in-game' | 'game-over';
+type GameRound = 'one' | 'two' | 'three';
 
 interface GameState {
 	joinCode: string | null;
@@ -14,6 +15,7 @@ interface GameState {
 	playerIsCreator: boolean;
 	currentPlayerCount: number;
 	otherPlayers: Member[];
+	round: GameRound | null;
 }
 
 const initial: GameState = {
@@ -25,7 +27,8 @@ const initial: GameState = {
 	createdAt: null,
 	playerIsCreator: false,
 	currentPlayerCount: 0,
-	otherPlayers: []
+	otherPlayers: [],
+	round: null
 };
 
 function createGameStore() {
@@ -43,7 +46,8 @@ function createGameStore() {
 				createdAt: new Date(game.created_at),
 				playerIsCreator: player.is_creator,
 				currentPlayerCount: game.current_player_count,
-				otherPlayers: members
+				otherPlayers: members,
+				round: null
 			})),
 		setGameState: (state: GamePhase) => update((game) => ({ ...game, state })),
 		addPlayer: (id: string, nickname: string) =>

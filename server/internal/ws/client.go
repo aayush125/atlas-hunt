@@ -45,15 +45,15 @@ func (c *Client) Send(v wsmessages.WSMessage) error {
 	select {
 	case c.send <- v:
 		return nil
-	case <-time.After(5 * time.Second):
-		return fmt.Errorf("notification timeout")
+	case <-c.done:
+		return fmt.Errorf("client disconnected")
 	}
 }
 
 func (c *Client) ReadPump() {
 	defer func() {
-		close(c.send)
 		close(c.done)
+		close(c.send)
 		c.conn.Close()
 		c.room.Unregister <- c
 	}()

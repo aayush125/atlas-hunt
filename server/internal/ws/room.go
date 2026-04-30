@@ -48,13 +48,17 @@ func (r *Room) Run() {
 			err = player.Send(wsmessages.WSMessage{Type: wsmessages.WelcomeToTheGame})
 			if err != nil {
 				r.logger.Error("error sending welcome message to player", "error", err)
+				break
 			}
 
 			for p := range r.Players {
-				p.Send(wsmessages.WSMessage{Type: wsmessages.PlayerJoined, Data: map[string]any{
+				err = p.Send(wsmessages.WSMessage{Type: wsmessages.PlayerJoined, Data: map[string]any{
 					"nickname": player.nickname,
 					"id":       player.id,
 				}})
+				if err != nil {
+					r.logger.Error("error sending player joined message to player", "error", err, "playerId", p.id)
+				}
 			}
 		case player := <-r.Unregister:
 			err := r.GameModel.DecrementPlayerCount(r.Code)
@@ -70,13 +74,19 @@ func (r *Room) Run() {
 			delete(r.Players, player)
 
 			for p := range r.Players {
-				p.Send(wsmessages.WSMessage{Type: wsmessages.PlayerLeft, Data: map[string]any{
+				err = p.Send(wsmessages.WSMessage{Type: wsmessages.PlayerLeft, Data: map[string]any{
 					"id": player.id,
 				}})
+				if err != nil {
+					r.logger.Error("error sending player left message to player", "error", err, "playerId", p.id)
+				}
 			}
 		case message := <-r.Broadcast:
 			for player := range r.Players {
-				player.Send(*message)
+				err := player.Send(*message)
+				if err != nil {
+					r.logger.Error("error sending broadcast message to player", "error", err, "playerId", player.id)
+				}
 			}
 		}
 	}

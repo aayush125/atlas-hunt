@@ -7,6 +7,10 @@ settings:
 importers:
 
   .:
+    dependencies:
+      '@panzoom/panzoom':
+        specifier: ^4.6.1
+        version: 4.6.1
     devDependencies:
       '@eslint/compat':
         specifier: ^2.0.2
@@ -315,6 +319,9 @@ packages:
 
   '@jridgewell/trace-mapping@0.3.31':
     resolution: {integrity: sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw==}
+
+  '@panzoom/panzoom@4.6.1':
+    resolution: {integrity: sha512-ogf/KhHHjj+DYAvHfaf3TXMQ8OE36pJtKpabLlx1OmpjcgtpCvkUoCiNONA8kuVRPGJdLiqMf0n8LRFXj1OyuA==}
 
   '@polka/url@1.0.0-next.29':
     resolution: {integrity: sha512-wwQAWhWSuHaag8c4q/KN/vCoeOJYshAIvMQwD4GpSb3OiZklFfvAgmj0VCBBImRpuF/aFgIRzllXlVX93Jevww==}
@@ -1568,6 +1575,8 @@ snapshots:
     dependencies:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.5
+
+  '@panzoom/panzoom@4.6.1': {}
 
   '@polka/url@1.0.0-next.29': {}
 
