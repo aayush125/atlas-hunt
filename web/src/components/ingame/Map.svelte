@@ -2,37 +2,13 @@
 	import { onMount } from 'svelte';
 	import type { Treasure } from '$lib/types/treasure';
 	import * as Panzoom from '@panzoom/panzoom';
-	// import firstMap from '$lib/assets/maps/round_1.svg';
-	// import secondMap from '$lib/assets/maps/round_2.svg';
 	import thirdMap from '$lib/assets/maps/round_3.svg';
-	import { SvelteSet } from 'svelte/reactivity';
-	import { thirdMapPoints as validPoints } from '$lib/points';
 	import TreasureDialog from './TreasureDialog.svelte';
-	import { gameStore } from '../../stores/gameStore';
+
+	let { allTreasures, onClaim }: { allTreasures: Treasure[]; onClaim: (t: Treasure) => void } =
+		$props();
 
 	let svgEl: SVGSVGElement;
-
-	const usedIndices = new SvelteSet<number>();
-	let icons: Treasure[] = $state(
-		Array.from({ length: Math.min(50, validPoints.length) }, (_, i) => {
-			let idx;
-			do {
-				idx = Math.floor(Math.random() * validPoints.length);
-			} while (usedIndices.has(idx));
-			usedIndices.add(idx);
-			return {
-				id: String(i),
-				name: 'randomname',
-				icon: '💎',
-				x: validPoints[idx].x,
-				y: validPoints[idx].y,
-				question: {
-					text: 'What are the answers to this question?',
-					options: ['Answer One', 'Answer Two', 'Answer Three', 'Answer Four']
-				}
-			};
-		})
-	);
 
 	let selectedTreasure = $state<Treasure | null>(null);
 	let claimResult = $state<'correct' | 'incorrect' | null>(null);
@@ -43,11 +19,31 @@
 		selectedTreasure = icon;
 	}
 
-	function handleTreasureClaim(treasure: Treasure, selectedIndex: number) {
-		console.log('selected answer:', selectedIndex);
-		claimResult = 'correct';
-		gameStore.addTreasure(treasure);
-		icons = icons.filter((ic) => ic.id !== treasure.id);
+	async function handleTreasureClaim(treasure: Treasure, selectedAnswer: string) {
+		console.log('selected answer:', selectedAnswer);
+		const res = await fetch('/api/game/checkanswer', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				questionId: treasure.question.id,
+				selectedAnswer: selectedAnswer
+			})
+		});
+
+		if (!res.ok) {
+			console.error('There was an error checking the answer.');
+			return;
+		}
+
+		const json = await res.json();
+
+		claimResult = json.correct === true ? 'correct' : 'incorrect';
+
+		if (claimResult == 'correct') {
+			onClaim(treasure);
+		}
 
 		clearTimeout(claimResultTimer);
 		claimResultTimer = setTimeout(() => {
@@ -89,13 +85,13 @@
 					<stop offset="100%" stop-color="#c0202a" />
 				</radialGradient>
 			</defs>
-			{#each icons as icon (icon.id)}
+			{#each allTreasures as icon (icon.id)}
 				<g transform="translate({icon.x}, {icon.y})">
 					<g
 						role="button"
 						tabindex="0"
-						on:click={() => handleIconClick(icon)}
-						on:keydown={(e) => e.key === 'Enter' && handleIconClick(icon)}
+						onclick={() => handleIconClick(icon)}
+						onkeydown={(e) => e.key === 'Enter' && handleIconClick(icon)}
 						class="map-icon"
 					>
 						<circle

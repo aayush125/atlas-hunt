@@ -1,0 +1,4270 @@
+[
+  {
+    "id": "ng01",
+    "name": "Amazon River Stone",
+    "icon": "🪨",
+    "cat": "Nature & Geography",
+    "rarity": "Common",
+    "points": 10,
+    "boostPoints": 60,
+    "questions": [
+      {
+        "q": "What is the longest river in South America?",
+        "options": {
+          "A": "Orinoco",
+          "B": "Amazon",
+          "C": "Paraná",
+          "D": "São Francisco"
+        },
+        "answer": "B",
+        "id": "ng01-q1"
+      },
+      {
+        "q": "In which continent is the Amazon rainforest located?",
+        "options": {
+          "A": "Asia",
+          "B": "Africa",
+          "C": "South America",
+          "D": "Australia"
+        },
+        "answer": "C",
+        "id": "ng01-q2"
+      }
+    ]
+  },
+  {
+    "id": "ng02",
+    "name": "Sahara Sand Vial",
+    "icon": "🏜️",
+    "cat": "Nature & Geography",
+    "rarity": "Common",
+    "points": 10,
+    "boostPoints": 60,
+    "questions": [
+      {
+        "q": "The Sahara Desert is located on which continent?",
+        "options": {
+          "A": "Asia",
+          "B": "Australia",
+          "C": "South America",
+          "D": "Africa"
+        },
+        "answer": "D",
+        "id": "ng02-q1"
+      },
+      {
+        "q": "Which country has the largest portion of the Sahara Desert?",
+        "options": {
+          "A": "Egypt",
+          "B": "Algeria",
+          "C": "Libya",
+          "D": "Sudan"
+        },
+        "answer": "B",
+        "id": "ng02-q2"
+      }
+    ]
+  },
+  {
+    "id": "ng03",
+    "name": "Everest Summit Flag",
+    "icon": "🚩",
+    "cat": "Nature & Geography",
+    "rarity": "Legendary",
+    "points": 150,
+    "boostPoints": 500,
+    "questions": [
+      {
+        "q": "What is the official height of Mount Everest as measured in 2020?",
+        "options": {
+          "A": "8,444 m",
+          "B": "8,611 m",
+          "C": "8,849 m",
+          "D": "8,091 m"
+        },
+        "answer": "C",
+        "id": "ng03-q1"
+      },
+      {
+        "q": "In which mountain range is Mount Everest located?",
+        "options": {
+          "A": "Karakoram",
+          "B": "Andes",
+          "C": "Alps",
+          "D": "Himalayas"
+        },
+        "answer": "D",
+        "id": "ng03-q2"
+      },
+      {
+        "q": "Who were the first two people confirmed to summit Mount Everest?",
+        "options": {
+          "A": "Reinhold Messner & Peter Habeler",
+          "B": "Edmund Hillary & Tenzing Norgay",
+          "C": "George Mallory & Andrew Irvine",
+          "D": "Chris Bonington & Doug Scott"
+        },
+        "answer": "B",
+        "id": "ng03-q3"
+      }
+    ]
+  },
+  {
+    "id": "ng04",
+    "name": "Pacific Shell",
+    "icon": "🐚",
+    "cat": "Nature & Geography",
+    "rarity": "Common",
+    "points": 10,
+    "boostPoints": 60,
+    "questions": [
+      {
+        "q": "What is the largest ocean on Earth?",
+        "options": {
+          "A": "Atlantic",
+          "B": "Indian",
+          "C": "Arctic",
+          "D": "Pacific"
+        },
+        "answer": "D",
+        "id": "ng04-q1"
+      },
+      {
+        "q": "The Pacific Ocean covers approximately what fraction of Earth's surface?",
+        "options": {
+          "A": "One quarter",
+          "B": "One third",
+          "C": "Nearly half",
+          "D": "Two thirds"
+        },
+        "answer": "C",
+        "id": "ng04-q2"
+      }
+    ]
+  },
+  {
+    "id": "ng05",
+    "name": "Nile Papyrus",
+    "icon": "📜",
+    "cat": "Nature & Geography",
+    "rarity": "Rare",
+    "points": 25,
+    "boostPoints": 120,
+    "questions": [
+      {
+        "q": "The Nile River flows northward and empties into which body of water?",
+        "options": {
+          "A": "Red Sea",
+          "B": "Arabian Sea",
+          "C": "Mediterranean Sea",
+          "D": "Black Sea"
+        },
+        "answer": "C",
+        "id": "ng05-q1"
+      },
+      {
+        "q": "Through how many countries does the Nile River flow?",
+        "options": {
+          "A": "5",
+          "B": "8",
+          "C": "11",
+          "D": "14"
+        },
+        "answer": "C",
+        "id": "ng05-q2"
+      },
+      {
+        "q": "What is the name of the large dam on the Nile completed in 1970?",
+        "options": {
+          "A": "Kariba Dam",
+          "B": "Aswan High Dam",
+          "C": "Grand Ethiopian Renaissance Dam",
+          "D": "Merowe Dam"
+        },
+        "answer": "B",
+        "id": "ng05-q3"
+      }
+    ]
+  },
+  {
+    "id": "ng06",
+    "name": "Volcanic Crystal",
+    "icon": "💎",
+    "cat": "Nature & Geography",
+    "rarity": "Epic",
+    "points": 60,
+    "boostPoints": 250,
+    "questions": [
+      {
+        "q": "What type of rock is formed directly from cooled lava?",
+        "options": {
+          "A": "Sedimentary",
+          "B": "Metamorphic",
+          "C": "Igneous",
+          "D": "Limestone"
+        },
+        "answer": "C",
+        "id": "ng06-q1"
+      },
+      {
+        "q": "What is the name of the supervolcano beneath Yellowstone National Park?",
+        "options": {
+          "A": "Long Valley Caldera",
+          "B": "Campi Flegrei",
+          "C": "Taupo Caldera",
+          "D": "Yellowstone Caldera"
+        },
+        "answer": "D",
+        "id": "ng06-q2"
+      },
+      {
+        "q": "Which volcanic eruption in 79 AD buried the city of Pompeii?",
+        "options": {
+          "A": "Mount Etna",
+          "B": "Mount Vesuvius",
+          "C": "Stromboli",
+          "D": "Santorini"
+        },
+        "answer": "B",
+        "id": "ng06-q3"
+      }
+    ]
+  },
+  {
+    "id": "ng07",
+    "name": "Northern Lights Orb",
+    "icon": "🔮",
+    "cat": "Nature & Geography",
+    "rarity": "Legendary",
+    "points": 150,
+    "boostPoints": 500,
+    "questions": [
+      {
+        "q": "What causes the Aurora Borealis (Northern Lights)?",
+        "options": {
+          "A": "Moonlight reflecting off polar ice",
+          "B": "Volcanic gas emissions",
+          "C": "Charged solar particles colliding with the atmosphere",
+          "D": "Refraction of sunlight through ice crystals"
+        },
+        "answer": "C",
+        "id": "ng07-q1"
+      },
+      {
+        "q": "What is the Southern Hemisphere equivalent of the Aurora Borealis?",
+        "options": {
+          "A": "Aurora Meridiem",
+          "B": "Aurora Australis",
+          "C": "Aurora Polaris",
+          "D": "Aurora Pacifica"
+        },
+        "answer": "B",
+        "id": "ng07-q2"
+      },
+      {
+        "q": "Which gas produces the most common green colour in the Aurora Borealis?",
+        "options": {
+          "A": "Nitrogen",
+          "B": "Hydrogen",
+          "C": "Neon",
+          "D": "Oxygen"
+        },
+        "answer": "D",
+        "id": "ng07-q3"
+      }
+    ]
+  },
+  {
+    "id": "ng08",
+    "name": "Glacier Ice Cube",
+    "icon": "🧊",
+    "cat": "Nature & Geography",
+    "rarity": "Rare",
+    "points": 25,
+    "boostPoints": 120,
+    "questions": [
+      {
+        "q": "Approximately what percentage of Earth's fresh water is stored in glaciers?",
+        "options": {
+          "A": "30%",
+          "B": "50%",
+          "C": "69%",
+          "D": "85%"
+        },
+        "answer": "C",
+        "id": "ng08-q1"
+      },
+      {
+        "q": "Which is the world's largest glacier outside the polar regions?",
+        "options": {
+          "A": "Perito Moreno",
+          "B": "Baltoro",
+          "C": "Siachen",
+          "D": "Aletsch"
+        },
+        "answer": "C",
+        "id": "ng08-q2"
+      }
+    ]
+  },
+  {
+    "id": "ng09",
+    "name": "Rainforest Leaf",
+    "icon": "🌿",
+    "cat": "Nature & Geography",
+    "rarity": "Common",
+    "points": 10,
+    "boostPoints": 60,
+    "questions": [
+      {
+        "q": "The Amazon rainforest produces roughly what fraction of Earth's oxygen?",
+        "options": {
+          "A": "5%",
+          "B": "10%",
+          "C": "20%",
+          "D": "35%"
+        },
+        "answer": "C",
+        "id": "ng09-q1"
+      },
+      {
+        "q": "How many species of trees are estimated to exist in the Amazon rainforest?",
+        "options": {
+          "A": "Over 3,000",
+          "B": "Over 16,000",
+          "C": "Over 50,000",
+          "D": "Over 100,000"
+        },
+        "answer": "B",
+        "id": "ng09-q2"
+      }
+    ]
+  },
+  {
+    "id": "ng10",
+    "name": "Mariana Trench Pearl",
+    "icon": "🫧",
+    "cat": "Nature & Geography",
+    "rarity": "Epic",
+    "points": 60,
+    "boostPoints": 250,
+    "questions": [
+      {
+        "q": "What is the name of the deepest known point in the ocean?",
+        "options": {
+          "A": "Puerto Rico Trench",
+          "B": "Tonga Trench",
+          "C": "Challenger Deep",
+          "D": "Java Trench"
+        },
+        "answer": "C",
+        "id": "ng10-q1"
+      },
+      {
+        "q": "Approximately how deep is the Mariana Trench?",
+        "options": {
+          "A": "6,000 metres",
+          "B": "8,500 metres",
+          "C": "11,000 metres",
+          "D": "14,000 metres"
+        },
+        "answer": "C",
+        "id": "ng10-q2"
+      },
+      {
+        "q": "In which ocean is the Mariana Trench located?",
+        "options": {
+          "A": "Atlantic",
+          "B": "Indian",
+          "C": "Arctic",
+          "D": "Pacific"
+        },
+        "answer": "D",
+        "id": "ng10-q3"
+      }
+    ]
+  },
+  {
+    "id": "ng11",
+    "name": "Great Barrier Reef Coral",
+    "icon": "🪸",
+    "cat": "Nature & Geography",
+    "rarity": "Rare",
+    "points": 25,
+    "boostPoints": 120,
+    "questions": [
+      {
+        "q": "The Great Barrier Reef is located off the coast of which Australian state?",
+        "options": {
+          "A": "New South Wales",
+          "B": "Western Australia",
+          "C": "Queensland",
+          "D": "Victoria"
+        },
+        "answer": "C",
+        "id": "ng11-q1"
+      },
+      {
+        "q": "Approximately how long is the Great Barrier Reef?",
+        "options": {
+          "A": "500 km",
+          "B": "1,200 km",
+          "C": "2,300 km",
+          "D": "4,000 km"
+        },
+        "answer": "C",
+        "id": "ng11-q2"
+      },
+      {
+        "q": "What percentage of the world's coral reefs does the Great Barrier Reef represent?",
+        "options": {
+          "A": "2%",
+          "B": "10%",
+          "C": "25%",
+          "D": "40%"
+        },
+        "answer": "B",
+        "id": "ng11-q3"
+      }
+    ]
+  },
+  {
+    "id": "ng12",
+    "name": "Victoria Falls Mist",
+    "icon": "💧",
+    "cat": "Nature & Geography",
+    "rarity": "Epic",
+    "points": 60,
+    "boostPoints": 250,
+    "questions": [
+      {
+        "q": "Victoria Falls lies on which African river?",
+        "options": {
+          "A": "Congo River",
+          "B": "Niger River",
+          "C": "Limpopo River",
+          "D": "Zambezi River"
+        },
+        "answer": "D",
+        "id": "ng12-q1"
+      },
+      {
+        "q": "What is the local Tonga name for Victoria Falls?",
+        "options": {
+          "A": "Mosi-oa-Tunya",
+          "B": "Ngonye Falls",
+          "C": "Kalambo Falls",
+          "D": "Augrabies Falls"
+        },
+        "answer": "A",
+        "id": "ng12-q2"
+      },
+      {
+        "q": "Between which two countries does Victoria Falls sit?",
+        "options": {
+          "A": "Kenya and Tanzania",
+          "B": "Zambia and Zimbabwe",
+          "C": "Botswana and Namibia",
+          "D": "Mozambique and Malawi"
+        },
+        "answer": "B",
+        "id": "ng12-q3"
+      }
+    ]
+  },
+  {
+    "id": "ng13",
+    "name": "Dead Sea Salt Crystal",
+    "icon": "🧂",
+    "cat": "Nature & Geography",
+    "rarity": "Rare",
+    "points": 25,
+    "boostPoints": 120,
+    "questions": [
+      {
+        "q": "Why is it nearly impossible to sink in the Dead Sea?",
+        "options": {
+          "A": "The water is shallow throughout",
+          "B": "Its high salt concentration makes water denser than the body",
+          "C": "Underwater currents push swimmers upward",
+          "D": "The sea contains natural buoyancy minerals"
+        },
+        "answer": "B",
+        "id": "ng13-q1"
+      },
+      {
+        "q": "How many times saltier is the Dead Sea compared to the average ocean?",
+        "options": {
+          "A": "2×",
+          "B": "5×",
+          "C": "10×",
+          "D": "20×"
+        },
+        "answer": "C",
+        "id": "ng13-q2"
+      }
+    ]
+  },
+  {
+    "id": "st01",
+    "name": "DNA Double Helix",
+    "icon": "🧬",
+    "cat": "Science & Technology",
+    "rarity": "Epic",
+    "points": 60,
+    "boostPoints": 250,
+    "questions": [
+      {
+        "q": "What does the 'D' in DNA stand for?",
+        "options": {
+          "A": "Dual",
+          "B": "Deoxyribonucleic",
+          "C": "Dynamic",
+          "D": "Dimeric"
+        },
+        "answer": "B",
+        "id": "st01-q1"
+      },
+      {
+        "q": "Who took the famous X-ray diffraction photo (Photo 51) that helped reveal DNA's structure?",
+        "options": {
+          "A": "Rosalind Franklin",
+          "B": "Linus Pauling",
+          "C": "Francis Crick",
+          "D": "Maurice Wilkins"
+        },
+        "answer": "A",
+        "id": "st01-q2"
+      },
+      {
+        "q": "How many base pairs does the human genome contain approximately?",
+        "options": {
+          "A": "300 million",
+          "B": "3 billion",
+          "C": "30 billion",
+          "D": "300 billion"
+        },
+        "answer": "B",
+        "id": "st01-q3"
+      }
+    ]
+  },
+  {
+    "id": "st02",
+    "name": "Newton's Apple",
+    "icon": "🍎",
+    "cat": "Science & Technology",
+    "rarity": "Common",
+    "points": 10,
+    "boostPoints": 60,
+    "questions": [
+      {
+        "q": "What is Newton's second law of motion?",
+        "options": {
+          "A": "Every action has an equal and opposite reaction",
+          "B": "Objects stay at rest unless acted on by a force",
+          "C": "Force equals mass times acceleration",
+          "D": "Energy is conserved in a closed system"
+        },
+        "answer": "C",
+        "id": "st02-q1"
+      },
+      {
+        "q": "In which year did Isaac Newton publish his Principia Mathematica?",
+        "options": {
+          "A": "1632",
+          "B": "1687",
+          "C": "1712",
+          "D": "1755"
+        },
+        "answer": "B",
+        "id": "st02-q2"
+      }
+    ]
+  },
+  {
+    "id": "st03",
+    "name": "Periodic Table Tile",
+    "icon": "⚗️",
+    "cat": "Science & Technology",
+    "rarity": "Rare",
+    "points": 25,
+    "boostPoints": 120,
+    "questions": [
+      {
+        "q": "What is the chemical symbol for gold?",
+        "options": {
+          "A": "Go",
+          "B": "Gd",
+          "C": "Gl",
+          "D": "Au"
+        },
+        "answer": "D",
+        "id": "st03-q1"
+      },
+      {
+        "q": "How many elements are on the modern periodic table?",
+        "options": {
+          "A": "92",
+          "B": "103",
+          "C": "118",
+          "D": "126"
+        },
+        "answer": "C",
+        "id": "st03-q2"
+      },
+      {
+        "q": "Who published the first widely accepted periodic table in 1869?",
+        "options": {
+          "A": "Antoine Lavoisier",
+          "B": "John Dalton",
+          "C": "Henry Moseley",
+          "D": "Dmitri Mendeleev"
+        },
+        "answer": "D",
+        "id": "st03-q3"
+      }
+    ]
+  },
+  {
+    "id": "st04",
+    "name": "Circuit Board Fragment",
+    "icon": "💻",
+    "cat": "Science & Technology",
+    "rarity": "Common",
+    "points": 10,
+    "boostPoints": 60,
+    "questions": [
+      {
+        "q": "What does CPU stand for?",
+        "options": {
+          "A": "Central Power Unit",
+          "B": "Core Processing Unit",
+          "C": "Central Processing Unit",
+          "D": "Computed Program Unit"
+        },
+        "answer": "C",
+        "id": "st04-q1"
+      },
+      {
+        "q": "Who is credited as the inventor of the World Wide Web?",
+        "options": {
+          "A": "Bill Gates",
+          "B": "Vint Cerf",
+          "C": "Tim Berners-Lee",
+          "D": "Steve Jobs"
+        },
+        "answer": "C",
+        "id": "st04-q2"
+      }
+    ]
+  },
+  {
+    "id": "st05",
+    "name": "Black Hole Shard",
+    "icon": "🌑",
+    "cat": "Science & Technology",
+    "rarity": "Legendary",
+    "points": 150,
+    "boostPoints": 500,
+    "questions": [
+      {
+        "q": "What is the boundary around a black hole beyond which nothing can escape called?",
+        "options": {
+          "A": "Photon sphere",
+          "B": "Ergosphere",
+          "C": "Accretion disk",
+          "D": "Event horizon"
+        },
+        "answer": "D",
+        "id": "st05-q1"
+      },
+      {
+        "q": "What term describes the infinitely dense point at the centre of a black hole?",
+        "options": {
+          "A": "Quantum core",
+          "B": "Singularity",
+          "C": "Neutron kernel",
+          "D": "Dark nucleus"
+        },
+        "answer": "B",
+        "id": "st05-q2"
+      },
+      {
+        "q": "What is the name of the first black hole ever directly imaged, revealed in 2019?",
+        "options": {
+          "A": "Cygnus X-1",
+          "B": "Sagittarius A*",
+          "C": "M87* (Pōwehi)",
+          "D": "NGC 1277"
+        },
+        "answer": "C",
+        "id": "st05-q3"
+      }
+    ]
+  },
+  {
+    "id": "st06",
+    "name": "Tesla Coil Spark",
+    "icon": "⚡",
+    "cat": "Science & Technology",
+    "rarity": "Rare",
+    "points": 25,
+    "boostPoints": 120,
+    "questions": [
+      {
+        "q": "What type of electrical current did Nikola Tesla champion over Edison's system?",
+        "options": {
+          "A": "Direct current (DC)",
+          "B": "Alternating current (AC)",
+          "C": "Pulsed current (PC)",
+          "D": "Static current (SC)"
+        },
+        "answer": "B",
+        "id": "st06-q1"
+      },
+      {
+        "q": "What unit is electrical voltage measured in?",
+        "options": {
+          "A": "Watts",
+          "B": "Amperes",
+          "C": "Ohms",
+          "D": "Volts"
+        },
+        "answer": "D",
+        "id": "st06-q2"
+      },
+      {
+        "q": "Tesla's patents were largely bought by which company after financial disputes?",
+        "options": {
+          "A": "General Electric",
+          "B": "Westinghouse Electric",
+          "C": "Edison Electric",
+          "D": "Siemens"
+        },
+        "answer": "B",
+        "id": "st06-q3"
+      }
+    ]
+  },
+  {
+    "id": "st07",
+    "name": "Quantum Qubit",
+    "icon": "🔵",
+    "cat": "Science & Technology",
+    "rarity": "Legendary",
+    "points": 150,
+    "boostPoints": 500,
+    "questions": [
+      {
+        "q": "What quantum property allows a particle to exist in multiple states at once?",
+        "options": {
+          "A": "Entanglement",
+          "B": "Superposition",
+          "C": "Decoherence",
+          "D": "Tunnelling"
+        },
+        "answer": "B",
+        "id": "st07-q1"
+      },
+      {
+        "q": "What happens to two entangled particles when one is measured?",
+        "options": {
+          "A": "The other gains mass",
+          "B": "The other moves away at light speed",
+          "C": "The other's state is instantly determined",
+          "D": "The other becomes undetectable"
+        },
+        "answer": "C",
+        "id": "st07-q2"
+      },
+      {
+        "q": "What is the term for the loss of quantum coherence due to environmental interference?",
+        "options": {
+          "A": "Superposition collapse",
+          "B": "Quantum erasure",
+          "C": "Wave-function decay",
+          "D": "Decoherence"
+        },
+        "answer": "D",
+        "id": "st07-q3"
+      }
+    ]
+  },
+  {
+    "id": "st08",
+    "name": "Lab Flask",
+    "icon": "🧪",
+    "cat": "Science & Technology",
+    "rarity": "Common",
+    "points": 10,
+    "boostPoints": 60,
+    "questions": [
+      {
+        "q": "What is the chemical formula for water?",
+        "options": {
+          "A": "HO₂",
+          "B": "H₂O",
+          "C": "H₃O",
+          "D": "OH₂"
+        },
+        "answer": "B",
+        "id": "st08-q1"
+      },
+      {
+        "q": "What is the pH of a perfectly neutral solution?",
+        "options": {
+          "A": "0",
+          "B": "5",
+          "C": "7",
+          "D": "14"
+        },
+        "answer": "C",
+        "id": "st08-q2"
+      }
+    ]
+  },
+  {
+    "id": "st09",
+    "name": "Genome Sequencer Token",
+    "icon": "🔬",
+    "cat": "Science & Technology",
+    "rarity": "Epic",
+    "points": 60,
+    "boostPoints": 250,
+    "questions": [
+      {
+        "q": "In what year was the Human Genome Project declared complete?",
+        "options": {
+          "A": "1998",
+          "B": "2001",
+          "C": "2003",
+          "D": "2007"
+        },
+        "answer": "C",
+        "id": "st09-q1"
+      },
+      {
+        "q": "How many chromosomes do humans have in a typical somatic cell?",
+        "options": {
+          "A": "23",
+          "B": "44",
+          "C": "46",
+          "D": "48"
+        },
+        "answer": "C",
+        "id": "st09-q2"
+      },
+      {
+        "q": "What does CRISPR-Cas9 enable scientists to do?",
+        "options": {
+          "A": "Clone entire organisms",
+          "B": "Precisely edit specific DNA sequences",
+          "C": "Visualise gene expression in real time",
+          "D": "Synthesise artificial chromosomes"
+        },
+        "answer": "B",
+        "id": "st09-q3"
+      }
+    ]
+  },
+  {
+    "id": "st10",
+    "name": "Higgs Boson Badge",
+    "icon": "⚛️",
+    "cat": "Science & Technology",
+    "rarity": "Legendary",
+    "points": 150,
+    "boostPoints": 500,
+    "questions": [
+      {
+        "q": "At which facility was the Higgs boson discovered in 2012?",
+        "options": {
+          "A": "Fermilab",
+          "B": "SLAC",
+          "C": "DESY",
+          "D": "CERN's Large Hadron Collider"
+        },
+        "answer": "D",
+        "id": "st10-q1"
+      },
+      {
+        "q": "What fundamental property does the Higgs field give to other particles?",
+        "options": {
+          "A": "Charge",
+          "B": "Spin",
+          "C": "Mass",
+          "D": "Colour"
+        },
+        "answer": "C",
+        "id": "st10-q2"
+      },
+      {
+        "q": "What popular nickname was given to the Higgs boson?",
+        "options": {
+          "A": "The Ghost Particle",
+          "B": "The God Particle",
+          "C": "The Omega Particle",
+          "D": "The Force Carrier"
+        },
+        "answer": "B",
+        "id": "st10-q3"
+      }
+    ]
+  },
+  {
+    "id": "st11",
+    "name": "Internet Node",
+    "icon": "🌐",
+    "cat": "Science & Technology",
+    "rarity": "Rare",
+    "points": 25,
+    "boostPoints": 120,
+    "questions": [
+      {
+        "q": "In what year did Tim Berners-Lee propose the World Wide Web?",
+        "options": {
+          "A": "1983",
+          "B": "1989",
+          "C": "1993",
+          "D": "1997"
+        },
+        "answer": "B",
+        "id": "st11-q1"
+      },
+      {
+        "q": "What does HTTP stand for?",
+        "options": {
+          "A": "HyperText Transfer Protocol",
+          "B": "High-Traffic Transfer Pathway",
+          "C": "Hosted Text Transport Process",
+          "D": "HyperLink Transmission Protocol"
+        },
+        "answer": "A",
+        "id": "st11-q2"
+      },
+      {
+        "q": "What were the first two characters of the very first ARPANET message (sent in 1969)?",
+        "options": {
+          "A": "hi",
+          "B": "lo",
+          "C": "go",
+          "D": "no"
+        },
+        "answer": "B",
+        "id": "st11-q3"
+      }
+    ]
+  },
+  {
+    "id": "st12",
+    "name": "Rocket Nozzle",
+    "icon": "🚀",
+    "cat": "Science & Technology",
+    "rarity": "Epic",
+    "points": 60,
+    "boostPoints": 250,
+    "questions": [
+      {
+        "q": "What is the approximate escape velocity needed to leave Earth's gravity?",
+        "options": {
+          "A": "7.9 km/s",
+          "B": "11.2 km/s",
+          "C": "17.6 km/s",
+          "D": "28.0 km/s"
+        },
+        "answer": "B",
+        "id": "st12-q1"
+      },
+      {
+        "q": "Which Newton's law explains why rockets accelerate in space?",
+        "options": {
+          "A": "First law",
+          "B": "Second law",
+          "C": "Third law",
+          "D": "Law of Gravitation"
+        },
+        "answer": "C",
+        "id": "st12-q2"
+      },
+      {
+        "q": "What propellant combination did the Saturn V rocket's first stage use?",
+        "options": {
+          "A": "Liquid hydrogen and liquid oxygen",
+          "B": "RP-1 (kerosene) and liquid oxygen",
+          "C": "Hydrazine and nitrogen tetroxide",
+          "D": "Solid ammonium perchlorate"
+        },
+        "answer": "B",
+        "id": "st12-q3"
+      }
+    ]
+  },
+  {
+    "id": "st13",
+    "name": "Solar Cell",
+    "icon": "☀️",
+    "cat": "Science & Technology",
+    "rarity": "Common",
+    "points": 10,
+    "boostPoints": 60,
+    "questions": [
+      {
+        "q": "What physical phenomenon do solar panels exploit to generate electricity?",
+        "options": {
+          "A": "Thermoelectric effect",
+          "B": "Piezoelectric effect",
+          "C": "Photovoltaic effect",
+          "D": "Photoelectric emission"
+        },
+        "answer": "C",
+        "id": "st13-q1"
+      },
+      {
+        "q": "What element is most commonly used as the semiconductor in solar panels?",
+        "options": {
+          "A": "Germanium",
+          "B": "Silicon",
+          "C": "Gallium",
+          "D": "Cadmium"
+        },
+        "answer": "B",
+        "id": "st13-q2"
+      }
+    ]
+  },
+  {
+    "id": "hc01",
+    "name": "Egyptian Cartouche",
+    "icon": "📿",
+    "cat": "History & Culture",
+    "rarity": "Rare",
+    "points": 25,
+    "boostPoints": 120,
+    "questions": [
+      {
+        "q": "Who was the last ruling pharaoh of ancient Egypt?",
+        "options": {
+          "A": "Nefertiti",
+          "B": "Hatshepsut",
+          "C": "Cleopatra VII",
+          "D": "Nefertari"
+        },
+        "answer": "C",
+        "id": "hc01-q1"
+      },
+      {
+        "q": "The Rosetta Stone was written in how many scripts?",
+        "options": {
+          "A": "Two",
+          "B": "Three",
+          "C": "Four",
+          "D": "Five"
+        },
+        "answer": "B",
+        "id": "hc01-q2"
+      },
+      {
+        "q": "What year was the Rosetta Stone discovered?",
+        "options": {
+          "A": "1756",
+          "B": "1799",
+          "C": "1823",
+          "D": "1851"
+        },
+        "answer": "B",
+        "id": "hc01-q3"
+      }
+    ]
+  },
+  {
+    "id": "hc02",
+    "name": "Roman Coin",
+    "icon": "🪙",
+    "cat": "History & Culture",
+    "rarity": "Common",
+    "points": 10,
+    "boostPoints": 60,
+    "questions": [
+      {
+        "q": "In what year did the Western Roman Empire fall?",
+        "options": {
+          "A": "410 AD",
+          "B": "455 AD",
+          "C": "476 AD",
+          "D": "527 AD"
+        },
+        "answer": "C",
+        "id": "hc02-q1"
+      },
+      {
+        "q": "What language did the Romans speak?",
+        "options": {
+          "A": "Greek",
+          "B": "Etruscan",
+          "C": "Oscan",
+          "D": "Latin"
+        },
+        "answer": "D",
+        "id": "hc02-q2"
+      }
+    ]
+  },
+  {
+    "id": "hc03",
+    "name": "Magna Carta Seal",
+    "icon": "📜",
+    "cat": "History & Culture",
+    "rarity": "Epic",
+    "points": 60,
+    "boostPoints": 250,
+    "questions": [
+      {
+        "q": "In what year was the Magna Carta signed?",
+        "options": {
+          "A": "1066",
+          "B": "1154",
+          "C": "1215",
+          "D": "1295"
+        },
+        "answer": "C",
+        "id": "hc03-q1"
+      },
+      {
+        "q": "Which English king was forced to sign the Magna Carta?",
+        "options": {
+          "A": "King Henry II",
+          "B": "King Richard I",
+          "C": "King John",
+          "D": "King Edward I"
+        },
+        "answer": "C",
+        "id": "hc03-q2"
+      },
+      {
+        "q": "What key legal principle did the Magna Carta introduce?",
+        "options": {
+          "A": "Universal suffrage",
+          "B": "Parliamentary sovereignty",
+          "C": "Trial by combat",
+          "D": "No one is above the rule of law"
+        },
+        "answer": "D",
+        "id": "hc03-q3"
+      }
+    ]
+  },
+  {
+    "id": "hc04",
+    "name": "Samurai Blade Fragment",
+    "icon": "⚔️",
+    "cat": "History & Culture",
+    "rarity": "Rare",
+    "points": 25,
+    "boostPoints": 120,
+    "questions": [
+      {
+        "q": "What is the name of the samurai code of honour and conduct?",
+        "options": {
+          "A": "Shintoism",
+          "B": "Bushido",
+          "C": "Budo",
+          "D": "Kendo"
+        },
+        "answer": "B",
+        "id": "hc04-q1"
+      },
+      {
+        "q": "What was the last major samurai rebellion in Japan (1877)?",
+        "options": {
+          "A": "Boshin War",
+          "B": "Imjin War",
+          "C": "Satsuma Rebellion",
+          "D": "Meiji Restoration"
+        },
+        "answer": "C",
+        "id": "hc04-q2"
+      },
+      {
+        "q": "What type of sword is traditionally associated with samurai warriors?",
+        "options": {
+          "A": "Tanto",
+          "B": "Naginata",
+          "C": "Katana",
+          "D": "Wakizashi"
+        },
+        "answer": "C",
+        "id": "hc04-q3"
+      }
+    ]
+  },
+  {
+    "id": "hc05",
+    "name": "Berlin Wall Chip",
+    "icon": "🧱",
+    "cat": "History & Culture",
+    "rarity": "Epic",
+    "points": 60,
+    "boostPoints": 250,
+    "questions": [
+      {
+        "q": "In what year did the Berlin Wall fall?",
+        "options": {
+          "A": "1987",
+          "B": "1989",
+          "C": "1991",
+          "D": "1993"
+        },
+        "answer": "B",
+        "id": "hc05-q1"
+      },
+      {
+        "q": "Approximately how long was the Berlin Wall in total?",
+        "options": {
+          "A": "45 km",
+          "B": "95 km",
+          "C": "155 km",
+          "D": "220 km"
+        },
+        "answer": "C",
+        "id": "hc05-q2"
+      },
+      {
+        "q": "What was the East German name for the Berlin Wall?",
+        "options": {
+          "A": "Eiserner Vorhang",
+          "B": "Grenzmauer",
+          "C": "Antifaschistischer Schutzwall",
+          "D": "Sperrmauer"
+        },
+        "answer": "C",
+        "id": "hc05-q3"
+      }
+    ]
+  },
+  {
+    "id": "hc06",
+    "name": "Viking Compass",
+    "icon": "🧭",
+    "cat": "History & Culture",
+    "rarity": "Rare",
+    "points": 25,
+    "boostPoints": 120,
+    "questions": [
+      {
+        "q": "Who is credited as the first European to reach North America?",
+        "options": {
+          "A": "Eric the Red",
+          "B": "Leif Erikson",
+          "C": "Bjorn Ironside",
+          "D": "Ragnar Lothbrok"
+        },
+        "answer": "B",
+        "id": "hc06-q1"
+      },
+      {
+        "q": "What was the name of the Viking assembly or parliament?",
+        "options": {
+          "A": "Jarl",
+          "B": "Folkmoot",
+          "C": "Althing",
+          "D": "Witan"
+        },
+        "answer": "C",
+        "id": "hc06-q2"
+      },
+      {
+        "q": "What mysterious navigational crystal did Vikings reportedly use at sea?",
+        "options": {
+          "A": "Sea crystal",
+          "B": "Ice spar",
+          "C": "Sunstone",
+          "D": "Moon rock"
+        },
+        "answer": "C",
+        "id": "hc06-q3"
+      }
+    ]
+  },
+  {
+    "id": "hc07",
+    "name": "Aztec Sun Stone",
+    "icon": "☀️",
+    "cat": "History & Culture",
+    "rarity": "Legendary",
+    "points": 150,
+    "boostPoints": 500,
+    "questions": [
+      {
+        "q": "What is the Aztec Sun Stone more commonly (if inaccurately) known as?",
+        "options": {
+          "A": "Aztec Zodiac",
+          "B": "Aztec Calendar",
+          "C": "Aztec Codex",
+          "D": "Aztec Compass"
+        },
+        "answer": "B",
+        "id": "hc07-q1"
+      },
+      {
+        "q": "In what year did Spanish conquistador Hernán Cortés arrive in the Aztec Empire?",
+        "options": {
+          "A": "1492",
+          "B": "1502",
+          "C": "1519",
+          "D": "1535"
+        },
+        "answer": "C",
+        "id": "hc07-q2"
+      },
+      {
+        "q": "Who was the Aztec emperor at the time of the Spanish conquest?",
+        "options": {
+          "A": "Itzcoatl",
+          "B": "Ahuitzotl",
+          "C": "Tizoc",
+          "D": "Moctezuma II"
+        },
+        "answer": "D",
+        "id": "hc07-q3"
+      }
+    ]
+  },
+  {
+    "id": "hc08",
+    "name": "Gutenberg Bible Page",
+    "icon": "📖",
+    "cat": "History & Culture",
+    "rarity": "Epic",
+    "points": 60,
+    "boostPoints": 250,
+    "questions": [
+      {
+        "q": "Approximately when did Gutenberg invent his movable-type printing press?",
+        "options": {
+          "A": "Around 1350",
+          "B": "Around 1440",
+          "C": "Around 1510",
+          "D": "Around 1580"
+        },
+        "answer": "B",
+        "id": "hc08-q1"
+      },
+      {
+        "q": "How many copies of the Gutenberg Bible were printed in the original run?",
+        "options": {
+          "A": "About 50",
+          "B": "About 80",
+          "C": "About 180",
+          "D": "About 500"
+        },
+        "answer": "C",
+        "id": "hc08-q2"
+      },
+      {
+        "q": "In which German city did Gutenberg develop his printing press?",
+        "options": {
+          "A": "Hamburg",
+          "B": "Cologne",
+          "C": "Frankfurt",
+          "D": "Mainz"
+        },
+        "answer": "D",
+        "id": "hc08-q3"
+      }
+    ]
+  },
+  {
+    "id": "hc09",
+    "name": "Ancient Olympic Torch",
+    "icon": "🔥",
+    "cat": "History & Culture",
+    "rarity": "Common",
+    "points": 10,
+    "boostPoints": 60,
+    "questions": [
+      {
+        "q": "In which ancient Greek city were the original Olympic Games held?",
+        "options": {
+          "A": "Athens",
+          "B": "Sparta",
+          "C": "Olympia",
+          "D": "Corinth"
+        },
+        "answer": "C",
+        "id": "hc09-q1"
+      },
+      {
+        "q": "How frequently were the ancient Olympic Games held?",
+        "options": {
+          "A": "Every year",
+          "B": "Every two years",
+          "C": "Every four years",
+          "D": "Every eight years"
+        },
+        "answer": "C",
+        "id": "hc09-q2"
+      }
+    ]
+  },
+  {
+    "id": "hc10",
+    "name": "French Revolution Cockade",
+    "icon": "🎗️",
+    "cat": "History & Culture",
+    "rarity": "Rare",
+    "points": 25,
+    "boostPoints": 120,
+    "questions": [
+      {
+        "q": "In what year did the French Revolution begin?",
+        "options": {
+          "A": "1776",
+          "B": "1783",
+          "C": "1789",
+          "D": "1795"
+        },
+        "answer": "C",
+        "id": "hc10-q1"
+      },
+      {
+        "q": "What Paris fortress was stormed on 14 July 1789?",
+        "options": {
+          "A": "The Louvre",
+          "B": "Palace of Versailles",
+          "C": "The Bastille",
+          "D": "The Tuileries"
+        },
+        "answer": "C",
+        "id": "hc10-q2"
+      },
+      {
+        "q": "What were the three ideals of the French Revolution?",
+        "options": {
+          "A": "Faith, Hope, Charity",
+          "B": "Liberty, Equality, Fraternity",
+          "C": "Order, Justice, Progress",
+          "D": "Reason, Nature, Freedom"
+        },
+        "answer": "B",
+        "id": "hc10-q3"
+      }
+    ]
+  },
+  {
+    "id": "hc11",
+    "name": "Silk Road Spice Pouch",
+    "icon": "🌶️",
+    "cat": "History & Culture",
+    "rarity": "Common",
+    "points": 10,
+    "boostPoints": 60,
+    "questions": [
+      {
+        "q": "Which ancient trade route connected China to the Mediterranean world?",
+        "options": {
+          "A": "Amber Road",
+          "B": "Incense Route",
+          "C": "Silk Road",
+          "D": "Spice Trail"
+        },
+        "answer": "C",
+        "id": "hc11-q1"
+      },
+      {
+        "q": "During which dynasty was the Silk Road most actively developed by China?",
+        "options": {
+          "A": "Qin Dynasty",
+          "B": "Han Dynasty",
+          "C": "Tang Dynasty",
+          "D": "Ming Dynasty"
+        },
+        "answer": "B",
+        "id": "hc11-q2"
+      }
+    ]
+  },
+  {
+    "id": "hc12",
+    "name": "Moon Landing Module",
+    "icon": "🌕",
+    "cat": "History & Culture",
+    "rarity": "Legendary",
+    "points": 150,
+    "boostPoints": 500,
+    "questions": [
+      {
+        "q": "In what year did humans first land on the Moon?",
+        "options": {
+          "A": "1961",
+          "B": "1965",
+          "C": "1969",
+          "D": "1972"
+        },
+        "answer": "C",
+        "id": "hc12-q1"
+      },
+      {
+        "q": "What were the first words spoken on the Moon's surface?",
+        "options": {
+          "A": "The Eagle has landed",
+          "B": "One small step for man",
+          "C": "Tranquility Base here",
+          "D": "Houston, we have touchdown"
+        },
+        "answer": "A",
+        "id": "hc12-q2"
+      },
+      {
+        "q": "How long did Apollo 11 astronauts spend on the Moon's surface?",
+        "options": {
+          "A": "About 2.5 hours",
+          "B": "About 7 hours",
+          "C": "About 21.5 hours",
+          "D": "About 48 hours"
+        },
+        "answer": "C",
+        "id": "hc12-q3"
+      }
+    ]
+  },
+  {
+    "id": "hc13",
+    "name": "Inca Gold Idol",
+    "icon": "🗿",
+    "cat": "History & Culture",
+    "rarity": "Epic",
+    "points": 60,
+    "boostPoints": 250,
+    "questions": [
+      {
+        "q": "What was the capital city of the Inca Empire?",
+        "options": {
+          "A": "Machu Picchu",
+          "B": "Lima",
+          "C": "Cusco",
+          "D": "Quito"
+        },
+        "answer": "C",
+        "id": "hc13-q1"
+      },
+      {
+        "q": "The Inca citadel Machu Picchu sits at approximately what altitude?",
+        "options": {
+          "A": "1,200 m",
+          "B": "2,430 m",
+          "C": "3,800 m",
+          "D": "4,600 m"
+        },
+        "answer": "B",
+        "id": "hc13-q2"
+      },
+      {
+        "q": "What language did the Incas speak?",
+        "options": {
+          "A": "Aymara",
+          "B": "Nahuatl",
+          "C": "Guaraní",
+          "D": "Quechua"
+        },
+        "answer": "D",
+        "id": "hc13-q3"
+      }
+    ]
+  },
+  {
+    "id": "fd01",
+    "name": "Truffle Shaving",
+    "icon": "🍄",
+    "cat": "Food & Drink",
+    "rarity": "Legendary",
+    "points": 150,
+    "boostPoints": 500,
+    "questions": [
+      {
+        "q": "Which variety of truffle is generally the most expensive?",
+        "options": {
+          "A": "Black Périgord truffle",
+          "B": "White Alba truffle",
+          "C": "Burgundy truffle",
+          "D": "Oregon truffle"
+        },
+        "answer": "B",
+        "id": "fd01-q1"
+      },
+      {
+        "q": "In which country are the most prized white truffles traditionally found?",
+        "options": {
+          "A": "France",
+          "B": "Spain",
+          "C": "Croatia",
+          "D": "Italy"
+        },
+        "answer": "D",
+        "id": "fd01-q2"
+      },
+      {
+        "q": "What animals are traditionally used to hunt truffles?",
+        "options": {
+          "A": "Pigs or dogs",
+          "B": "Cats or rabbits",
+          "C": "Goats or sheep",
+          "D": "Ferrets or foxes"
+        },
+        "answer": "A",
+        "id": "fd01-q3"
+      }
+    ]
+  },
+  {
+    "id": "fd02",
+    "name": "Saffron Thread",
+    "icon": "🌸",
+    "cat": "Food & Drink",
+    "rarity": "Epic",
+    "points": 60,
+    "boostPoints": 250,
+    "questions": [
+      {
+        "q": "Why is saffron so expensive to produce?",
+        "options": {
+          "A": "The plant only grows in one country",
+          "B": "Each flower yields only 3 hand-harvested stigmas",
+          "C": "It takes 10 years for a plant to flower",
+          "D": "It must be dried for over a year"
+        },
+        "answer": "B",
+        "id": "fd02-q1"
+      },
+      {
+        "q": "Which country produces the majority of the world's saffron?",
+        "options": {
+          "A": "Spain",
+          "B": "Greece",
+          "C": "Iran",
+          "D": "India"
+        },
+        "answer": "C",
+        "id": "fd02-q2"
+      },
+      {
+        "q": "Which classic dish uses saffron as a defining ingredient?",
+        "options": {
+          "A": "Risotto Milanese",
+          "B": "Bouillabaisse",
+          "C": "Paella",
+          "D": "All of the above"
+        },
+        "answer": "D",
+        "id": "fd02-q3"
+      }
+    ]
+  },
+  {
+    "id": "fd03",
+    "name": "Vintage Wine Cork",
+    "icon": "🍷",
+    "cat": "Food & Drink",
+    "rarity": "Rare",
+    "points": 25,
+    "boostPoints": 120,
+    "questions": [
+      {
+        "q": "Which region of France produces Bordeaux wine?",
+        "options": {
+          "A": "Burgundy",
+          "B": "Bordeaux",
+          "C": "Champagne",
+          "D": "Rhône Valley"
+        },
+        "answer": "B",
+        "id": "fd03-q1"
+      },
+      {
+        "q": "What grape is Champagne NOT typically made from?",
+        "options": {
+          "A": "Chardonnay",
+          "B": "Pinot Noir",
+          "C": "Pinot Meunier",
+          "D": "Sauvignon Blanc"
+        },
+        "answer": "D",
+        "id": "fd03-q2"
+      },
+      {
+        "q": "What is the process of pouring wine into a wide vessel to remove sediment and aerate it?",
+        "options": {
+          "A": "Clarifying",
+          "B": "Racking",
+          "C": "Decanting",
+          "D": "Fining"
+        },
+        "answer": "C",
+        "id": "fd03-q3"
+      }
+    ]
+  },
+  {
+    "id": "fd04",
+    "name": "Street Taco",
+    "icon": "🌮",
+    "cat": "Food & Drink",
+    "rarity": "Common",
+    "points": 10,
+    "boostPoints": 60,
+    "questions": [
+      {
+        "q": "From which country do tacos originate?",
+        "options": {
+          "A": "Spain",
+          "B": "Mexico",
+          "C": "United States",
+          "D": "Guatemala"
+        },
+        "answer": "B",
+        "id": "fd04-q1"
+      },
+      {
+        "q": "What is the traditional corn preparation technique used to make tortillas?",
+        "options": {
+          "A": "Fermentation",
+          "B": "Nixtamalization",
+          "C": "Stone grinding",
+          "D": "Sun drying"
+        },
+        "answer": "B",
+        "id": "fd04-q2"
+      }
+    ]
+  },
+  {
+    "id": "fd05",
+    "name": "Aged Cheese Wedge",
+    "icon": "🧀",
+    "cat": "Food & Drink",
+    "rarity": "Rare",
+    "points": 25,
+    "boostPoints": 120,
+    "questions": [
+      {
+        "q": "What mould gives blue cheeses like Roquefort their blue-green veins?",
+        "options": {
+          "A": "Aspergillus",
+          "B": "Rhizopus",
+          "C": "Penicillium",
+          "D": "Candida"
+        },
+        "answer": "C",
+        "id": "fd05-q1"
+      },
+      {
+        "q": "Where does Parmigiano-Reggiano cheese originate?",
+        "options": {
+          "A": "France",
+          "B": "Switzerland",
+          "C": "Italy",
+          "D": "Netherlands"
+        },
+        "answer": "C",
+        "id": "fd05-q2"
+      },
+      {
+        "q": "How long is some aged Parmigiano-Reggiano matured for?",
+        "options": {
+          "A": "6 months",
+          "B": "12 months",
+          "C": "24 months",
+          "D": "Up to 36+ months"
+        },
+        "answer": "D",
+        "id": "fd05-q3"
+      }
+    ]
+  },
+  {
+    "id": "fd06",
+    "name": "Matcha Bowl",
+    "icon": "🍵",
+    "cat": "Food & Drink",
+    "rarity": "Rare",
+    "points": 25,
+    "boostPoints": 120,
+    "questions": [
+      {
+        "q": "What type of plant is matcha derived from?",
+        "options": {
+          "A": "Camellia japonica",
+          "B": "Camellia sinensis",
+          "C": "Hibiscus sabdariffa",
+          "D": "Moringa oleifera"
+        },
+        "answer": "B",
+        "id": "fd06-q1"
+      },
+      {
+        "q": "Why do shade-grown tea plants produce greener, more flavourful matcha?",
+        "options": {
+          "A": "Shade reduces bitterness through lower tannins",
+          "B": "Less sunlight increases chlorophyll and L-theanine production",
+          "C": "Cold temperatures slow fermentation",
+          "D": "Shading prevents oxidation of the leaves"
+        },
+        "answer": "B",
+        "id": "fd06-q2"
+      },
+      {
+        "q": "What is the traditional Japanese tea ceremony called?",
+        "options": {
+          "A": "Ikebana",
+          "B": "Kodo",
+          "C": "Chanoyu",
+          "D": "Kagura"
+        },
+        "answer": "C",
+        "id": "fd06-q3"
+      }
+    ]
+  },
+  {
+    "id": "fd07",
+    "name": "Sourdough Loaf",
+    "icon": "🍞",
+    "cat": "Food & Drink",
+    "rarity": "Common",
+    "points": 10,
+    "boostPoints": 60,
+    "questions": [
+      {
+        "q": "What makes sourdough bread sour?",
+        "options": {
+          "A": "Added vinegar",
+          "B": "Citric acid from fruit",
+          "C": "Lactic acid from wild bacteria in the starter",
+          "D": "Fermented yeast sugar"
+        },
+        "answer": "C",
+        "id": "fd07-q1"
+      },
+      {
+        "q": "How many years ago did humans first make sourdough bread approximately?",
+        "options": {
+          "A": "500 years",
+          "B": "2,000 years",
+          "C": "5,000 years",
+          "D": "10,000 years"
+        },
+        "answer": "C",
+        "id": "fd07-q2"
+      }
+    ]
+  },
+  {
+    "id": "fd08",
+    "name": "Wagyu Cut",
+    "icon": "🥩",
+    "cat": "Food & Drink",
+    "rarity": "Legendary",
+    "points": 150,
+    "boostPoints": 500,
+    "questions": [
+      {
+        "q": "What does the word 'Wagyu' literally mean in Japanese?",
+        "options": {
+          "A": "Premium cattle",
+          "B": "Japanese cow",
+          "C": "Sacred beef",
+          "D": "Marbled meat"
+        },
+        "answer": "B",
+        "id": "fd08-q1"
+      },
+      {
+        "q": "What gives Wagyu beef its exceptional marbling?",
+        "options": {
+          "A": "A special grain-only diet",
+          "B": "Massaging the cattle",
+          "C": "Genetic predisposition of specific Japanese cattle breeds",
+          "D": "Slow ageing at low temperatures"
+        },
+        "answer": "C",
+        "id": "fd08-q2"
+      },
+      {
+        "q": "Which is the most famous and strictly regulated brand of Wagyu beef?",
+        "options": {
+          "A": "Matsusaka beef",
+          "B": "Omi beef",
+          "C": "Kobe beef",
+          "D": "Saga beef"
+        },
+        "answer": "C",
+        "id": "fd08-q3"
+      }
+    ]
+  },
+  {
+    "id": "fd09",
+    "name": "Dark Chocolate Bar",
+    "icon": "🍫",
+    "cat": "Food & Drink",
+    "rarity": "Common",
+    "points": 10,
+    "boostPoints": 60,
+    "questions": [
+      {
+        "q": "From which plant is chocolate derived?",
+        "options": {
+          "A": "Vanilla planifolia",
+          "B": "Theobroma cacao",
+          "C": "Cola nitida",
+          "D": "Coffea arabica"
+        },
+        "answer": "B",
+        "id": "fd09-q1"
+      },
+      {
+        "q": "Which ancient civilisation first consumed cacao as a bitter drink?",
+        "options": {
+          "A": "Egyptian",
+          "B": "Roman",
+          "C": "Maya/Aztec",
+          "D": "Greek"
+        },
+        "answer": "C",
+        "id": "fd09-q2"
+      }
+    ]
+  },
+  {
+    "id": "fd10",
+    "name": "Ramen Bowl",
+    "icon": "🍜",
+    "cat": "Food & Drink",
+    "rarity": "Common",
+    "points": 10,
+    "boostPoints": 60,
+    "questions": [
+      {
+        "q": "What are the four main regional styles of ramen broth?",
+        "options": {
+          "A": "Miso, Tonkotsu, Shio, Shoyu",
+          "B": "Dashi, Tare, Umami, Kombu",
+          "C": "Chicken, Pork, Fish, Vegetable",
+          "D": "Clear, White, Red, Black"
+        },
+        "answer": "A",
+        "id": "fd10-q1"
+      },
+      {
+        "q": "Ramen noodles were originally derived from which country's cuisine?",
+        "options": {
+          "A": "Korea",
+          "B": "China",
+          "C": "Japan",
+          "D": "Vietnam"
+        },
+        "answer": "B",
+        "id": "fd10-q2"
+      }
+    ]
+  },
+  {
+    "id": "fd11",
+    "name": "Hot Sauce Bottle",
+    "icon": "🌶️",
+    "cat": "Food & Drink",
+    "rarity": "Rare",
+    "points": 25,
+    "boostPoints": 120,
+    "questions": [
+      {
+        "q": "What scale measures the heat level of chilli peppers?",
+        "options": {
+          "A": "Richter scale",
+          "B": "Beaufort scale",
+          "C": "Scoville scale",
+          "D": "Kelvin scale"
+        },
+        "answer": "C",
+        "id": "fd11-q1"
+      },
+      {
+        "q": "What compound is responsible for the burning sensation of chilli peppers?",
+        "options": {
+          "A": "Piperine",
+          "B": "Gingerol",
+          "C": "Curcumin",
+          "D": "Capsaicin"
+        },
+        "answer": "D",
+        "id": "fd11-q2"
+      },
+      {
+        "q": "What is the approximate Scoville rating of a standard jalapeño pepper?",
+        "options": {
+          "A": "500–1,000 SHU",
+          "B": "2,500–8,000 SHU",
+          "C": "30,000–50,000 SHU",
+          "D": "100,000–350,000 SHU"
+        },
+        "answer": "B",
+        "id": "fd11-q3"
+      }
+    ]
+  },
+  {
+    "id": "fd12",
+    "name": "Champagne Flute",
+    "icon": "🥂",
+    "cat": "Food & Drink",
+    "rarity": "Epic",
+    "points": 60,
+    "boostPoints": 250,
+    "questions": [
+      {
+        "q": "In which French region must wine be produced to be called Champagne?",
+        "options": {
+          "A": "Burgundy",
+          "B": "Alsace",
+          "C": "Loire Valley",
+          "D": "Champagne"
+        },
+        "answer": "D",
+        "id": "fd12-q1"
+      },
+      {
+        "q": "What is the traditional method of making Champagne bubbly called?",
+        "options": {
+          "A": "Charmat method",
+          "B": "Méthode champenoise",
+          "C": "Carbonation method",
+          "D": "Cold stabilisation"
+        },
+        "answer": "B",
+        "id": "fd12-q2"
+      },
+      {
+        "q": "What is a 'blanc de blancs' Champagne made from?",
+        "options": {
+          "A": "Only Pinot Noir",
+          "B": "Only Pinot Meunier",
+          "C": "Only Chardonnay",
+          "D": "All three permitted grapes"
+        },
+        "answer": "C",
+        "id": "fd12-q3"
+      }
+    ]
+  },
+  {
+    "id": "fd13",
+    "name": "Ancient Honey Jar",
+    "icon": "🍯",
+    "cat": "Food & Drink",
+    "rarity": "Epic",
+    "points": 60,
+    "boostPoints": 250,
+    "questions": [
+      {
+        "q": "Why does honey never spoil?",
+        "options": {
+          "A": "It is too acidic for bacteria",
+          "B": "Its low water content and hydrogen peroxide prevent microbial growth",
+          "C": "It contains natural preservatives bees add",
+          "D": "Both A and B"
+        },
+        "answer": "D",
+        "id": "fd13-q1"
+      },
+      {
+        "q": "Approximately how many flowers must bees visit to produce one pound of honey?",
+        "options": {
+          "A": "200,000",
+          "B": "2 million",
+          "C": "10 million",
+          "D": "50 million"
+        },
+        "answer": "B",
+        "id": "fd13-q2"
+      },
+      {
+        "q": "What enzyme do bees add to nectar when converting it to honey?",
+        "options": {
+          "A": "Amylase",
+          "B": "Lipase",
+          "C": "Invertase",
+          "D": "Protease"
+        },
+        "answer": "C",
+        "id": "fd13-q3"
+      }
+    ]
+  },
+  {
+    "id": "ae01",
+    "name": "Mona Lisa Miniature",
+    "icon": "🖼️",
+    "cat": "Arts & Entertainment",
+    "rarity": "Legendary",
+    "points": 150,
+    "boostPoints": 500,
+    "questions": [
+      {
+        "q": "Who painted the Mona Lisa?",
+        "options": {
+          "A": "Michelangelo",
+          "B": "Raphael",
+          "C": "Titian",
+          "D": "Leonardo da Vinci"
+        },
+        "answer": "D",
+        "id": "ae01-q1"
+      },
+      {
+        "q": "In which museum is the Mona Lisa permanently displayed?",
+        "options": {
+          "A": "The Vatican Museums",
+          "B": "The Uffizi Gallery",
+          "C": "The Louvre, Paris",
+          "D": "The Prado, Madrid"
+        },
+        "answer": "C",
+        "id": "ae01-q2"
+      },
+      {
+        "q": "What painting technique creates the soft, haze-like edges seen in the Mona Lisa?",
+        "options": {
+          "A": "Fresco",
+          "B": "Chiaroscuro",
+          "C": "Sfumato",
+          "D": "Impasto"
+        },
+        "answer": "C",
+        "id": "ae01-q3"
+      }
+    ]
+  },
+  {
+    "id": "ae02",
+    "name": "Shakespeare Quill",
+    "icon": "✒️",
+    "cat": "Arts & Entertainment",
+    "rarity": "Epic",
+    "points": 60,
+    "boostPoints": 250,
+    "questions": [
+      {
+        "q": "How many plays is William Shakespeare credited with writing?",
+        "options": {
+          "A": "17",
+          "B": "27",
+          "C": "37",
+          "D": "47"
+        },
+        "answer": "C",
+        "id": "ae02-q1"
+      },
+      {
+        "q": "In which English town was William Shakespeare born?",
+        "options": {
+          "A": "Oxford",
+          "B": "Canterbury",
+          "C": "Stratford-upon-Avon",
+          "D": "Bath"
+        },
+        "answer": "C",
+        "id": "ae02-q2"
+      },
+      {
+        "q": "Which Shakespeare play features the line 'To be or not to be, that is the question'?",
+        "options": {
+          "A": "Macbeth",
+          "B": "Hamlet",
+          "C": "King Lear",
+          "D": "Othello"
+        },
+        "answer": "B",
+        "id": "ae02-q3"
+      }
+    ]
+  },
+  {
+    "id": "ae03",
+    "name": "Film Reel",
+    "icon": "🎞️",
+    "cat": "Arts & Entertainment",
+    "rarity": "Rare",
+    "points": 25,
+    "boostPoints": 120,
+    "questions": [
+      {
+        "q": "Who invented the cinématographe, enabling the first public film screenings?",
+        "options": {
+          "A": "Thomas Edison",
+          "B": "George Méliès",
+          "C": "The Lumière brothers",
+          "D": "D.W. Griffith"
+        },
+        "answer": "C",
+        "id": "ae03-q1"
+      },
+      {
+        "q": "Which film holds the record for most Academy Awards won (11)?",
+        "options": {
+          "A": "Gone with the Wind",
+          "B": "Ben-Hur, Titanic, or Return of the King (tied)",
+          "C": "Lawrence of Arabia",
+          "D": "Schindler's List"
+        },
+        "answer": "B",
+        "id": "ae03-q2"
+      },
+      {
+        "q": "In what decade was the first commercially successful sound film ('talkie') released?",
+        "options": {
+          "A": "1900s",
+          "B": "1910s",
+          "C": "1920s",
+          "D": "1930s"
+        },
+        "answer": "C",
+        "id": "ae03-q3"
+      }
+    ]
+  },
+  {
+    "id": "ae04",
+    "name": "Beethoven Score",
+    "icon": "🎼",
+    "cat": "Arts & Entertainment",
+    "rarity": "Epic",
+    "points": 60,
+    "boostPoints": 250,
+    "questions": [
+      {
+        "q": "How many symphonies did Beethoven compose?",
+        "options": {
+          "A": "6",
+          "B": "7",
+          "C": "9",
+          "D": "12"
+        },
+        "answer": "C",
+        "id": "ae04-q1"
+      },
+      {
+        "q": "How old was Beethoven when he began to lose his hearing?",
+        "options": {
+          "A": "Around 16",
+          "B": "Around 28",
+          "C": "Around 40",
+          "D": "Around 55"
+        },
+        "answer": "B",
+        "id": "ae04-q2"
+      },
+      {
+        "q": "Which of Beethoven's works was composed when he was completely deaf?",
+        "options": {
+          "A": "Symphony No. 5",
+          "B": "Moonlight Sonata",
+          "C": "Symphony No. 9 (Ode to Joy)",
+          "D": "Piano Concerto No. 4"
+        },
+        "answer": "C",
+        "id": "ae04-q3"
+      }
+    ]
+  },
+  {
+    "id": "ae05",
+    "name": "Jazz Trumpet",
+    "icon": "🎺",
+    "cat": "Arts & Entertainment",
+    "rarity": "Rare",
+    "points": 25,
+    "boostPoints": 120,
+    "questions": [
+      {
+        "q": "In which American city did jazz music originate?",
+        "options": {
+          "A": "Chicago",
+          "B": "New York",
+          "C": "New Orleans",
+          "D": "Memphis"
+        },
+        "answer": "C",
+        "id": "ae05-q1"
+      },
+      {
+        "q": "Which instrument is Louis Armstrong most associated with?",
+        "options": {
+          "A": "Piano",
+          "B": "Saxophone",
+          "C": "Trombone",
+          "D": "Trumpet"
+        },
+        "answer": "D",
+        "id": "ae05-q2"
+      },
+      {
+        "q": "What jazz style emerged in the 1940s characterised by fast tempos and complex harmonies?",
+        "options": {
+          "A": "Swing",
+          "B": "Bebop",
+          "C": "Cool jazz",
+          "D": "Dixieland"
+        },
+        "answer": "B",
+        "id": "ae05-q3"
+      }
+    ]
+  },
+  {
+    "id": "ae06",
+    "name": "Ballet Slipper",
+    "icon": "🩰",
+    "cat": "Arts & Entertainment",
+    "rarity": "Common",
+    "points": 10,
+    "boostPoints": 60,
+    "questions": [
+      {
+        "q": "In which country did classical ballet first develop as a concert art form?",
+        "options": {
+          "A": "Russia",
+          "B": "Italy",
+          "C": "France",
+          "D": "Austria"
+        },
+        "answer": "C",
+        "id": "ae06-q1"
+      },
+      {
+        "q": "What is the ballet term for dancing on the very tips of the toes?",
+        "options": {
+          "A": "En l'air",
+          "B": "En pointe",
+          "C": "En dehors",
+          "D": "En croix"
+        },
+        "answer": "B",
+        "id": "ae06-q2"
+      }
+    ]
+  },
+  {
+    "id": "ae07",
+    "name": "Comic Book Issue #1",
+    "icon": "💬",
+    "cat": "Arts & Entertainment",
+    "rarity": "Rare",
+    "points": 25,
+    "boostPoints": 120,
+    "questions": [
+      {
+        "q": "In what year did Batman first appear in DC Comics?",
+        "options": {
+          "A": "1933",
+          "B": "1939",
+          "C": "1945",
+          "D": "1952"
+        },
+        "answer": "B",
+        "id": "ae07-q1"
+      },
+      {
+        "q": "Who co-created Spider-Man with Stan Lee?",
+        "options": {
+          "A": "Jack Kirby",
+          "B": "Bob Kane",
+          "C": "Steve Ditko",
+          "D": "John Romita Sr."
+        },
+        "answer": "C",
+        "id": "ae07-q2"
+      },
+      {
+        "q": "In what year did Marvel publish the first issue of The Avengers?",
+        "options": {
+          "A": "1958",
+          "B": "1961",
+          "C": "1963",
+          "D": "1966"
+        },
+        "answer": "C",
+        "id": "ae07-q3"
+      }
+    ]
+  },
+  {
+    "id": "ae08",
+    "name": "Starry Night Brush",
+    "icon": "🎨",
+    "cat": "Arts & Entertainment",
+    "rarity": "Epic",
+    "points": 60,
+    "boostPoints": 250,
+    "questions": [
+      {
+        "q": "Who painted The Starry Night?",
+        "options": {
+          "A": "Paul Gauguin",
+          "B": "Paul Cézanne",
+          "C": "Claude Monet",
+          "D": "Vincent van Gogh"
+        },
+        "answer": "D",
+        "id": "ae08-q1"
+      },
+      {
+        "q": "Where was Van Gogh when he painted The Starry Night?",
+        "options": {
+          "A": "In his studio in Paris",
+          "B": "Outdoors in Arles",
+          "C": "In an asylum in Saint-Rémy-de-Provence",
+          "D": "In Amsterdam"
+        },
+        "answer": "C",
+        "id": "ae08-q2"
+      },
+      {
+        "q": "What painting technique, using thick layered brushstrokes, characterises Van Gogh's style?",
+        "options": {
+          "A": "Sfumato",
+          "B": "Impasto",
+          "C": "Pointillism",
+          "D": "Tenebrism"
+        },
+        "answer": "B",
+        "id": "ae08-q3"
+      }
+    ]
+  },
+  {
+    "id": "ae09",
+    "name": "Grammy Gramophone",
+    "icon": "🏆",
+    "cat": "Arts & Entertainment",
+    "rarity": "Legendary",
+    "points": 150,
+    "boostPoints": 500,
+    "questions": [
+      {
+        "q": "What does GRAMMY stand for?",
+        "options": {
+          "A": "Grand Recording And Music Merit Year",
+          "B": "Gramophone Award",
+          "C": "Great Recording Artist Musical Merit Yearly",
+          "D": "Grand Recording Academy Music Medal Year"
+        },
+        "answer": "B",
+        "id": "ae09-q1"
+      },
+      {
+        "q": "In what year were the first Grammy Awards held?",
+        "options": {
+          "A": "1949",
+          "B": "1955",
+          "C": "1959",
+          "D": "1963"
+        },
+        "answer": "C",
+        "id": "ae09-q2"
+      },
+      {
+        "q": "As of recent records, which artist has won the most Grammy Awards?",
+        "options": {
+          "A": "Taylor Swift",
+          "B": "Jay-Z",
+          "C": "Georg Solti",
+          "D": "Beyoncé"
+        },
+        "answer": "D",
+        "id": "ae09-q3"
+      }
+    ]
+  },
+  {
+    "id": "ae10",
+    "name": "Neon Sign",
+    "icon": "🔴",
+    "cat": "Arts & Entertainment",
+    "rarity": "Common",
+    "points": 10,
+    "boostPoints": 60,
+    "questions": [
+      {
+        "q": "What gas is used in traditional red-orange neon signs?",
+        "options": {
+          "A": "Argon",
+          "B": "Krypton",
+          "C": "Neon",
+          "D": "Xenon"
+        },
+        "answer": "C",
+        "id": "ae10-q1"
+      },
+      {
+        "q": "Who first publicly displayed neon signs at the Paris Motor Show?",
+        "options": {
+          "A": "Thomas Edison",
+          "B": "Nikola Tesla",
+          "C": "Georges Claude",
+          "D": "Heinrich Geissler"
+        },
+        "answer": "C",
+        "id": "ae10-q2"
+      }
+    ]
+  },
+  {
+    "id": "ae11",
+    "name": "Novel First Edition",
+    "icon": "📚",
+    "cat": "Arts & Entertainment",
+    "rarity": "Rare",
+    "points": 25,
+    "boostPoints": 120,
+    "questions": [
+      {
+        "q": "Who wrote Pride and Prejudice?",
+        "options": {
+          "A": "Charlotte Brontë",
+          "B": "George Eliot",
+          "C": "Jane Austen",
+          "D": "Mary Shelley"
+        },
+        "answer": "C",
+        "id": "ae11-q1"
+      },
+      {
+        "q": "In what year was Harry Potter and the Philosopher's Stone first published?",
+        "options": {
+          "A": "1994",
+          "B": "1997",
+          "C": "2000",
+          "D": "2001"
+        },
+        "answer": "B",
+        "id": "ae11-q2"
+      },
+      {
+        "q": "Who wrote the novel One Hundred Years of Solitude?",
+        "options": {
+          "A": "Jorge Luis Borges",
+          "B": "Mario Vargas Llosa",
+          "C": "Julio Cortázar",
+          "D": "Gabriel García Márquez"
+        },
+        "answer": "D",
+        "id": "ae11-q3"
+      }
+    ]
+  },
+  {
+    "id": "ae12",
+    "name": "Disco Ball Shard",
+    "icon": "✨",
+    "cat": "Arts & Entertainment",
+    "rarity": "Common",
+    "points": 10,
+    "boostPoints": 60,
+    "questions": [
+      {
+        "q": "In which decade did disco music reach its peak popularity?",
+        "options": {
+          "A": "1960s",
+          "B": "1970s",
+          "C": "1980s",
+          "D": "1990s"
+        },
+        "answer": "B",
+        "id": "ae12-q1"
+      },
+      {
+        "q": "Which iconic New York City nightclub was central to the disco era?",
+        "options": {
+          "A": "CBGB",
+          "B": "The Roxy",
+          "C": "Studio 54",
+          "D": "The Limelight"
+        },
+        "answer": "C",
+        "id": "ae12-q2"
+      }
+    ]
+  },
+  {
+    "id": "ae13",
+    "name": "Oscar Statuette",
+    "icon": "🏅",
+    "cat": "Arts & Entertainment",
+    "rarity": "Legendary",
+    "points": 150,
+    "boostPoints": 500,
+    "questions": [
+      {
+        "q": "What is the Oscar statuette officially called?",
+        "options": {
+          "A": "The Golden Award",
+          "B": "The Academy Merit Award",
+          "C": "The Academy Award of Merit",
+          "D": "The Hollywood Award"
+        },
+        "answer": "C",
+        "id": "ae13-q1"
+      },
+      {
+        "q": "Which actress holds the record for most acting Oscar wins?",
+        "options": {
+          "A": "Meryl Streep",
+          "B": "Katharine Hepburn",
+          "C": "Cate Blanchett",
+          "D": "Ingrid Bergman"
+        },
+        "answer": "B",
+        "id": "ae13-q2"
+      },
+      {
+        "q": "Which film won the very first Best Picture Oscar in 1928?",
+        "options": {
+          "A": "Sunrise",
+          "B": "The Jazz Singer",
+          "C": "The Last Command",
+          "D": "Wings"
+        },
+        "answer": "D",
+        "id": "ae13-q3"
+      }
+    ]
+  },
+  {
+    "id": "sg01",
+    "name": "World Cup Trophy",
+    "icon": "🏆",
+    "cat": "Sports & Games",
+    "rarity": "Legendary",
+    "points": 150,
+    "boostPoints": 500,
+    "questions": [
+      {
+        "q": "Which country has won the most FIFA World Cups?",
+        "options": {
+          "A": "Germany",
+          "B": "Argentina",
+          "C": "Italy",
+          "D": "Brazil"
+        },
+        "answer": "D",
+        "id": "sg01-q1"
+      },
+      {
+        "q": "Who has scored the most goals in FIFA World Cup history?",
+        "options": {
+          "A": "Ronaldo (Brazil)",
+          "B": "Just Fontaine",
+          "C": "Miroslav Klose",
+          "D": "Gerd Müller"
+        },
+        "answer": "C",
+        "id": "sg01-q2"
+      },
+      {
+        "q": "In what year was the first FIFA World Cup held?",
+        "options": {
+          "A": "1924",
+          "B": "1928",
+          "C": "1930",
+          "D": "1934"
+        },
+        "answer": "C",
+        "id": "sg01-q3"
+      }
+    ]
+  },
+  {
+    "id": "sg02",
+    "name": "Olympic Gold Medal",
+    "icon": "🥇",
+    "cat": "Sports & Games",
+    "rarity": "Epic",
+    "points": 60,
+    "boostPoints": 250,
+    "questions": [
+      {
+        "q": "Where were the first modern Olympic Games held?",
+        "options": {
+          "A": "Paris",
+          "B": "London",
+          "C": "Rome",
+          "D": "Athens"
+        },
+        "answer": "D",
+        "id": "sg02-q1"
+      },
+      {
+        "q": "Who is the most decorated Olympian of all time?",
+        "options": {
+          "A": "Usain Bolt",
+          "B": "Carl Lewis",
+          "C": "Michael Phelps",
+          "D": "Larisa Latynina"
+        },
+        "answer": "C",
+        "id": "sg02-q2"
+      },
+      {
+        "q": "What year were the first modern Olympics held?",
+        "options": {
+          "A": "1888",
+          "B": "1896",
+          "C": "1900",
+          "D": "1904"
+        },
+        "answer": "B",
+        "id": "sg02-q3"
+      }
+    ]
+  },
+  {
+    "id": "sg03",
+    "name": "Chess King",
+    "icon": "♟️",
+    "cat": "Sports & Games",
+    "rarity": "Rare",
+    "points": 25,
+    "boostPoints": 120,
+    "questions": [
+      {
+        "q": "In chess, which piece can only move one square at a time in any direction?",
+        "options": {
+          "A": "Queen",
+          "B": "King",
+          "C": "Bishop",
+          "D": "Rook"
+        },
+        "answer": "B",
+        "id": "sg03-q1"
+      },
+      {
+        "q": "What term describes a situation where a player cannot move without putting their own king in check?",
+        "options": {
+          "A": "Checkmate",
+          "B": "Check",
+          "C": "Stalemate",
+          "D": "Fork"
+        },
+        "answer": "C",
+        "id": "sg03-q2"
+      },
+      {
+        "q": "How many squares does the knight move in chess?",
+        "options": {
+          "A": "One square diagonally",
+          "B": "Two squares in one direction, then one sideways (L-shape)",
+          "C": "Three squares in a straight line",
+          "D": "Any number of squares in a straight line"
+        },
+        "answer": "B",
+        "id": "sg03-q3"
+      }
+    ]
+  },
+  {
+    "id": "sg04",
+    "name": "Tennis Racket String",
+    "icon": "🎾",
+    "cat": "Sports & Games",
+    "rarity": "Common",
+    "points": 10,
+    "boostPoints": 60,
+    "questions": [
+      {
+        "q": "How many Grand Slam tournaments are there in tennis?",
+        "options": {
+          "A": "2",
+          "B": "3",
+          "C": "4",
+          "D": "5"
+        },
+        "answer": "C",
+        "id": "sg04-q1"
+      },
+      {
+        "q": "What surface is the Wimbledon tennis tournament played on?",
+        "options": {
+          "A": "Clay",
+          "B": "Hard court",
+          "C": "Grass",
+          "D": "Carpet"
+        },
+        "answer": "C",
+        "id": "sg04-q2"
+      }
+    ]
+  },
+  {
+    "id": "sg05",
+    "name": "Basketball",
+    "icon": "🏀",
+    "cat": "Sports & Games",
+    "rarity": "Common",
+    "points": 10,
+    "boostPoints": 60,
+    "questions": [
+      {
+        "q": "Who invented basketball?",
+        "options": {
+          "A": "James Naismith",
+          "B": "William Morgan",
+          "C": "Walter Camp",
+          "D": "Abner Doubleday"
+        },
+        "answer": "A",
+        "id": "sg05-q1"
+      },
+      {
+        "q": "What is the standard height of a basketball hoop from the ground?",
+        "options": {
+          "A": "8 feet",
+          "B": "9 feet",
+          "C": "10 feet",
+          "D": "11 feet"
+        },
+        "answer": "C",
+        "id": "sg05-q2"
+      }
+    ]
+  },
+  {
+    "id": "sg06",
+    "name": "Tour de France Jersey",
+    "icon": "🚴",
+    "cat": "Sports & Games",
+    "rarity": "Epic",
+    "points": 60,
+    "boostPoints": 250,
+    "questions": [
+      {
+        "q": "What does the yellow jersey (maillot jaune) represent in the Tour de France?",
+        "options": {
+          "A": "Best young rider",
+          "B": "Best climber",
+          "C": "Overall race leader",
+          "D": "Most combative rider"
+        },
+        "answer": "C",
+        "id": "sg06-q1"
+      },
+      {
+        "q": "How many stages does the Tour de France typically comprise?",
+        "options": {
+          "A": "15 stages",
+          "B": "18 stages",
+          "C": "21 stages",
+          "D": "24 stages"
+        },
+        "answer": "C",
+        "id": "sg06-q2"
+      },
+      {
+        "q": "Which cyclist holds the record for the most Tour de France wins (5, no doping)?",
+        "options": {
+          "A": "Bernard Hinault",
+          "B": "Eddy Merckx",
+          "C": "Jacques Anquetil",
+          "D": "Miguel Induráin"
+        },
+        "answer": "B",
+        "id": "sg06-q3"
+      }
+    ]
+  },
+  {
+    "id": "sg07",
+    "name": "Poker Chip Stack",
+    "icon": "🃏",
+    "cat": "Sports & Games",
+    "rarity": "Rare",
+    "points": 25,
+    "boostPoints": 120,
+    "questions": [
+      {
+        "q": "What is the highest-ranking hand in standard poker?",
+        "options": {
+          "A": "Four of a kind",
+          "B": "Straight flush",
+          "C": "Full house",
+          "D": "Royal flush"
+        },
+        "answer": "D",
+        "id": "sg07-q1"
+      },
+      {
+        "q": "How many cards are in a standard playing deck (excluding jokers)?",
+        "options": {
+          "A": "48",
+          "B": "52",
+          "C": "54",
+          "D": "56"
+        },
+        "answer": "B",
+        "id": "sg07-q2"
+      },
+      {
+        "q": "What poker term describes betting aggressively as though you have a strong hand when you don't?",
+        "options": {
+          "A": "Folding",
+          "B": "Slow-playing",
+          "C": "Bluffing",
+          "D": "Sandbagging"
+        },
+        "answer": "C",
+        "id": "sg07-q3"
+      }
+    ]
+  },
+  {
+    "id": "sg08",
+    "name": "Sumo Belt",
+    "icon": "🥋",
+    "cat": "Sports & Games",
+    "rarity": "Rare",
+    "points": 25,
+    "boostPoints": 120,
+    "questions": [
+      {
+        "q": "In which country does sumo wrestling originate?",
+        "options": {
+          "A": "China",
+          "B": "Korea",
+          "C": "Mongolia",
+          "D": "Japan"
+        },
+        "answer": "D",
+        "id": "sg08-q1"
+      },
+      {
+        "q": "What is the sumo wrestling ring called?",
+        "options": {
+          "A": "Tatami",
+          "B": "Dohyo",
+          "C": "Dojo",
+          "D": "Shiro"
+        },
+        "answer": "B",
+        "id": "sg08-q2"
+      },
+      {
+        "q": "What is the highest rank achievable in sumo wrestling?",
+        "options": {
+          "A": "Maegashira",
+          "B": "Ozeki",
+          "C": "Yokozuna",
+          "D": "Komusubi"
+        },
+        "answer": "C",
+        "id": "sg08-q3"
+      }
+    ]
+  },
+  {
+    "id": "sg09",
+    "name": "Cricket Ball",
+    "icon": "🏏",
+    "cat": "Sports & Games",
+    "rarity": "Common",
+    "points": 10,
+    "boostPoints": 60,
+    "questions": [
+      {
+        "q": "In cricket, how many balls make up one over?",
+        "options": {
+          "A": "4",
+          "B": "5",
+          "C": "6",
+          "D": "8"
+        },
+        "answer": "C",
+        "id": "sg09-q1"
+      },
+      {
+        "q": "What is it called in cricket when a batter is dismissed without scoring any runs?",
+        "options": {
+          "A": "A blob",
+          "B": "A zero",
+          "C": "A duck",
+          "D": "A bagel"
+        },
+        "answer": "C",
+        "id": "sg09-q2"
+      }
+    ]
+  },
+  {
+    "id": "sg10",
+    "name": "Formula 1 Trophy",
+    "icon": "🏎️",
+    "cat": "Sports & Games",
+    "rarity": "Legendary",
+    "points": 150,
+    "boostPoints": 500,
+    "questions": [
+      {
+        "q": "Which drivers share the record for most Formula 1 World Championships (7)?",
+        "options": {
+          "A": "Ayrton Senna and Michael Schumacher",
+          "B": "Michael Schumacher and Lewis Hamilton",
+          "C": "Alain Prost and Lewis Hamilton",
+          "D": "Michael Schumacher and Sebastian Vettel"
+        },
+        "answer": "B",
+        "id": "sg10-q1"
+      },
+      {
+        "q": "What does DRS stand for in Formula 1?",
+        "options": {
+          "A": "Dynamic Race System",
+          "B": "Dual Rear Spoiler",
+          "C": "Drag Reduction System",
+          "D": "Differential Rotation Speed"
+        },
+        "answer": "C",
+        "id": "sg10-q2"
+      },
+      {
+        "q": "The Monaco Grand Prix is held on which type of circuit?",
+        "options": {
+          "A": "Permanent purpose-built track",
+          "B": "Oval track",
+          "C": "Public streets of Monaco",
+          "D": "Airport runway"
+        },
+        "answer": "C",
+        "id": "sg10-q3"
+      }
+    ]
+  },
+  {
+    "id": "sg11",
+    "name": "Bowling Pin",
+    "icon": "🎳",
+    "cat": "Sports & Games",
+    "rarity": "Common",
+    "points": 10,
+    "boostPoints": 60,
+    "questions": [
+      {
+        "q": "How many pins are used in standard ten-pin bowling?",
+        "options": {
+          "A": "8",
+          "B": "9",
+          "C": "10",
+          "D": "12"
+        },
+        "answer": "C",
+        "id": "sg11-q1"
+      },
+      {
+        "q": "What is it called when a bowler knocks all pins down with the first ball?",
+        "options": {
+          "A": "A spare",
+          "B": "A perfect",
+          "C": "A split",
+          "D": "A strike"
+        },
+        "answer": "D",
+        "id": "sg11-q2"
+      }
+    ]
+  },
+  {
+    "id": "sg12",
+    "name": "Fencing Foil",
+    "icon": "🤺",
+    "cat": "Sports & Games",
+    "rarity": "Rare",
+    "points": 25,
+    "boostPoints": 120,
+    "questions": [
+      {
+        "q": "What are the three weapons used in Olympic fencing?",
+        "options": {
+          "A": "Foil, rapier, and sabre",
+          "B": "Foil, épée, and sabre",
+          "C": "Foil, épée, and longsword",
+          "D": "Sabre, cutlass, and épée"
+        },
+        "answer": "B",
+        "id": "sg12-q1"
+      },
+      {
+        "q": "In fencing, what is the term for a valid scoring touch on the opponent?",
+        "options": {
+          "A": "En garde",
+          "B": "Parry",
+          "C": "Touché",
+          "D": "Riposte"
+        },
+        "answer": "C",
+        "id": "sg12-q2"
+      },
+      {
+        "q": "In foil fencing, which area of the body is the valid target?",
+        "options": {
+          "A": "Full body",
+          "B": "Head and arms only",
+          "C": "Torso only",
+          "D": "Below the waist only"
+        },
+        "answer": "C",
+        "id": "sg12-q3"
+      }
+    ]
+  },
+  {
+    "id": "sg13",
+    "name": "Ancient Dice",
+    "icon": "🎲",
+    "cat": "Sports & Games",
+    "rarity": "Epic",
+    "points": 60,
+    "boostPoints": 250,
+    "questions": [
+      {
+        "q": "How old are the oldest known dice, found in Iran?",
+        "options": {
+          "A": "1,000 years",
+          "B": "2,500 years",
+          "C": "5,000 years",
+          "D": "10,000 years"
+        },
+        "answer": "C",
+        "id": "sg13-q1"
+      },
+      {
+        "q": "What is the probability of rolling any specific number on a standard six-sided die?",
+        "options": {
+          "A": "1 in 4",
+          "B": "1 in 6",
+          "C": "1 in 8",
+          "D": "1 in 12"
+        },
+        "answer": "B",
+        "id": "sg13-q2"
+      },
+      {
+        "q": "In Dungeons & Dragons, what is the nickname for the iconic 20-sided die?",
+        "options": {
+          "A": "The fate die",
+          "B": "The dragon die",
+          "C": "The d20",
+          "D": "The prime die"
+        },
+        "answer": "C",
+        "id": "sg13-q3"
+      }
+    ]
+  },
+  {
+    "id": "sa01",
+    "name": "Moon Rock",
+    "icon": "🌑",
+    "cat": "Space & Astronomy",
+    "rarity": "Epic",
+    "points": 60,
+    "boostPoints": 250,
+    "questions": [
+      {
+        "q": "What is the Moon's diameter relative to Earth's?",
+        "options": {
+          "A": "About 10%",
+          "B": "About 27%",
+          "C": "About 50%",
+          "D": "About 75%"
+        },
+        "answer": "B",
+        "id": "sa01-q1"
+      },
+      {
+        "q": "How long does it take light to travel from the Moon to Earth?",
+        "options": {
+          "A": "About 0.13 seconds",
+          "B": "About 1.3 seconds",
+          "C": "About 13 seconds",
+          "D": "About 130 seconds"
+        },
+        "answer": "B",
+        "id": "sa01-q2"
+      },
+      {
+        "q": "What is the name of the dark, flat plains on the Moon formed by ancient lava flows?",
+        "options": {
+          "A": "Craters",
+          "B": "Terrae",
+          "C": "Maria",
+          "D": "Rilles"
+        },
+        "answer": "C",
+        "id": "sa01-q3"
+      }
+    ]
+  },
+  {
+    "id": "sa02",
+    "name": "Mars Dust Sample",
+    "icon": "🔴",
+    "cat": "Space & Astronomy",
+    "rarity": "Rare",
+    "points": 25,
+    "boostPoints": 120,
+    "questions": [
+      {
+        "q": "What mineral makes Mars appear red?",
+        "options": {
+          "A": "Sulphur",
+          "B": "Copper oxide",
+          "C": "Iron oxide (rust)",
+          "D": "Red clay"
+        },
+        "answer": "C",
+        "id": "sa02-q1"
+      },
+      {
+        "q": "What is the name of the largest volcano in the solar system, located on Mars?",
+        "options": {
+          "A": "Arsia Mons",
+          "B": "Olympus Mons",
+          "C": "Pavonis Mons",
+          "D": "Elysium Mons"
+        },
+        "answer": "B",
+        "id": "sa02-q2"
+      },
+      {
+        "q": "How long is a Martian day (sol) compared to an Earth day?",
+        "options": {
+          "A": "Exactly 24 hours",
+          "B": "About 24 hours and 37 minutes",
+          "C": "About 25 hours and 12 minutes",
+          "D": "About 26 hours"
+        },
+        "answer": "B",
+        "id": "sa02-q3"
+      }
+    ]
+  },
+  {
+    "id": "sa03",
+    "name": "Pulsar Beacon",
+    "icon": "💫",
+    "cat": "Space & Astronomy",
+    "rarity": "Legendary",
+    "points": 150,
+    "boostPoints": 500,
+    "questions": [
+      {
+        "q": "What is a pulsar?",
+        "options": {
+          "A": "A young star surrounded by a protoplanetary disk",
+          "B": "A rapidly rotating neutron star emitting regular radiation beams",
+          "C": "A type of quasar with periodic outbursts",
+          "D": "A binary star system that eclipses periodically"
+        },
+        "answer": "B",
+        "id": "sa03-q1"
+      },
+      {
+        "q": "Why do pulsars appear to 'pulse' when observed from Earth?",
+        "options": {
+          "A": "They expand and contract rhythmically",
+          "B": "Their rotation sweeps the beam across Earth like a lighthouse",
+          "C": "They orbit a companion star",
+          "D": "Their magnetic field reverses regularly"
+        },
+        "answer": "B",
+        "id": "sa03-q2"
+      },
+      {
+        "q": "Approximately how dense is neutron star material?",
+        "options": {
+          "A": "A teaspoon weighs about 1 kg",
+          "B": "A teaspoon weighs about 1 tonne",
+          "C": "A teaspoon weighs about 1 billion tonnes",
+          "D": "A teaspoon weighs about 1 trillion tonnes"
+        },
+        "answer": "C",
+        "id": "sa03-q3"
+      }
+    ]
+  },
+  {
+    "id": "sa04",
+    "name": "Saturn Ring Fragment",
+    "icon": "🪐",
+    "cat": "Space & Astronomy",
+    "rarity": "Epic",
+    "points": 60,
+    "boostPoints": 250,
+    "questions": [
+      {
+        "q": "What are Saturn's rings primarily composed of?",
+        "options": {
+          "A": "Dust and iron particles",
+          "B": "Ice particles and rocky debris",
+          "C": "Gas and plasma",
+          "D": "Compressed hydrogen"
+        },
+        "answer": "B",
+        "id": "sa04-q1"
+      },
+      {
+        "q": "How many confirmed moons does Saturn have?",
+        "options": {
+          "A": "Around 30",
+          "B": "Around 60",
+          "C": "Around 80",
+          "D": "Over 140"
+        },
+        "answer": "D",
+        "id": "sa04-q2"
+      },
+      {
+        "q": "Which moon of Saturn is thought most likely to harbour conditions for life?",
+        "options": {
+          "A": "Titan and Enceladus",
+          "B": "Rhea and Dione",
+          "C": "Mimas and Tethys",
+          "D": "Hyperion and Iapetus"
+        },
+        "answer": "A",
+        "id": "sa04-q3"
+      }
+    ]
+  },
+  {
+    "id": "sa05",
+    "name": "Hubble Photo",
+    "icon": "🔭",
+    "cat": "Space & Astronomy",
+    "rarity": "Rare",
+    "points": 25,
+    "boostPoints": 120,
+    "questions": [
+      {
+        "q": "When was the Hubble Space Telescope launched?",
+        "options": {
+          "A": "1986",
+          "B": "1988",
+          "C": "1990",
+          "D": "1993"
+        },
+        "answer": "C",
+        "id": "sa05-q1"
+      },
+      {
+        "q": "What flaw was discovered in Hubble's optics shortly after launch?",
+        "options": {
+          "A": "The mirror was cracked",
+          "B": "The primary mirror was ground to the wrong shape",
+          "C": "The lens coatings were incorrect",
+          "D": "The focus mechanism was jammed"
+        },
+        "answer": "B",
+        "id": "sa05-q2"
+      },
+      {
+        "q": "What famous image shows thousands of galaxies in a tiny patch of dark sky?",
+        "options": {
+          "A": "Hubble Ultra Deep Field",
+          "B": "Hubble Deep Field",
+          "C": "Cosmic Web Image",
+          "D": "Pillars of Creation"
+        },
+        "answer": "B",
+        "id": "sa05-q3"
+      }
+    ]
+  },
+  {
+    "id": "sa06",
+    "name": "Comet Tail",
+    "icon": "☄️",
+    "cat": "Space & Astronomy",
+    "rarity": "Rare",
+    "points": 25,
+    "boostPoints": 120,
+    "questions": [
+      {
+        "q": "What is a comet's tail composed of?",
+        "options": {
+          "A": "Molten rock and magma",
+          "B": "Gas and dust blown off by solar wind",
+          "C": "Hydrogen and helium gas",
+          "D": "Dark matter trails"
+        },
+        "answer": "B",
+        "id": "sa06-q1"
+      },
+      {
+        "q": "How often does Halley's Comet pass close to Earth?",
+        "options": {
+          "A": "Every 25–30 years",
+          "B": "Every 50–55 years",
+          "C": "Every 75–76 years",
+          "D": "Every 100–110 years"
+        },
+        "answer": "C",
+        "id": "sa06-q2"
+      },
+      {
+        "q": "What is the difference between a comet and an asteroid?",
+        "options": {
+          "A": "Comets are larger than asteroids",
+          "B": "Asteroids orbit Jupiter; comets orbit Saturn",
+          "C": "Comets are icy and develop tails near the Sun; asteroids are rocky",
+          "D": "Comets orbit the Sun clockwise; asteroids orbit anti-clockwise"
+        },
+        "answer": "C",
+        "id": "sa06-q3"
+      }
+    ]
+  },
+  {
+    "id": "sa07",
+    "name": "Supernova Core",
+    "icon": "💥",
+    "cat": "Space & Astronomy",
+    "rarity": "Legendary",
+    "points": 150,
+    "boostPoints": 500,
+    "questions": [
+      {
+        "q": "What triggers a core-collapse supernova?",
+        "options": {
+          "A": "A star colliding with another star",
+          "B": "A massive star exhausting its nuclear fuel and its core imploding",
+          "C": "A white dwarf accumulating too much mass from a companion",
+          "D": "A black hole consuming a nearby star"
+        },
+        "answer": "B",
+        "id": "sa07-q1"
+      },
+      {
+        "q": "What can remain after a massive star goes supernova?",
+        "options": {
+          "A": "Only a nebula cloud",
+          "B": "A red giant",
+          "C": "A neutron star or black hole",
+          "D": "A white dwarf or brown dwarf"
+        },
+        "answer": "C",
+        "id": "sa07-q2"
+      },
+      {
+        "q": "Why are supernovae important to life on Earth?",
+        "options": {
+          "A": "They send gravitational waves that heat Earth's core",
+          "B": "They are the source of Earth's magnetic field",
+          "C": "They provide energy that powers the Sun",
+          "D": "They forged and distributed heavy elements like carbon and iron across the universe"
+        },
+        "answer": "D",
+        "id": "sa07-q3"
+      }
+    ]
+  },
+  {
+    "id": "sa08",
+    "name": "Voyager Golden Record",
+    "icon": "💿",
+    "cat": "Space & Astronomy",
+    "rarity": "Legendary",
+    "points": 150,
+    "boostPoints": 500,
+    "questions": [
+      {
+        "q": "What is the Voyager Golden Record?",
+        "options": {
+          "A": "A gold-plated data disk storing Voyager telemetry",
+          "B": "A phonograph record with Earth sounds and images, attached to Voyager 1 & 2",
+          "C": "A reflective panel used to communicate with Earth",
+          "D": "A solar energy collector made of gold foil"
+        },
+        "answer": "B",
+        "id": "sa08-q1"
+      },
+      {
+        "q": "When were the Voyager 1 and 2 probes launched?",
+        "options": {
+          "A": "1969",
+          "B": "1973",
+          "C": "1977",
+          "D": "1981"
+        },
+        "answer": "C",
+        "id": "sa08-q2"
+      },
+      {
+        "q": "Voyager 1 is currently the most distant human-made object. What region of space has it entered?",
+        "options": {
+          "A": "The Kuiper Belt",
+          "B": "The Oort Cloud",
+          "C": "The heliopause boundary",
+          "D": "Interstellar space"
+        },
+        "answer": "D",
+        "id": "sa08-q3"
+      }
+    ]
+  },
+  {
+    "id": "sa09",
+    "name": "ISS Bolt",
+    "icon": "🛸",
+    "cat": "Space & Astronomy",
+    "rarity": "Epic",
+    "points": 60,
+    "boostPoints": 250,
+    "questions": [
+      {
+        "q": "How fast does the International Space Station orbit Earth?",
+        "options": {
+          "A": "About 7,700 km/h",
+          "B": "About 18,000 km/h",
+          "C": "About 28,000 km/h",
+          "D": "About 40,000 km/h"
+        },
+        "answer": "C",
+        "id": "sa09-q1"
+      },
+      {
+        "q": "How long does the ISS take to complete one full orbit of Earth?",
+        "options": {
+          "A": "About 45 minutes",
+          "B": "About 90 minutes",
+          "C": "About 3 hours",
+          "D": "About 6 hours"
+        },
+        "answer": "B",
+        "id": "sa09-q2"
+      },
+      {
+        "q": "Which space agency is NOT a partner in the International Space Station programme?",
+        "options": {
+          "A": "NASA (USA)",
+          "B": "Roscosmos (Russia)",
+          "C": "ISRO (India)",
+          "D": "JAXA (Japan)"
+        },
+        "answer": "C",
+        "id": "sa09-q3"
+      }
+    ]
+  },
+  {
+    "id": "sa10",
+    "name": "Nebula Fragment",
+    "icon": "🌌",
+    "cat": "Space & Astronomy",
+    "rarity": "Epic",
+    "points": 60,
+    "boostPoints": 250,
+    "questions": [
+      {
+        "q": "What is a nebula?",
+        "options": {
+          "A": "A collapsed neutron star",
+          "B": "A giant cloud of gas and dust in space",
+          "C": "A galaxy without a central black hole",
+          "D": "A type of comet cluster"
+        },
+        "answer": "B",
+        "id": "sa10-q1"
+      },
+      {
+        "q": "Which famous nebula was created by the supernova observed by astronomers in 1054 AD?",
+        "options": {
+          "A": "Orion Nebula",
+          "B": "Eagle Nebula",
+          "C": "Crab Nebula",
+          "D": "Helix Nebula"
+        },
+        "answer": "C",
+        "id": "sa10-q2"
+      },
+      {
+        "q": "What is the common nickname for the nebula in the Eagle Nebula, famous from a Hubble image?",
+        "options": {
+          "A": "Fingers of God",
+          "B": "Pillars of Creation",
+          "C": "Eye of the Universe",
+          "D": "Stairway to Stars"
+        },
+        "answer": "B",
+        "id": "sa10-q3"
+      }
+    ]
+  },
+  {
+    "id": "sa11",
+    "name": "Solar Flare Ember",
+    "icon": "🌞",
+    "cat": "Space & Astronomy",
+    "rarity": "Rare",
+    "points": 25,
+    "boostPoints": 120,
+    "questions": [
+      {
+        "q": "What is a solar flare?",
+        "options": {
+          "A": "A stream of particles constantly flowing from the Sun",
+          "B": "An intense burst of radiation from the Sun's surface",
+          "C": "A large bubble of plasma ejected into space",
+          "D": "A dark area on the Sun's surface"
+        },
+        "answer": "B",
+        "id": "sa11-q1"
+      },
+      {
+        "q": "How long does it take light from the Sun to reach Earth?",
+        "options": {
+          "A": "About 2 minutes",
+          "B": "About 8 minutes and 20 seconds",
+          "C": "About 15 minutes",
+          "D": "About 33 minutes"
+        },
+        "answer": "B",
+        "id": "sa11-q2"
+      },
+      {
+        "q": "What is the name of the outermost layer of the Sun's atmosphere?",
+        "options": {
+          "A": "Chromosphere",
+          "B": "Photosphere",
+          "C": "Corona",
+          "D": "Radiative zone"
+        },
+        "answer": "C",
+        "id": "sa11-q3"
+      }
+    ]
+  },
+  {
+    "id": "sa12",
+    "name": "Exoplanet Token",
+    "icon": "🌍",
+    "cat": "Space & Astronomy",
+    "rarity": "Common",
+    "points": 10,
+    "boostPoints": 60,
+    "questions": [
+      {
+        "q": "What is an exoplanet?",
+        "options": {
+          "A": "A moon orbiting a gas giant",
+          "B": "A planet that orbits a star outside our solar system",
+          "C": "An asteroid in the asteroid belt",
+          "D": "A rogue planet with no host star"
+        },
+        "answer": "B",
+        "id": "sa12-q1"
+      },
+      {
+        "q": "How many confirmed exoplanets have scientists discovered as of recent records?",
+        "options": {
+          "A": "Over 500",
+          "B": "Over 1,500",
+          "C": "Over 5,500",
+          "D": "Over 20,000"
+        },
+        "answer": "C",
+        "id": "sa12-q2"
+      }
+    ]
+  },
+  {
+    "id": "sa13",
+    "name": "Dark Matter Trace",
+    "icon": "🕳️",
+    "cat": "Space & Astronomy",
+    "rarity": "Legendary",
+    "points": 150,
+    "boostPoints": 500,
+    "questions": [
+      {
+        "q": "What is dark matter?",
+        "options": {
+          "A": "Matter inside black holes that emits no light",
+          "B": "Cold gas clouds between galaxies",
+          "C": "An unseen form of matter detectable only through its gravitational effects",
+          "D": "Anti-matter produced in stellar explosions"
+        },
+        "answer": "C",
+        "id": "sa13-q1"
+      },
+      {
+        "q": "Approximately what percentage of the universe is made of dark matter?",
+        "options": {
+          "A": "5%",
+          "B": "27%",
+          "C": "50%",
+          "D": "68%"
+        },
+        "answer": "B",
+        "id": "sa13-q2"
+      },
+      {
+        "q": "How do scientists detect the presence of dark matter?",
+        "options": {
+          "A": "Using infrared telescopes",
+          "B": "By measuring cosmic background radiation",
+          "C": "Through gravitational lensing and its effect on visible matter",
+          "D": "Using particle accelerators"
+        },
+        "answer": "C",
+        "id": "sa13-q3"
+      }
+    ]
+  },
+  {
+    "id": "aw01",
+    "name": "Octopus Ink Vial",
+    "icon": "🐙",
+    "cat": "Animals & Wildlife",
+    "rarity": "Epic",
+    "points": 60,
+    "boostPoints": 250,
+    "questions": [
+      {
+        "q": "How many hearts does an octopus have?",
+        "options": {
+          "A": "One",
+          "B": "Two",
+          "C": "Three",
+          "D": "Four"
+        },
+        "answer": "C",
+        "id": "aw01-q1"
+      },
+      {
+        "q": "What is unique about an octopus's blood colour?",
+        "options": {
+          "A": "It is colourless",
+          "B": "It is green due to chlorocruorin",
+          "C": "It is blue due to copper-based haemocyanin",
+          "D": "It is purple due to haemoglobin variants"
+        },
+        "answer": "C",
+        "id": "aw01-q2"
+      },
+      {
+        "q": "How many arms does an octopus have?",
+        "options": {
+          "A": "Six",
+          "B": "Eight",
+          "C": "Ten",
+          "D": "Twelve"
+        },
+        "answer": "B",
+        "id": "aw01-q3"
+      }
+    ]
+  },
+  {
+    "id": "aw02",
+    "name": "Tiger Stripe",
+    "icon": "🐯",
+    "cat": "Animals & Wildlife",
+    "rarity": "Rare",
+    "points": 25,
+    "boostPoints": 120,
+    "questions": [
+      {
+        "q": "How many living subspecies of tiger exist today?",
+        "options": {
+          "A": "Three",
+          "B": "Four",
+          "C": "Six",
+          "D": "Nine"
+        },
+        "answer": "C",
+        "id": "aw02-q1"
+      },
+      {
+        "q": "What makes each tiger's stripe pattern unique?",
+        "options": {
+          "A": "Diet affects pigmentation",
+          "B": "No two tigers have the same pattern, like fingerprints",
+          "C": "Stripes change with age",
+          "D": "Stripes differ only between subspecies"
+        },
+        "answer": "B",
+        "id": "aw02-q2"
+      },
+      {
+        "q": "What is a group of tigers called?",
+        "options": {
+          "A": "A pride",
+          "B": "A pack",
+          "C": "An ambush",
+          "D": "A coalition"
+        },
+        "answer": "C",
+        "id": "aw02-q3"
+      }
+    ]
+  },
+  {
+    "id": "aw03",
+    "name": "Whale Song Crystal",
+    "icon": "🐋",
+    "cat": "Animals & Wildlife",
+    "rarity": "Legendary",
+    "points": 150,
+    "boostPoints": 500,
+    "questions": [
+      {
+        "q": "Which whale species produces the loudest sounds in the animal kingdom?",
+        "options": {
+          "A": "Blue whale",
+          "B": "Humpback whale",
+          "C": "Sperm whale",
+          "D": "Fin whale"
+        },
+        "answer": "C",
+        "id": "aw03-q1"
+      },
+      {
+        "q": "How long can a bowhead whale live?",
+        "options": {
+          "A": "Around 60–80 years",
+          "B": "Around 100–120 years",
+          "C": "Around 150–170 years",
+          "D": "Over 200 years"
+        },
+        "answer": "D",
+        "id": "aw03-q2"
+      },
+      {
+        "q": "Why do male humpback whales sing?",
+        "options": {
+          "A": "To warn rivals and attract mates",
+          "B": "To navigate using echolocation",
+          "C": "To communicate with calves",
+          "D": "To stun prey before feeding"
+        },
+        "answer": "A",
+        "id": "aw03-q3"
+      }
+    ]
+  },
+  {
+    "id": "aw04",
+    "name": "Monarch Butterfly Wing",
+    "icon": "🦋",
+    "cat": "Animals & Wildlife",
+    "rarity": "Rare",
+    "points": 25,
+    "boostPoints": 120,
+    "questions": [
+      {
+        "q": "How far can Monarch butterflies migrate annually?",
+        "options": {
+          "A": "Up to 800 km",
+          "B": "Up to 2,000 km",
+          "C": "Up to 4,800 km",
+          "D": "Up to 10,000 km"
+        },
+        "answer": "C",
+        "id": "aw04-q1"
+      },
+      {
+        "q": "Where do North American Monarch butterflies overwinter?",
+        "options": {
+          "A": "Florida, USA",
+          "B": "Caribbean islands",
+          "C": "Central Mexico",
+          "D": "Southern California"
+        },
+        "answer": "C",
+        "id": "aw04-q2"
+      },
+      {
+        "q": "How long does the migratory generation of Monarch butterflies live?",
+        "options": {
+          "A": "2–4 weeks",
+          "B": "2–3 months",
+          "C": "8–9 months",
+          "D": "Over a year"
+        },
+        "answer": "C",
+        "id": "aw04-q3"
+      }
+    ]
+  },
+  {
+    "id": "aw05",
+    "name": "Chameleon Scale",
+    "icon": "🦎",
+    "cat": "Animals & Wildlife",
+    "rarity": "Rare",
+    "points": 25,
+    "boostPoints": 120,
+    "questions": [
+      {
+        "q": "Why do chameleons primarily change colour?",
+        "options": {
+          "A": "Mainly for camouflage from predators",
+          "B": "To regulate body temperature and communicate",
+          "C": "To signal territory only",
+          "D": "To absorb more sunlight"
+        },
+        "answer": "B",
+        "id": "aw05-q1"
+      },
+      {
+        "q": "What extraordinary feature do chameleons' eyes have?",
+        "options": {
+          "A": "They can see ultraviolet light",
+          "B": "Each eye can move completely independently",
+          "C": "They have 360° vision without moving",
+          "D": "They can detect infrared heat"
+        },
+        "answer": "B",
+        "id": "aw05-q2"
+      },
+      {
+        "q": "How fast can a chameleon's tongue strike?",
+        "options": {
+          "A": "About as fast as a human sneeze",
+          "B": "Faster than most jet aircraft",
+          "C": "From 0 to 100 km/h in 0.003 seconds",
+          "D": "In about half a second"
+        },
+        "answer": "C",
+        "id": "aw05-q3"
+      }
+    ]
+  },
+  {
+    "id": "aw06",
+    "name": "Honeybee Comb",
+    "icon": "🐝",
+    "cat": "Animals & Wildlife",
+    "rarity": "Common",
+    "points": 10,
+    "boostPoints": 60,
+    "questions": [
+      {
+        "q": "How do honeybees communicate the location of a food source to their hive?",
+        "options": {
+          "A": "Through pheromone trails",
+          "B": "Through the waggle dance",
+          "C": "Through vibrations on the comb",
+          "D": "Through sound signals"
+        },
+        "answer": "B",
+        "id": "aw06-q1"
+      },
+      {
+        "q": "Approximately how many flowers does a bee visit in its lifetime?",
+        "options": {
+          "A": "About 200,000",
+          "B": "About 500,000",
+          "C": "About 2 million",
+          "D": "About 10 million"
+        },
+        "answer": "C",
+        "id": "aw06-q2"
+      }
+    ]
+  },
+  {
+    "id": "aw07",
+    "name": "Deep Sea Anglerfish Lure",
+    "icon": "🐟",
+    "cat": "Animals & Wildlife",
+    "rarity": "Epic",
+    "points": 60,
+    "boostPoints": 250,
+    "questions": [
+      {
+        "q": "What produces the bioluminescent glow in an anglerfish's lure?",
+        "options": {
+          "A": "The fish generates electricity internally",
+          "B": "Bioluminescent bacteria living in the esca",
+          "C": "A chemical reaction with seawater",
+          "D": "Phosphorescent minerals absorbed from food"
+        },
+        "answer": "B",
+        "id": "aw07-q1"
+      },
+      {
+        "q": "What is the bizarre mating strategy of deep-sea anglerfish?",
+        "options": {
+          "A": "Males fight to the death for females",
+          "B": "The male permanently fuses to the female, becoming a parasite",
+          "C": "Males build elaborate nests to attract females",
+          "D": "Females lay eggs on the seafloor for males to fertilise"
+        },
+        "answer": "B",
+        "id": "aw07-q2"
+      },
+      {
+        "q": "At what depth do deep-sea anglerfish typically live?",
+        "options": {
+          "A": "0–200 m (sunlight zone)",
+          "B": "200–1,000 m (twilight zone)",
+          "C": "1,000–4,000 m (midnight zone)",
+          "D": "Below 6,000 m (hadal zone)"
+        },
+        "answer": "C",
+        "id": "aw07-q3"
+      }
+    ]
+  },
+  {
+    "id": "aw08",
+    "name": "Wolf Pack Token",
+    "icon": "🐺",
+    "cat": "Animals & Wildlife",
+    "rarity": "Common",
+    "points": 10,
+    "boostPoints": 60,
+    "questions": [
+      {
+        "q": "What is the dominant breeding pair of a wolf pack now commonly called by researchers?",
+        "options": {
+          "A": "Alpha pair",
+          "B": "Omega pair",
+          "C": "Breeding pair",
+          "D": "Lead pair"
+        },
+        "answer": "C",
+        "id": "aw08-q1"
+      },
+      {
+        "q": "What is the primary purpose of wolves howling?",
+        "options": {
+          "A": "To scare prey",
+          "B": "To communicate location and reinforce social bonds",
+          "C": "To warn neighbouring packs only",
+          "D": "To attract a mate exclusively"
+        },
+        "answer": "B",
+        "id": "aw08-q2"
+      }
+    ]
+  },
+  {
+    "id": "aw09",
+    "name": "Tardigrade Vial",
+    "icon": "🔬",
+    "cat": "Animals & Wildlife",
+    "rarity": "Legendary",
+    "points": 150,
+    "boostPoints": 500,
+    "questions": [
+      {
+        "q": "What is a tardigrade also known as?",
+        "options": {
+          "A": "Sea bear or brine shrimp",
+          "B": "Water bear or moss piglet",
+          "C": "Sand flea or dust mite",
+          "D": "Micro-bear or nano-pig"
+        },
+        "answer": "B",
+        "id": "aw09-q1"
+      },
+      {
+        "q": "What survival state do tardigrades enter when conditions become extreme?",
+        "options": {
+          "A": "Hibernation",
+          "B": "Aestivation",
+          "C": "Cryptobiosis (tun state)",
+          "D": "Diapause"
+        },
+        "answer": "C",
+        "id": "aw09-q2"
+      },
+      {
+        "q": "Tardigrades have survived exposure to which extreme environment?",
+        "options": {
+          "A": "The vacuum of outer space",
+          "B": "The centre of a nuclear reactor",
+          "C": "The interior of an active volcano",
+          "D": "Depths of over 10,000 m in the ocean"
+        },
+        "answer": "A",
+        "id": "aw09-q3"
+      }
+    ]
+  },
+  {
+    "id": "aw10",
+    "name": "Platypus Bill",
+    "icon": "🦆",
+    "cat": "Animals & Wildlife",
+    "rarity": "Epic",
+    "points": 60,
+    "boostPoints": 250,
+    "questions": [
+      {
+        "q": "What makes the platypus unique among mammals?",
+        "options": {
+          "A": "It is the only mammal that can fly",
+          "B": "It lays eggs yet nurses young with milk",
+          "C": "It has no bones in its legs",
+          "D": "It breathes through its skin"
+        },
+        "answer": "B",
+        "id": "aw10-q1"
+      },
+      {
+        "q": "What special sensory ability does the platypus bill have?",
+        "options": {
+          "A": "It can smell underwater",
+          "B": "It detects electrical fields produced by prey",
+          "C": "It has sonar like a bat",
+          "D": "It can taste toxins in water"
+        },
+        "answer": "B",
+        "id": "aw10-q2"
+      },
+      {
+        "q": "Which sex of platypus has venomous spurs on its hind legs?",
+        "options": {
+          "A": "Females only",
+          "B": "Both sexes",
+          "C": "Males only",
+          "D": "Neither — they are not venomous"
+        },
+        "answer": "C",
+        "id": "aw10-q3"
+      }
+    ]
+  },
+  {
+    "id": "aw11",
+    "name": "Elephant Tusk Shard",
+    "icon": "🐘",
+    "cat": "Animals & Wildlife",
+    "rarity": "Rare",
+    "points": 25,
+    "boostPoints": 120,
+    "questions": [
+      {
+        "q": "What is the gestation period of an elephant?",
+        "options": {
+          "A": "About 12 months",
+          "B": "About 16 months",
+          "C": "About 22 months",
+          "D": "About 30 months"
+        },
+        "answer": "C",
+        "id": "aw11-q1"
+      },
+      {
+        "q": "How much can an adult male African elephant weigh?",
+        "options": {
+          "A": "Up to 2,000 kg",
+          "B": "Up to 4,000 kg",
+          "C": "Up to 7,000 kg",
+          "D": "Up to 12,000 kg"
+        },
+        "answer": "C",
+        "id": "aw11-q2"
+      },
+      {
+        "q": "What are elephant tusks made of?",
+        "options": {
+          "A": "Bone",
+          "B": "Calcium deposits",
+          "C": "Ivory (a form of dentine)",
+          "D": "Keratin"
+        },
+        "answer": "C",
+        "id": "aw11-q3"
+      }
+    ]
+  },
+  {
+    "id": "aw12",
+    "name": "Migratory Bird Band",
+    "icon": "🐦",
+    "cat": "Animals & Wildlife",
+    "rarity": "Common",
+    "points": 10,
+    "boostPoints": 60,
+    "questions": [
+      {
+        "q": "Which bird makes the longest migration of any animal on Earth?",
+        "options": {
+          "A": "Bar-tailed Godwit",
+          "B": "Sooty Shearwater",
+          "C": "Arctic Tern",
+          "D": "Wandering Albatross"
+        },
+        "answer": "C",
+        "id": "aw12-q1"
+      },
+      {
+        "q": "How do migratory birds navigate over vast distances?",
+        "options": {
+          "A": "By following rivers and coastlines only",
+          "B": "Using the Sun, stars, Earth's magnetic field and landmarks",
+          "C": "By following older birds exclusively",
+          "D": "Using smell to detect their home region"
+        },
+        "answer": "B",
+        "id": "aw12-q2"
+      }
+    ]
+  },
+  {
+    "id": "aw13",
+    "name": "Coral Reef Spine",
+    "icon": "🪸",
+    "cat": "Animals & Wildlife",
+    "rarity": "Epic",
+    "points": 60,
+    "boostPoints": 250,
+    "questions": [
+      {
+        "q": "Are corals classified as plants, animals, or fungi?",
+        "options": {
+          "A": "Plants",
+          "B": "Fungi",
+          "C": "Protists",
+          "D": "Animals"
+        },
+        "answer": "D",
+        "id": "aw13-q1"
+      },
+      {
+        "q": "What causes coral bleaching?",
+        "options": {
+          "A": "Ocean acidification dissolving the coral skeleton",
+          "B": "Pollution blocking sunlight",
+          "C": "Ocean warming causing coral to expel their symbiotic algae",
+          "D": "Overfishing of herbivorous fish"
+        },
+        "answer": "C",
+        "id": "aw13-q2"
+      },
+      {
+        "q": "What do corals need to build their calcium carbonate skeletons?",
+        "options": {
+          "A": "Zooplankton only",
+          "B": "Zooxanthellae (symbiotic algae) and calcium from seawater",
+          "C": "Sunlight alone",
+          "D": "Cold deep water currents"
+        },
+        "answer": "B",
+        "id": "aw13-q3"
+      }
+    ]
+  }
+]

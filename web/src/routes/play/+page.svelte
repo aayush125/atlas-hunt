@@ -1,11 +1,14 @@
 <script lang="ts">
+	import { Events } from '$lib/constants/wsmessages';
 	import type { Game } from '$lib/types/game';
 	import type { Member, Player } from '$lib/types/player';
+	import type { Treasure } from '$lib/types/treasure';
 	import type { WSMessage } from '$lib/types/wsmessage';
 	import CreateGame from '../../components/CreateGame.svelte';
+	import GameLoading from '../../components/ingame/GameLoading.svelte';
 	import JoinGame from '../../components/JoinGame.svelte';
 	import Lobby from '../../components/Lobby.svelte';
-	// import GamePlay from '../../components/ingame/GamePlay.svelte';
+	import GamePlay from '../../components/ingame/GamePlay.svelte';
 	import { gameStore } from '../../stores/gameStore';
 	import { onDestroy } from 'svelte';
 
@@ -15,9 +18,13 @@
 	const BASE_RETRY_DELAY_MS = 1000;
 
 	let ws: WebSocket | null = null;
-	let retryCount = 0;
+	let retryCount = $state(0);
 	let retryTimeout: ReturnType<typeof setTimeout> | null = null;
 	let manualClose = false;
+
+	let mapTreasures = $state<Treasure[]>([]);
+	let wsReady = $state(false);
+	let connectionState = $state<'connected' | 'reconnecting' | 'failed'>('connected');
 
 	function connectToWs() {
 		if (ws && (ws.readyState === WebSocket.OPEN || ws.readyState === WebSocket.CONNECTING)) return;
@@ -27,6 +34,8 @@
 
 		ws.onopen = () => {
 			console.log('WebSocket connected');
+			wsReady = true;
+			connectionState = 'connected';
 			retryCount = 0;
 		};
 
@@ -45,7 +54,9 @@
 
 		ws.onclose = (event) => {
 			console.log(`WebSocket closed (code: ${event.code})`);
+			wsReady = false;
 			if (!manualClose && retryCount < MAX_RETRIES) {
+				connectionState = 'reconnecting';
 				const delay = BASE_RETRY_DELAY_MS * 2 ** retryCount;
 				console.log(`Reconnecting in ${delay}ms (attempt ${retryCount + 1}/${MAX_RETRIES})...`);
 				retryTimeout = setTimeout(() => {
@@ -53,28 +64,51 @@
 					connectToWs();
 				}, delay);
 			} else if (retryCount >= MAX_RETRIES) {
+				connectionState = 'failed';
 				console.error('Max reconnection attempts reached.');
-				// Optionally: gameStore.setError('Connection lost. Please refresh.');
 			}
 		};
 
 		ws.onerror = (error) => {
 			console.error('WebSocket error:', error);
-			ws?.close(); // triggers onclose → retry
+			wsReady = false;
+			ws?.close();
 		};
 	}
 
 	function handleMessage(data: WSMessage) {
-		// Route incoming server messages to your store
 		console.log('Message received:', data);
-		if (data.type === 'player:joined') {
-			const info = data.data as { id: string; nickname: string };
-			if (info.id !== $gameStore.playerId) {
-				gameStore.addPlayer(info.id, info.nickname);
+
+		switch (data.type) {
+			case Events.PlayerJoined: {
+				const info = data.data as { id: string; nickname: string };
+				if (info.id !== $gameStore.playerId) {
+					gameStore.addPlayer(info.id, info.nickname);
+				}
+				break;
 			}
-		} else if (data.type === 'player:left') {
-			const info = data.data as { id: string };
-			gameStore.removePlayer(info.id);
+			case Events.PlayerLeft: {
+				const info = data.data as { id: string };
+				gameStore.removePlayer(info.id);
+				break;
+			}
+			case Events.ShowGameLoading: {
+				gameStore.setGameState('loading');
+				break;
+			}
+			case Events.NotEnoughPlayers: {
+				console.log('NOT ENOUGH PLAYERS');
+				break;
+			}
+			case Events.GameDataTreasures: {
+				const info = data.data as { treasures: Treasure[] };
+				mapTreasures = info.treasures;
+				gameStore.setGameState('in-game'); // TODO: transition on a separate start signal from server
+				break;
+			}
+			default: {
+				console.warn('Unhandled message type:', data.type);
+			}
 		}
 	}
 
@@ -103,8 +137,6 @@
 		content="Join an existing game or create a new one and invite your friends to play."
 	/>
 	<meta name="robots" content="noindex, nofollow" />
-
-	<!-- Open Graph -->
 	<meta property="og:title" content="Play - Crisis Control" />
 	<meta
 		property="og:description"
@@ -113,51 +145,66 @@
 	<meta property="og:type" content="website" />
 </svelte:head>
 
+{#if connectionState === 'reconnecting'}
+	<div
+		class="fixed top-0 right-0 left-0 z-50 bg-yellow-500 px-4 py-2 text-center text-sm font-medium text-white"
+	>
+		Connection lost — reconnecting... (attempt {retryCount}/{MAX_RETRIES})
+	</div>
+{:else if connectionState === 'failed'}
+	<div
+		class="fixed top-0 right-0 left-0 z-50 bg-red-600 px-4 py-2 text-center text-sm font-medium text-white"
+	>
+		Connection lost. Please refresh the page.
+	</div>
+{/if}
+
 <div class="flex flex-col items-center justify-center gap-8 p-8">
 	{#if $gameStore.state === 'waiting'}
 		<Lobby
+			{wsReady}
 			onStartGame={async () => {
-				console.log('Starting game');
 				sendMessage({ type: 'request:game:start', data: null });
 			}}
 			onLeaveGame={async () => {
-				const res = await fetch('/api/game/leave', {
-					method: 'POST'
-				});
+				const res = await fetch('/api/game/leave', { method: 'POST' });
 
 				if (!res.ok) {
 					console.log('failed to logout');
 				}
 
 				disconnectWs();
-
 				gameStore.reset();
 				gate = 'join';
 			}}
 		/>
+	{:else if $gameStore.state === 'loading'}
+		<GameLoading />
 	{:else if $gameStore.state === 'idle'}
 		{#if gate === 'join'}
 			<JoinGame
 				onCreateGame={() => (gate = 'create')}
 				onGameJoined={(player: Player, game: Game, members: Member[]) => {
 					connectToWs();
-					console.log('Player received:', player);
-					console.log('Game received:', game);
-					console.log('Members received:', members);
 					gameStore.setupGame(game, player, members);
 				}}
 			/>
-			<!-- <GamePlay /> -->
 		{:else}
 			<CreateGame
 				onJoinGame={() => (gate = 'join')}
 				onGameCreated={(game: Game, player: Player) => {
 					connectToWs();
-					console.log('Player received:', player);
-					console.log('Game received:', game);
 					gameStore.setupGame(game, player, []);
 				}}
 			/>
 		{/if}
+	{:else if $gameStore.state === 'in-game'}
+		<GamePlay
+			treasures={mapTreasures}
+			onClaim={(t) => {
+				mapTreasures = mapTreasures.filter((tr) => tr.id !== t.id);
+				gameStore.addTreasure(t);
+			}}
+		/>
 	{/if}
 </div>

@@ -1,10 +1,12 @@
 package ws
 
 import (
+	"encoding/json"
 	"log/slog"
 	"sync"
 
 	"game.crisis-control.com/internal/data"
+	"game.crisis-control.com/internal/engine"
 	"game.crisis-control.com/internal/wsmessages"
 )
 
@@ -21,9 +23,10 @@ type Room struct {
 	currentPlayerCount int
 	mutex              sync.RWMutex
 	Broadcast          chan *wsmessages.WSMessage
+	engine             *engine.Engine
 }
 
-func NewRoom(models *data.Models, code string, maxPlayers int, gm *data.GameModel, pm *data.PlayerModel, logger *slog.Logger) *Room {
+func NewRoom(models *data.Models, code string, maxPlayers int, gm *data.GameModel, pm *data.PlayerModel, logger *slog.Logger, engine *engine.Engine) *Room {
 	return &Room{
 		Players:            make(map[*Client]bool),
 		Register:           make(chan *Client),
@@ -36,6 +39,42 @@ func NewRoom(models *data.Models, code string, maxPlayers int, gm *data.GameMode
 		currentPlayerCount: 0,
 		logger:             logger,
 		Broadcast:          make(chan *wsmessages.WSMessage),
+		engine:             engine,
+	}
+}
+
+func (r *Room) HandleMessage(message []byte, sender *Client) {
+	var msg wsmessages.WSMessage
+	err := json.Unmarshal(message, &msg)
+	if err != nil {
+		r.logger.Error("ws message unmarshal error", "error", err.Error())
+		return
+	}
+
+	switch msg.Type {
+	case wsmessages.StartGameRequest:
+		if sender.isCreator {
+			if r.IsReadyToPlay() {
+				r.Broadcast <- &wsmessages.WSMessage{Type: wsmessages.ShowGameLoading}
+			} else {
+				sender.Send(wsmessages.WSMessage{Type: wsmessages.NotEnoughPlayers})
+				return
+			}
+
+			treasures := r.engine.GenerateTreasureSet(r.currentPlayerCount)
+			i := 0
+			for player := range r.Players {
+				player.Send(wsmessages.WSMessage{Type: wsmessages.GameDataTreasures, Data: map[string]any{
+					"treasures": treasures[i],
+				}})
+				i++
+			}
+		} else {
+			r.logger.Warn("non-creator player sent start game request", "nickname", sender.nickname, "gameroom", r.Code)
+			return
+		}
+	default:
+		r.logger.Warn("unknown ws request", "type", msg.Type)
 	}
 }
 

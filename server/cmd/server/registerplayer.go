@@ -46,7 +46,7 @@ func (app *application) registerPlayerHandler(w http.ResponseWriter, r *http.Req
 		return
 	}
 
-	if game.State != data.GameStateLobby {
+	if game.State != data.GameStateLobby || game.CurrentPlayerCount >= game.MaxPlayerCount {
 		app.roomFullResponse(w, r)
 		return
 	}

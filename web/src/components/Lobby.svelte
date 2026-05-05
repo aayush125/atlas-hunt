@@ -3,9 +3,11 @@
 	import avatarSrc from '$lib/assets/avatars/avatar.jpg';
 
 	let {
+		wsReady,
 		onLeaveGame,
 		onStartGame
-	}: { onLeaveGame: () => Promise<void>; onStartGame: () => Promise<void> } = $props();
+	}: { wsReady: boolean; onLeaveGame: () => Promise<void>; onStartGame: () => Promise<void> } =
+		$props();
 </script>
 
 <div class="flex w-full flex-col items-center justify-center gap-6 p-4 sm:p-6">
@@ -78,6 +80,7 @@
 	{#if $gameStore.playerIsCreator}
 		<button
 			class="btn mt-4 w-full max-w-lg btn-primary sm:mt-6"
+			disabled={!wsReady}
 			onclick={async () => {
 				await onStartGame();
 			}}>Start Game</button

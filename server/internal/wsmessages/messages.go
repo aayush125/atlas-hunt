@@ -8,9 +8,9 @@ const (
 	PlayerJoined          = WSEvent("player:joined")
 	PlayerLeft            = WSEvent("player:left")
 	StartGameRequest      = WSEvent("request:game:start")
-
-	// temporary
-	AcknowledgeStartRequest = WSEvent("ack:game:start")
+	ShowGameLoading       = WSEvent("ingame:show:loading")
+	GameDataTreasures     = WSEvent("game:data:treasures")
+	NotEnoughPlayers      = WSEvent("game:insufficient:players")
 )
 
 type WSMessage struct {

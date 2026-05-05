@@ -53,31 +53,7 @@ func (c *Client) Send(v wsmessages.WSMessage) error {
 }
 
 func (c *Client) HandleMessage(message []byte) {
-	var msg wsmessages.WSMessage
-	err := json.Unmarshal(message, &msg)
-	if err != nil {
-		c.logger.Error("ws message unmarshal error", "error", err.Error())
-		return
-	}
-
-	switch msg.Type {
-	case wsmessages.StartGameRequest:
-		// verify this client is the creator
-		if c.isCreator {
-			if c.room.IsReadyToPlay() {
-				err = c.Send(wsmessages.WSMessage{Type: wsmessages.AcknowledgeStartRequest})
-				if err != nil {
-					c.logger.Error("error sending start game acknowledgement", "error", err.Error())
-					return
-				}
-			}
-		} else {
-			c.logger.Warn("non-creator player sent start game request", "nickname", c.nickname, "game room", c.room.Code)
-			return
-		}
-	default:
-		c.logger.Warn("unknown ws request", "type", msg.Type)
-	}
+	c.room.HandleMessage(message, c)
 }
 
 func (c *Client) ReadPump() {

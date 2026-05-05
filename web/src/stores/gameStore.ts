@@ -3,7 +3,7 @@ import type { Member, Player } from '$lib/types/player';
 import type { TreasureItem } from '$lib/types/treasure';
 import { writable } from 'svelte/store';
 
-type GamePhase = 'idle' | 'waiting' | 'in-game' | 'game-over';
+type GamePhase = 'idle' | 'waiting' | 'loading' | 'in-game' | 'game-over';
 type GameRound = 'one' | 'two' | 'three';
 
 interface GameState {

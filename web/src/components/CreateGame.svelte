@@ -67,13 +67,13 @@
 			<input
 				bind:value={numberOfPlayers}
 				type="range"
-				min="4"
+				min="2"
 				max="10"
 				step="2"
 				class="range w-full"
 			/>
 			<div class="mt-2 flex justify-between text-xs">
-				{#each [4, 6, 8, 10] as n (n)}
+				{#each [2, 4, 6, 8, 10] as n (n)}
 					<div class="flex flex-col items-center gap-0.5">
 						<span>|</span>
 						<span>{n}</span>

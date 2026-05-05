@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"game.crisis-control.com/internal/data"
+	"game.crisis-control.com/internal/engine"
 	"game.crisis-control.com/internal/validator"
 	"game.crisis-control.com/internal/ws"
 	"github.com/redis/go-redis/v9"
@@ -30,6 +31,7 @@ type application struct {
 	mu           sync.Mutex
 	shuttingDown bool
 	gameRooms    map[string]*ws.Room
+	engine       *engine.Engine
 }
 
 func main() {
@@ -74,6 +76,7 @@ func main() {
 		logger:       logger,
 		shuttingDown: false,
 		gameRooms:    make(map[string]*ws.Room),
+		engine:       engine.NewEngine(logger),
 	}
 
 	err := app.serve()
