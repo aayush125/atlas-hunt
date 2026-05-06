@@ -1,5 +1,7 @@
 package gamedata
 
+import "github.com/google/uuid"
+
 const (
 	CommonRarity    = "Common"
 	RareRarity      = "Rare"
@@ -26,17 +28,26 @@ type Treasure struct {
 	Questions   []Question `json:"questions"`
 }
 
+type InventoryItemBase struct {
+	InstanceID  uuid.UUID `json:"instanceId"`
+	ID          string    `json:"id"`
+	Name        string    `json:"name"`
+	Icon        string    `json:"icon"`
+	Cat         string    `json:"-"`
+	Rarity      string    `json:"rarity"`
+	Points      int       `json:"points"`
+	BoostPoints int       `json:"boostPoints"`
+}
+
 type TreasureItem struct {
-	ID          string   `json:"id"`
-	Name        string   `json:"name"`
-	Icon        string   `json:"icon"`
-	Cat         string   `json:"-"`
-	Rarity      string   `json:"rarity"`
-	Points      int      `json:"points"`
-	BoostPoints int      `json:"boostPoints"`
-	X           float32  `json:"x"`
-	Y           float32  `json:"y"`
-	Question    Question `json:"question"`
+	InventoryItemBase
+	X        float32  `json:"x"`
+	Y        float32  `json:"y"`
+	Question Question `json:"question"`
+}
+
+type InventoryItem struct {
+	InventoryItemBase
 }
 
 // internal structs for parsing

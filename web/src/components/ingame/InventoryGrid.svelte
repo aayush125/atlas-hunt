@@ -5,7 +5,7 @@
 </script>
 
 <div class="grid grid-cols-6 gap-1.5">
-	{#each treasures as treasure (treasure.id)}
+	{#each treasures as treasure (treasure.instanceId)}
 		<div
 			class="group relative flex cursor-pointer flex-col items-center justify-center gap-0.5 rounded-lg border border-base-300 bg-base-200 px-1 py-2 transition-all duration-150 hover:border-warning/60 hover:bg-base-300 hover:shadow-md active:scale-95"
 			title={treasure.id}

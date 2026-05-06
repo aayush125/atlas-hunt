@@ -101,9 +101,22 @@
 				break;
 			}
 			case Events.GameDataTreasures: {
-				const info = data.data as { treasures: Treasure[] };
+				const info = data.data as { treasures: Treasure[]; map: 'first' | 'second' | 'third' };
 				mapTreasures = info.treasures;
+				gameStore.setMap(info.map); // TODO: transition on a separate start signal from server
 				gameStore.setGameState('in-game'); // TODO: transition on a separate start signal from server
+				break;
+			}
+			case Events.TreasureClaimSuccessful: {
+				const info = data.data as {
+					instance_id: string;
+					treasure_id: string;
+					treasure_count: number;
+					points: number;
+				};
+				console.log('received stat updates:', info);
+				gameStore.updatePoints(info.points);
+				gameStore.updateTreasureCount(info.treasure_id, info.treasure_count);
 				break;
 			}
 			default: {
@@ -202,8 +215,11 @@
 		<GamePlay
 			treasures={mapTreasures}
 			onClaim={(t) => {
-				mapTreasures = mapTreasures.filter((tr) => tr.id !== t.id);
+				mapTreasures = mapTreasures.filter((tr) => tr.instanceId !== t.instanceId);
 				gameStore.addTreasure(t);
+			}}
+			onFail={(t) => {
+				mapTreasures = mapTreasures.filter((tr) => tr.instanceId !== t.instanceId);
 			}}
 		/>
 	{/if}

@@ -2,13 +2,31 @@
 	import { onMount } from 'svelte';
 	import type { Treasure } from '$lib/types/treasure';
 	import * as Panzoom from '@panzoom/panzoom';
+	import firstMap from '$lib/assets/maps/round_1.svg';
+	import secondMap from '$lib/assets/maps/round_2.svg';
 	import thirdMap from '$lib/assets/maps/round_3.svg';
 	import TreasureDialog from './TreasureDialog.svelte';
+	import { gameStore } from '../../stores/gameStore';
 
-	let { allTreasures, onClaim }: { allTreasures: Treasure[]; onClaim: (t: Treasure) => void } =
+	let {
+		allTreasures,
+		onClaim,
+		onFail
+	}: { allTreasures: Treasure[]; onClaim: (t: Treasure) => void; onFail: (t: Treasure) => void } =
 		$props();
 
 	let svgEl: SVGSVGElement;
+
+	function getMap() {
+		switch ($gameStore.map) {
+			case 'first':
+				return firstMap;
+			case 'second':
+				return secondMap;
+			default:
+				return thirdMap;
+		}
+	}
 
 	let selectedTreasure = $state<Treasure | null>(null);
 	let claimResult = $state<'correct' | 'incorrect' | null>(null);
@@ -27,6 +45,7 @@
 				'Content-Type': 'application/json'
 			},
 			body: JSON.stringify({
+				instanceId: treasure.instanceId,
 				questionId: treasure.question.id,
 				selectedAnswer: selectedAnswer
 			})
@@ -39,10 +58,12 @@
 
 		const json = await res.json();
 
-		claimResult = json.correct === true ? 'correct' : 'incorrect';
+		claimResult = json.claimed === true ? 'correct' : 'incorrect';
 
 		if (claimResult == 'correct') {
 			onClaim(treasure);
+		} else {
+			onFail(treasure);
 		}
 
 		clearTimeout(claimResultTimer);
@@ -78,14 +99,14 @@
 			xmlns:xlink="http://www.w3.org/1999/xlink"
 			bind:this={svgEl}
 		>
-			<image href={thirdMap} width="100%" height="100%" preserveAspectRatio="xMidYMid meet" />
+			<image href={getMap()} width="100%" height="100%" preserveAspectRatio="xMidYMid meet" />
 			<defs>
 				<radialGradient id="iconGradient" cx="40%" cy="35%" r="60%">
 					<stop offset="0%" stop-color="#f05050" />
 					<stop offset="100%" stop-color="#c0202a" />
 				</radialGradient>
 			</defs>
-			{#each allTreasures as icon (icon.id)}
+			{#each allTreasures as icon (icon.instanceId)}
 				<g transform="translate({icon.x}, {icon.y})">
 					<g
 						role="button"

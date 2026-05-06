@@ -5,6 +5,7 @@ import (
 	"math/big"
 
 	"game.crisis-control.com/internal/gamedata"
+	"github.com/google/uuid"
 )
 
 const (
@@ -32,32 +33,34 @@ func (e *Engine) pickRandomPoint(points []gamedata.Point) gamedata.Point {
 	return points[randIndex(len(points))]
 }
 
-func (e *Engine) pickUniqueTreasures(pool []gamedata.Treasure, points []gamedata.Point, count int) []gamedata.TreasureItem {
+func (e *Engine) pickTreasures(pool []gamedata.Treasure, points []gamedata.Point, count int) []gamedata.TreasureItem {
 	if count > len(pool) {
 		panic("requested count exceeds treasure pool size")
 	}
 
-	seen := make(map[string]struct{}, count)
 	items := make([]gamedata.TreasureItem, 0, count)
 
 	for len(items) < count {
 		t := pool[randIndex(len(pool))]
-		if _, exists := seen[t.ID]; exists {
-			continue
-		}
-		seen[t.ID] = struct{}{}
 		point := e.pickRandomPoint(points)
+		instanceID, err := uuid.NewRandom()
+		if err != nil {
+			e.logger.Error("error generating uuid for treasure instanceID", "error", err.Error())
+			return nil
+		}
 		items = append(items, gamedata.TreasureItem{
-			ID:          t.ID,
-			Name:        t.Name,
-			Icon:        t.Icon,
-			Cat:         t.Cat,
-			Rarity:      t.Rarity,
-			Points:      t.Points,
-			BoostPoints: t.BoostPoints,
-			X:           point.X,
-			Y:           point.Y,
-			Question:    e.pickRandomQuestion(t.Questions),
+			InventoryItemBase: gamedata.InventoryItemBase{
+				InstanceID:  instanceID,
+				ID:          t.ID,
+				Name:        t.Name,
+				Icon:        t.Icon,
+				Cat:         t.Cat,
+				Rarity:      t.Rarity,
+				Points:      t.Points,
+				BoostPoints: t.BoostPoints},
+			X:        point.X,
+			Y:        point.Y,
+			Question: e.pickRandomQuestion(t.Questions),
 		})
 	}
 
@@ -66,10 +69,10 @@ func (e *Engine) pickUniqueTreasures(pool []gamedata.Treasure, points []gamedata
 
 func (e *Engine) GenerateTreasuresForPlayer() []gamedata.TreasureItem {
 	items := make([]gamedata.TreasureItem, 0, countTotal)
-	items = append(items, e.pickUniqueTreasures(gamedata.GetCommonTreasures(), gamedata.GetFirstMapPoints(), countCommon)...)
-	items = append(items, e.pickUniqueTreasures(gamedata.GetRareTreasures(), gamedata.GetFirstMapPoints(), countRare)...)
-	items = append(items, e.pickUniqueTreasures(gamedata.GetEpicTreasures(), gamedata.GetFirstMapPoints(), countEpic)...)
-	items = append(items, e.pickUniqueTreasures(gamedata.GetLegendaryTreasures(), gamedata.GetFirstMapPoints(), countLegendary)...)
+	items = append(items, e.pickTreasures(gamedata.GetCommonTreasures(), gamedata.GetFirstMapPoints(), countCommon)...)
+	items = append(items, e.pickTreasures(gamedata.GetRareTreasures(), gamedata.GetFirstMapPoints(), countRare)...)
+	items = append(items, e.pickTreasures(gamedata.GetEpicTreasures(), gamedata.GetFirstMapPoints(), countEpic)...)
+	items = append(items, e.pickTreasures(gamedata.GetLegendaryTreasures(), gamedata.GetFirstMapPoints(), countLegendary)...)
 	return items
 }
 

@@ -8,7 +8,12 @@
 	import InventoryGrid from './InventoryGrid.svelte';
 	import type { Treasure } from '$lib/types/treasure';
 
-	let { treasures, onClaim }: { treasures: Treasure[]; onClaim: (t: Treasure) => void } = $props();
+	let {
+		treasures,
+		onClaim,
+		onFail
+	}: { treasures: Treasure[]; onClaim: (t: Treasure) => void; onFail: (t: Treasure) => void } =
+		$props();
 
 	let showInfoModal = $state(false);
 	let showLeaveConfirm = $state(false);
@@ -35,9 +40,12 @@
 <div class="flex h-full w-full flex-col">
 	<!-- MAP -->
 	<div class="relative min-h-0 flex-1">
-		<Map allTreasures={treasures} {onClaim} />
+		<Map allTreasures={treasures} {onClaim} {onFail} />
 		<!-- FLOATING BUTTONS (top-right corner) -->
-		<div class="absolute top-3 right-3 z-10 flex gap-2">
+		<div class="absolute top-3 right-3 z-10 flex items-center gap-2">
+			<div class="badge badge-lg font-bold shadow-md badge-warning">
+				🏆 {$gameStore.points}
+			</div>
 			<button
 				class="btn gap-1.5 shadow-md btn-sm btn-info"
 				onclick={openInfo}

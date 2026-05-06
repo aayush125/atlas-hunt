@@ -4,7 +4,7 @@ import type { TreasureItem } from '$lib/types/treasure';
 import { writable } from 'svelte/store';
 
 type GamePhase = 'idle' | 'waiting' | 'loading' | 'in-game' | 'game-over';
-type GameRound = 'one' | 'two' | 'three';
+type GameMap = 'first' | 'second' | 'third';
 
 interface GameState {
 	joinCode: string | null;
@@ -16,8 +16,10 @@ interface GameState {
 	playerIsCreator: boolean;
 	currentPlayerCount: number;
 	otherPlayers: Member[];
-	round: GameRound | null;
+	map: GameMap | null;
 	treasures: TreasureItem[];
+	points: number;
+	treasureCount: Record<string, number>;
 }
 
 const initial: GameState = {
@@ -30,8 +32,10 @@ const initial: GameState = {
 	playerIsCreator: false,
 	currentPlayerCount: 0,
 	otherPlayers: [],
-	round: null,
-	treasures: []
+	map: null,
+	treasures: [],
+	points: 0,
+	treasureCount: {}
 };
 
 function createGameStore() {
@@ -50,8 +54,10 @@ function createGameStore() {
 				playerIsCreator: player.is_creator,
 				currentPlayerCount: game.current_player_count,
 				otherPlayers: members,
-				round: null,
-				treasures: []
+				map: null,
+				treasures: [],
+				points: 0,
+				treasureCount: {}
 			})),
 		setGameState: (state: GamePhase) => update((game) => ({ ...game, state })),
 		addPlayer: (id: string, nickname: string) =>
@@ -63,6 +69,16 @@ function createGameStore() {
 			update((game) => ({
 				...game,
 				treasures: [...game.treasures, treasure]
+			})),
+		setMap: (map: 'first' | 'second' | 'third') => update((game) => ({ ...game, map: map })),
+		updatePoints: (points: number) => update((game) => ({ ...game, points: points })),
+		updateTreasureCount: (treasureId: string, count: number) =>
+			update((game) => ({
+				...game,
+				treasureCount: {
+					...game.treasureCount,
+					[treasureId]: count
+				}
 			})),
 		removePlayer: (id: string) =>
 			update((game) => ({

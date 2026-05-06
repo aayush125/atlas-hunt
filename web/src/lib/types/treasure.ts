@@ -1,4 +1,5 @@
 export type Treasure = {
+	instanceId: string;
 	id: string;
 	name: string;
 	icon: string;

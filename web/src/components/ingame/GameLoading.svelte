@@ -8,7 +8,7 @@
 		<div class="flex flex-col items-center justify-center gap-6">
 			<!-- Animated Avatar Stack -->
 			<div class="flex -space-x-4">
-				{#each Array(3) as i (i)}
+				{#each Array(3) as _, i (i)}
 					<div class="animate-bounce" style="animation-delay: {i * 0.15}s">
 						<img
 							src={avatarSrc}

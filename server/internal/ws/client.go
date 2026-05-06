@@ -2,11 +2,15 @@ package ws
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"log/slog"
+	"sync"
 	"time"
 
+	"game.crisis-control.com/internal/gamedata"
 	"game.crisis-control.com/internal/wsmessages"
+	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
 )
 
@@ -18,29 +22,87 @@ const (
 )
 
 type Client struct {
-	conn      *websocket.Conn
-	send      chan wsmessages.WSMessage
-	logger    *slog.Logger
-	done      chan struct{}
-	room      *Room
-	nickname  string
-	id        string
-	session   string
-	isCreator bool
+	conn        *websocket.Conn
+	send        chan wsmessages.WSMessage
+	logger      *slog.Logger
+	done        chan struct{}
+	room        *Room
+	nickname    string
+	id          string
+	session     string
+	isCreator   bool
+	treasureSet []gamedata.TreasureItem
+	inventory   []gamedata.InventoryItem
+
+	mu            sync.Mutex
+	points        int
+	treasureCount map[string]int
 }
 
 func NewClient(conn *websocket.Conn, room *Room, nickname, id, session string, logger *slog.Logger, isCreator bool) *Client {
 	return &Client{
-		conn:      conn,
-		send:      make(chan wsmessages.WSMessage, 1),
-		logger:    logger,
-		done:      make(chan struct{}),
-		room:      room,
-		nickname:  nickname,
-		id:        id,
-		session:   session,
-		isCreator: isCreator,
+		conn:          conn,
+		send:          make(chan wsmessages.WSMessage, 1),
+		logger:        logger,
+		done:          make(chan struct{}),
+		room:          room,
+		nickname:      nickname,
+		id:            id,
+		session:       session,
+		isCreator:     isCreator,
+		treasureSet:   make([]gamedata.TreasureItem, 0, 40),
+		treasureCount: make(map[string]int),
 	}
+}
+
+func (c *Client) TryClaimTreasure(treasureInstanceID uuid.UUID, questionID, selectedAnswer string) (bool, error) {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+
+	var newTreasureSet []gamedata.TreasureItem
+	found := false
+	var t gamedata.TreasureItem
+	for _, treasure := range c.treasureSet {
+		if treasure.InstanceID == treasureInstanceID {
+			found = true
+			t = treasure
+			continue
+		}
+		newTreasureSet = append(newTreasureSet, treasure)
+	}
+
+	if !found {
+		return false, errors.New("treasure not assigned to player")
+	}
+
+	correct, err := gamedata.CheckAnswer(questionID, selectedAnswer)
+	if err != nil {
+		return false, err
+	}
+
+	if correct {
+		c.treasureCount[t.ID]++
+		c.points += t.Points
+		c.treasureSet = newTreasureSet
+		c.inventory = append(c.inventory, gamedata.InventoryItem{InventoryItemBase: t.InventoryItemBase})
+
+		err := c.Send(wsmessages.WSMessage{Type: wsmessages.TreasureClaimSuccessful, Data: map[string]any{
+			"instance_id":    treasureInstanceID,
+			"treasure_id":    t.ID,
+			"treasure_count": c.treasureCount[t.ID],
+			"points":         c.points,
+		}})
+
+		if err != nil {
+			c.logger.Error("error updating player stats", "playerID", c.id)
+		}
+	}
+
+	return correct, nil
+}
+
+func (c *Client) setTreasureSet(set []gamedata.TreasureItem) {
+	c.treasureSet = set
 }
 
 func (c *Client) Send(v wsmessages.WSMessage) error {

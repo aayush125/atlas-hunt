@@ -7,6 +7,7 @@ import (
 
 	"game.crisis-control.com/internal/data"
 	"game.crisis-control.com/internal/engine"
+	"game.crisis-control.com/internal/gamedata"
 	"game.crisis-control.com/internal/wsmessages"
 )
 
@@ -43,6 +44,28 @@ func NewRoom(models *data.Models, code string, maxPlayers int, gm *data.GameMode
 	}
 }
 
+func (r *Room) setupGameForPlayer(player *Client, treasures []gamedata.TreasureItem) {
+	player.setTreasureSet(treasures)
+	r.PlayerModel.UpdateTreasureSet(player.session, treasures)
+	err := player.Send(wsmessages.WSMessage{Type: wsmessages.GameDataTreasures, Data: map[string]any{
+		"treasures": treasures,
+		"map":       "first",
+	}})
+	if err != nil {
+		r.logger.Error("error sending treasures to player", "error", err)
+	}
+}
+
+func (r *Room) GetPlayerClientWithSessionToken(token string) *Client {
+	for player := range r.Players {
+		if player.session == token {
+			return player
+		}
+	}
+
+	return nil
+}
+
 func (r *Room) HandleMessage(message []byte, sender *Client) {
 	var msg wsmessages.WSMessage
 	err := json.Unmarshal(message, &msg)
@@ -64,9 +87,7 @@ func (r *Room) HandleMessage(message []byte, sender *Client) {
 			treasures := r.engine.GenerateTreasureSet(r.currentPlayerCount)
 			i := 0
 			for player := range r.Players {
-				player.Send(wsmessages.WSMessage{Type: wsmessages.GameDataTreasures, Data: map[string]any{
-					"treasures": treasures[i],
-				}})
+				r.setupGameForPlayer(player, treasures[i])
 				i++
 			}
 		} else {
