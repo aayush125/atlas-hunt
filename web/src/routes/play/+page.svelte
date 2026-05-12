@@ -103,8 +103,12 @@
 			case Events.GameDataTreasures: {
 				const info = data.data as { treasures: Treasure[]; map: 'first' | 'second' | 'third' };
 				mapTreasures = info.treasures;
-				gameStore.setMap(info.map); // TODO: transition on a separate start signal from server
-				gameStore.setGameState('in-game'); // TODO: transition on a separate start signal from server
+				gameStore.updateRoundTreasureCount(mapTreasures.length);
+				gameStore.setMap(info.map);
+				break;
+			}
+			case Events.BeginGame: {
+				gameStore.setGameState('in-game');
 				break;
 			}
 			case Events.TreasureClaimSuccessful: {

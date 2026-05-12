@@ -42,7 +42,7 @@ type Client struct {
 func NewClient(conn *websocket.Conn, room *Room, nickname, id, session string, logger *slog.Logger, isCreator bool) *Client {
 	return &Client{
 		conn:          conn,
-		send:          make(chan wsmessages.WSMessage, 1),
+		send:          make(chan wsmessages.WSMessage, 8),
 		logger:        logger,
 		done:          make(chan struct{}),
 		room:          room,
@@ -102,6 +102,8 @@ func (c *Client) TryClaimTreasure(treasureInstanceID uuid.UUID, questionID, sele
 }
 
 func (c *Client) setTreasureSet(set []gamedata.TreasureItem) {
+	c.mu.Lock()
+	defer c.mu.Unlock()
 	c.treasureSet = set
 }
 
@@ -114,8 +116,20 @@ func (c *Client) Send(v wsmessages.WSMessage) error {
 	}
 }
 
-func (c *Client) HandleMessage(message []byte) {
-	c.room.HandleMessage(message, c)
+func (c *Client) handleMessage(message []byte) {
+	var msg wsmessages.WSMessage
+	err := json.Unmarshal(message, &msg)
+	if err != nil {
+		c.logger.Error("ws message unmarshal error", "error", err.Error(), "client", c.session)
+		return
+	}
+
+	switch msg.Type {
+	case wsmessages.StartGameRequest:
+		c.room.StartGame <- c
+	default:
+		c.logger.Warn("unrecognized message from client", "client", c.session, "message", msg)
+	}
 }
 
 func (c *Client) ReadPump() {
@@ -139,7 +153,7 @@ func (c *Client) ReadPump() {
 			break
 		}
 
-		c.HandleMessage(message)
+		c.handleMessage(message)
 	}
 }
 

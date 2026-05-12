@@ -7,7 +7,8 @@ export const Events = {
 	ShowGameLoading: 'ingame:show:loading',
 	GameDataTreasures: 'game:data:treasures',
 	NotEnoughPlayers: 'game:insufficient:players',
-	TreasureClaimSuccessful: 'game:treasureclaim:successful'
+	TreasureClaimSuccessful: 'game:treasureclaim:successful',
+	BeginGame: 'game:begin'
 } as const;
 
 export type Event = (typeof Events)[keyof typeof Events];

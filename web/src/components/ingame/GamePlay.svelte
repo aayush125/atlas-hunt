@@ -42,23 +42,18 @@
 	<div class="relative min-h-0 flex-1">
 		<Map allTreasures={treasures} {onClaim} {onFail} />
 		<!-- FLOATING BUTTONS (top-right corner) -->
-		<div class="absolute top-3 right-3 z-10 flex items-center gap-2">
-			<div class="badge badge-lg font-bold shadow-md badge-warning">
+		<div class="absolute top-3 right-3 z-10 grid grid-cols-2 gap-1.5 shadow-md">
+			<div class="btn pointer-events-none btn-xs btn-warning">
 				🏆 {$gameStore.points}
 			</div>
-			<button
-				class="btn gap-1.5 shadow-md btn-sm btn-info"
-				onclick={openInfo}
-				aria-label="Game info"
-			>
+			<div class="btn pointer-events-none btn-xs btn-success">
+				🗺️ {treasures.length}/{$gameStore.treasureCountThisRound}
+			</div>
+			<button class="btn btn-xs btn-info" onclick={openInfo} aria-label="Game info">
 				<InfoIcon />
 				Info
 			</button>
-			<button
-				class="btn gap-1.5 shadow-md btn-sm btn-error"
-				onclick={promptLeave}
-				aria-label="Leave game"
-			>
+			<button class="btn btn-xs btn-error" onclick={promptLeave} aria-label="Leave game">
 				<LeaveIcon />
 				Leave
 			</button>

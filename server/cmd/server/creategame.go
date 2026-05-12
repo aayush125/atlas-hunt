@@ -98,6 +98,16 @@ func (app *application) createGameHandler(w http.ResponseWriter, r *http.Request
 		return
 	}
 
+	// Set initial TTL of 2 hours
+	err = app.models.Game.SetTTLForPlayerSet(gameRequest.GameID, 2*time.Hour)
+	if err != nil {
+		app.models.Game.Delete(gameRequest.GameID)
+		app.models.Player.Delete(player.SessionToken)
+		app.models.Game.RemovePlayerFromSet(gameRequest.GameID, player.SessionToken)
+		app.serverErrorResponse(w, r, err)
+		return
+	}
+
 	room := ws.NewRoom(app.models, gameRequest.GameID, gameRequest.MaxPlayerCount, app.models.Game, app.models.Player, app.logger, app.engine)
 
 	app.mu.Lock()

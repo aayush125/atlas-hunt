@@ -12,6 +12,8 @@ const (
 	GameDataTreasures       = WSEvent("game:data:treasures")
 	NotEnoughPlayers        = WSEvent("game:insufficient:players")
 	TreasureClaimSuccessful = WSEvent("game:treasureclaim:successful")
+	BeginGame               = WSEvent("game:begin")
+	MapRoundOver            = WSEvent("game:round:over")
 )
 
 type WSMessage struct {

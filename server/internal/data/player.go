@@ -76,7 +76,20 @@ func (m *PlayerModel) Insert(player *Player) error {
 		return err
 	}
 
-	if err := m.RDB.Expire(ctx, key, 30*time.Minute).Err(); err != nil {
+	if err := m.RDB.Expire(ctx, key, 2*time.Hour).Err(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *PlayerModel) SetTTL(token string) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	key := getPlayerKey(token)
+
+	if err := m.RDB.Expire(ctx, key, 20*time.Minute).Err(); err != nil {
 		return err
 	}
 

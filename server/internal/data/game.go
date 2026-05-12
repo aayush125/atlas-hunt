@@ -73,7 +73,7 @@ func getGameKey(code string) string {
 	return fmt.Sprintf("game:%s", code)
 }
 
-func getGamePlayerKey(code string) string {
+func getGamePlayerSetKey(code string) string {
 	return fmt.Sprintf("game:%s:players", code)
 }
 
@@ -87,8 +87,42 @@ func (m *GameModel) Insert(game *Game) error {
 		return err
 	}
 
-	if err := m.RDB.Expire(ctx, key, 30*time.Minute).Err(); err != nil {
+	if err := m.RDB.Expire(ctx, key, 2*time.Hour).Err(); err != nil {
 		return err
+	}
+
+	return nil
+}
+
+func (m *GameModel) SetTTL(code string) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	key := getGameKey(code)
+
+	if err := m.RDB.Expire(ctx, key, 20*time.Minute).Err(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *GameModel) SetGameState(code string, state GameState) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	key := getGameKey(code)
+
+	exists, err := m.RDB.Exists(ctx, key).Result()
+	if err != nil {
+		return err
+	}
+	if exists == 0 {
+		return ErrRecordNotFound
+	}
+
+	if err := m.RDB.HSet(ctx, key, "state", state).Err(); err != nil {
+		return fmt.Errorf("updating game state: %w", err)
 	}
 
 	return nil
@@ -170,12 +204,20 @@ func (m *GameModel) AddPlayerToSet(gameCode, playerSessionToken string) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
-	key := getGamePlayerKey(gameCode)
+	key := getGamePlayerSetKey(gameCode)
 	if err := m.RDB.SAdd(ctx, key, playerSessionToken).Err(); err != nil {
 		return err
 	}
 
-	if err := m.RDB.Expire(ctx, key, 30*time.Minute).Err(); err != nil {
+	return nil
+}
+
+func (m *GameModel) SetTTLForPlayerSet(gameCode string, ttl time.Duration) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	key := getGamePlayerSetKey(gameCode)
+	if err := m.RDB.Expire(ctx, key, ttl).Err(); err != nil {
 		return err
 	}
 
@@ -186,7 +228,7 @@ func (m *GameModel) RemovePlayerFromSet(gameCode, playerSessionToken string) err
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
-	key := getGamePlayerKey(gameCode)
+	key := getGamePlayerSetKey(gameCode)
 
 	return m.RDB.SRem(ctx, key, playerSessionToken).Err()
 }
@@ -195,7 +237,7 @@ func (m *GameModel) GetAllPlayers(gameCode string) ([]string, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
-	key := getGamePlayerKey(gameCode)
+	key := getGamePlayerSetKey(gameCode)
 
 	players, err := m.RDB.SMembers(ctx, key).Result()
 	if err != nil {
