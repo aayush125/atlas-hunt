@@ -108,6 +108,8 @@
 				break;
 			}
 			case Events.BeginGame: {
+				const info = data.data as { endsAt: number; serverNow: number };
+				gameStore.startRound(info.serverNow, info.endsAt);
 				gameStore.setGameState('in-game');
 				break;
 			}

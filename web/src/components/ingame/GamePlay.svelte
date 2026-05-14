@@ -19,6 +19,34 @@
 	let showLeaveConfirm = $state(false);
 	let activeTab = $state<'inventory' | 'players'>('inventory');
 
+	let now = $state(Date.now());
+	let timeLeft = $derived.by(() => {
+		if (!$gameStore.serverNow || !$gameStore.roundEndsAt) return '00:00';
+		const effectiveNow = Math.max(now, $gameStore.serverNow);
+		const remainingMs = Math.max(0, $gameStore.roundEndsAt - effectiveNow);
+
+		const totalSeconds = Math.floor(remainingMs / 1000);
+		const minutes = Math.floor(totalSeconds / 60);
+		const seconds = totalSeconds % 60;
+
+		const mm = String(minutes).padStart(2, '0');
+		const ss = String(seconds).padStart(2, '0');
+
+		return `${mm}:${ss}`;
+	});
+
+	$effect(() => {
+		const interval = setInterval(() => {
+			now = Date.now();
+
+			if ($gameStore.roundEndsAt && now >= $gameStore.roundEndsAt) {
+				clearInterval(interval);
+			}
+		}, 1000);
+
+		return () => clearInterval(interval);
+	});
+
 	function openInfo() {
 		showInfoModal = true;
 	}
@@ -41,18 +69,40 @@
 	<!-- MAP -->
 	<div class="relative min-h-0 flex-1">
 		<Map allTreasures={treasures} {onClaim} {onFail} />
-		<!-- FLOATING BUTTONS (top-right corner) -->
+
+		<!-- LEFT: TIMER -->
+		<div class="absolute top-3 left-3 z-10">
+			<div
+				class="flex items-center gap-2 rounded-xl bg-base-100/90 px-3 py-2 shadow-lg backdrop-blur"
+			>
+				<div class="text-lg">⏱️</div>
+
+				{#if $gameStore.serverNow && $gameStore.roundEndsAt}
+					<div class="leading-tight">
+						<div class="text-[10px] uppercase opacity-60">Time Left</div>
+						<div class="font-mono text-2xl font-black tracking-widest tabular-nums">
+							{timeLeft}
+						</div>
+					</div>
+				{/if}
+			</div>
+		</div>
+
+		<!-- RIGHT: FLOATING BUTTONS -->
 		<div class="absolute top-3 right-3 z-10 grid grid-cols-2 gap-1.5 shadow-md">
 			<div class="btn pointer-events-none btn-xs btn-warning">
 				🏆 {$gameStore.points}
 			</div>
+
 			<div class="btn pointer-events-none btn-xs btn-success">
 				🗺️ {treasures.length}/{$gameStore.treasureCountThisRound}
 			</div>
+
 			<button class="btn btn-xs btn-info" onclick={openInfo} aria-label="Game info">
 				<InfoIcon />
 				Info
 			</button>
+
 			<button class="btn btn-xs btn-error" onclick={promptLeave} aria-label="Leave game">
 				<LeaveIcon />
 				Leave

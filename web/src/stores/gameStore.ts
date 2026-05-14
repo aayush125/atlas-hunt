@@ -20,7 +20,9 @@ interface GameState {
 	treasures: TreasureItem[];
 	points: number;
 	treasureCount: Record<string, number>;
-	treasureCountThisRound: number;
+	treasureCountThisRound: number | null;
+	serverNow: number | null;
+	roundEndsAt: number | null;
 }
 
 const initial: GameState = {
@@ -37,7 +39,9 @@ const initial: GameState = {
 	treasures: [],
 	points: 0,
 	treasureCount: {},
-	treasureCountThisRound: 0
+	treasureCountThisRound: null,
+	serverNow: null,
+	roundEndsAt: null
 };
 
 function createGameStore() {
@@ -60,7 +64,9 @@ function createGameStore() {
 				treasures: [],
 				points: 0,
 				treasureCount: {},
-				treasureCountThisRound: 0
+				treasureCountThisRound: 0,
+				serverNow: null,
+				roundEndsAt: null
 			})),
 		setGameState: (state: GamePhase) => update((game) => ({ ...game, state })),
 		addPlayer: (id: string, nickname: string) =>
@@ -83,6 +89,8 @@ function createGameStore() {
 					[treasureId]: count
 				}
 			})),
+		startRound: (serverNow: number, endsAt: number) =>
+			update((game) => ({ ...game, serverNow: serverNow, roundEndsAt: endsAt })),
 		updateRoundTreasureCount: (count: number) =>
 			update((game) => ({ ...game, treasureCountThisRound: count })),
 		removePlayer: (id: string) =>

@@ -60,6 +60,7 @@ func (app *application) createGameHandler(w http.ResponseWriter, r *http.Request
 	gameRequest.GameID = gameID.Plaintext
 	gameRequest.CreatedAt = time.Now()
 	gameRequest.State = data.GameStateLobby
+	gameRequest.CurrentMap = data.GameMapNone
 
 	err = app.models.Game.Insert(&gameRequest)
 	if err != nil {

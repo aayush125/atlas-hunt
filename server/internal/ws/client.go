@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"log/slog"
+	"maps"
 	"sync"
 	"time"
 
@@ -39,6 +40,13 @@ type Client struct {
 	treasureCount map[string]int
 }
 
+type ClientSnapshot struct {
+	TreasureSet   []gamedata.TreasureItem
+	Inventory     []gamedata.InventoryItem
+	TreasureCount map[string]int
+	Points        int
+}
+
 func NewClient(conn *websocket.Conn, room *Room, nickname, id, session string, logger *slog.Logger, isCreator bool) *Client {
 	return &Client{
 		conn:          conn,
@@ -52,6 +60,17 @@ func NewClient(conn *websocket.Conn, room *Room, nickname, id, session string, l
 		isCreator:     isCreator,
 		treasureSet:   make([]gamedata.TreasureItem, 0, 40),
 		treasureCount: make(map[string]int),
+	}
+}
+
+func (c *Client) Snapshot() ClientSnapshot {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	return ClientSnapshot{
+		TreasureSet:   append([]gamedata.TreasureItem{}, c.treasureSet...),
+		Inventory:     append([]gamedata.InventoryItem{}, c.inventory...),
+		TreasureCount: maps.Clone(c.treasureCount),
+		Points:        c.points,
 	}
 }
 

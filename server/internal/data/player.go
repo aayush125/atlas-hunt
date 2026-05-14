@@ -39,6 +39,30 @@ func getPlayerKey(sessionToken string) string {
 	return fmt.Sprintf("player:%s", sessionToken)
 }
 
+func (m *PlayerModel) BackupPlayerStats(token string, treasureSet []gamedata.TreasureItem, treasureCount map[string]int, inventory []gamedata.InventoryItem, points int) error {
+	err := m.UpdateTreasureSet(token, treasureSet)
+	if err != nil {
+		return err
+	}
+
+	err = m.UpdateTreasureCount(token, treasureCount)
+	if err != nil {
+		return err
+	}
+
+	err = m.UpdateInventory(token, inventory)
+	if err != nil {
+		return err
+	}
+
+	err = m.UpdatePoints(token, points)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (m *PlayerModel) Insert(player *Player) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
@@ -47,7 +71,7 @@ func (m *PlayerModel) Insert(player *Player) error {
 
 	treasureData, err := json.Marshal(player.TreasureSet)
 	if err != nil {
-		return err
+		return fmt.Errorf("marshalling treasure_set: %w", err)
 	}
 
 	treasureCountData, err := json.Marshal(player.TreasureCount)
@@ -215,6 +239,53 @@ func (m *PlayerModel) UpdateInventory(token string, inventory []gamedata.Invento
 
 	if err := m.RDB.HSet(ctx, key, "inventory", inventoryData).Err(); err != nil {
 		return fmt.Errorf("updating inventory: %w", err)
+	}
+
+	return nil
+}
+
+func (m *PlayerModel) UpdatePoints(token string, points int) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	key := getPlayerKey(token)
+
+	exists, err := m.RDB.Exists(ctx, key).Result()
+	if err != nil {
+		return err
+	}
+	if exists == 0 {
+		return ErrRecordNotFound
+	}
+
+	if err := m.RDB.HSet(ctx, key, "points", points).Err(); err != nil {
+		return fmt.Errorf("updating points: %w", err)
+	}
+
+	return nil
+}
+
+func (m *PlayerModel) UpdateTreasureCount(token string, treasureCount map[string]int) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	key := getPlayerKey(token)
+
+	exists, err := m.RDB.Exists(ctx, key).Result()
+	if err != nil {
+		return err
+	}
+	if exists == 0 {
+		return ErrRecordNotFound
+	}
+
+	treasureCountData, err := json.Marshal(treasureCount)
+	if err != nil {
+		return fmt.Errorf("marshalling treasure_count: %w", err)
+	}
+
+	if err := m.RDB.HSet(ctx, key, "treasure_count", treasureCountData).Err(); err != nil {
+		return fmt.Errorf("updating treasure_count: %w", err)
 	}
 
 	return nil

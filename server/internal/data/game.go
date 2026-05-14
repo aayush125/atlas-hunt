@@ -21,8 +21,27 @@ func (g *GameState) UnmarshalBinary(data []byte) error {
 }
 
 const (
-	GameStateLobby      GameState = "lobby"
-	GameStateInProgress GameState = "in_progress"
+	GameStateLobby         GameState = "lobby"
+	GameStateInProgress    GameState = "in_progress"
+	GameStateTransitioning GameState = "transitioning"
+)
+
+type GameMap string
+
+func (g GameMap) MarshalBinary() ([]byte, error) {
+	return []byte(g), nil
+}
+
+func (g *GameMap) UnmarshalBinary(data []byte) error {
+	*g = GameMap(data)
+	return nil
+}
+
+const (
+	GameMapNone   GameMap = "none"
+	GameMapFirst  GameMap = "first"
+	GameMapSecond GameMap = "second"
+	GameMapThird  GameMap = "third"
 )
 
 type Game struct {
@@ -32,6 +51,7 @@ type Game struct {
 	CreatedAt          time.Time `json:"created_at" redis:"created_at"`
 	CreatorNickname    string    `json:"creator_nickname" redis:"creator_nickname"`
 	State              GameState `json:"state" redis:"state"`
+	CurrentMap         GameMap   `json:"current_map" redis:"current_map"`
 }
 
 type JoinGame struct {
@@ -107,7 +127,7 @@ func (m *GameModel) SetTTL(code string) error {
 	return nil
 }
 
-func (m *GameModel) SetGameState(code string, state GameState) error {
+func (m *GameModel) SetGameAndMapState(code string, state GameState, gameMap GameMap) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
@@ -123,6 +143,10 @@ func (m *GameModel) SetGameState(code string, state GameState) error {
 
 	if err := m.RDB.HSet(ctx, key, "state", state).Err(); err != nil {
 		return fmt.Errorf("updating game state: %w", err)
+	}
+
+	if err := m.RDB.HSet(ctx, key, "current_map", gameMap).Err(); err != nil {
+		return fmt.Errorf("updating game map: %w", err)
 	}
 
 	return nil
