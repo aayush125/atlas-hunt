@@ -96,68 +96,37 @@ func (r *Room) GetPlayerClientWithSessionToken(token string) *Client {
 	return <-req.result
 }
 
-func (r *Room) startGame(requester *Client, playerSnapshot []*Client, playerCount int) {
-	if requester.isCreator {
-		if playerCount != r.maxPlayers {
-			requester.Send(wsmessages.WSMessage{Type: wsmessages.NotEnoughPlayers})
-			return
-		}
-
-		r.Broadcast <- &wsmessages.WSMessage{Type: wsmessages.ShowGameLoading}
-		treasures := r.engine.GenerateTreasureSet(playerCount, data.GameMapFirst)
-		for i, player := range playerSnapshot {
-			r.setupGameForPlayer(player, treasures[i], data.GameMapFirst)
-		}
-
-		// Set TTL for the game as well as the players
-		err := r.GameModel.SetTTL(r.Code)
-		if err != nil {
-			r.logger.Error("error setting TTL for game room", "error", err.Error())
-			return
-		}
-
-		err = r.GameModel.SetTTLForPlayerSet(r.Code, 20*time.Minute)
-		if err != nil {
-			r.logger.Error("error setting TTL for player set", "gameCode", r.Code, "error", err.Error())
-			return
-		}
-
-		for _, player := range playerSnapshot {
-			err = r.PlayerModel.SetTTL(player.session)
-			if err != nil {
-				r.logger.Error("error setting TTL for player", "sessionToken", player.session)
-				return
-			}
-		}
-
-		err = r.GameModel.SetGameAndMapState(r.Code, data.GameStateInProgress, data.GameMapFirst)
-		if err != nil {
-			r.logger.Error("error updating game state", "error", err.Error())
-			return
-		}
-
-		now := time.Now()
-
-		r.Broadcast <- &wsmessages.WSMessage{
-			Type: wsmessages.BeginGame,
-			Data: map[string]any{
-				"serverNow": now.UnixMilli(),
-				"endsAt":    now.Add(RoundTime).UnixMilli(),
-			},
-		}
-
-		r.resetTimer <- roundStartData{roundTime: now.Add(RoundTime).UnixMilli(), roundMap: data.GameMapFirst}
-	} else {
-		r.logger.Warn("non-creator player sent start game request", "player_session", requester.session, "gameroom", r.Code)
+func (r *Room) setTTLForGameAndPlayers(playerSnapshot []*Client) {
+	err := r.GameModel.SetTTL(r.Code)
+	if err != nil {
+		r.logger.Error("error setting TTL for game room", "error", err.Error())
 		return
+	}
+
+	err = r.GameModel.SetTTLForPlayerSet(r.Code, 20*time.Minute)
+	if err != nil {
+		r.logger.Error("error setting TTL for player set", "gameCode", r.Code, "error", err.Error())
+		return
+	}
+
+	for _, player := range playerSnapshot {
+		err = r.PlayerModel.SetTTL(player.session)
+		if err != nil {
+			r.logger.Error("error setting TTL for player", "sessionToken", player.session)
+			continue
+		}
 	}
 }
 
-func (r *Room) nextRound(playerSnapshot []*Client, playerCount int, gameMap data.GameMap) {
+func (r *Room) startRound(playerSnapshot []*Client, playerCount int, gameMap data.GameMap) {
 	r.Broadcast <- &wsmessages.WSMessage{Type: wsmessages.ShowGameLoading}
 	treasures := r.engine.GenerateTreasureSet(playerCount, gameMap)
 	for i, player := range playerSnapshot {
 		r.setupGameForPlayer(player, treasures[i], gameMap)
+	}
+
+	if gameMap == data.GameMapFirst {
+		r.setTTLForGameAndPlayers(playerSnapshot)
 	}
 
 	err := r.GameModel.SetGameAndMapState(r.Code, data.GameStateInProgress, gameMap)
@@ -193,6 +162,16 @@ func (r *Room) Run() {
 			}
 			return
 		case client := <-r.StartGame:
+			if !client.isCreator {
+				r.logger.Warn("non-creator player requested game start", "playerToken", client.session)
+				break
+			}
+
+			if len(r.Players) != r.maxPlayers {
+				client.Send(wsmessages.WSMessage{Type: wsmessages.NotEnoughPlayers})
+				break
+			}
+
 			playerSnapshot := make([]*Client, 0, len(r.Players))
 			for p := range r.Players {
 				playerSnapshot = append(playerSnapshot, p)
@@ -201,7 +180,7 @@ func (r *Room) Run() {
 			playerCount := len(r.Players)
 
 			go func() {
-				r.startGame(client, playerSnapshot, playerCount)
+				r.startRound(playerSnapshot, playerCount, data.GameMapFirst)
 			}()
 		case client := <-r.NextRound:
 			if !client.isCreator {
@@ -235,7 +214,7 @@ func (r *Room) Run() {
 			}
 
 			go func() {
-				r.nextRound(playerSnapshot, playerCount, nextMap)
+				r.startRound(playerSnapshot, playerCount, nextMap)
 			}()
 		case req := <-r.PlayerLookup:
 			var found *Client
