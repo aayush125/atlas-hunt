@@ -1,4 +1,6 @@
-type GAMESTATE = 'lobby' | 'in_progress';
+type GAMESTATE = 'lobby' | 'in_progress' | 'transitioning';
+
+export type GameMap = 'first' | 'second' | 'third';
 
 export type Game = {
 	max_players: number;
@@ -7,4 +9,11 @@ export type Game = {
 	created_at: Date;
 	creator_nickname: string;
 	state: GAMESTATE;
+};
+
+export type MapRoundOverStats = {
+	map: GameMap;
+	treasures_claimed: number;
+	treasures_failed: number;
+	all_player_points: Record<string, number>;
 };

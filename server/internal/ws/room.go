@@ -10,6 +10,11 @@ import (
 	"game.crisis-control.com/internal/wsmessages"
 )
 
+const (
+	RoundTime  = 5 * time.Minute
+	BackupTime = 15 * time.Second
+)
+
 type playerLookupRequest struct {
 	session string
 	result  chan *Client
@@ -17,6 +22,7 @@ type playerLookupRequest struct {
 
 type roundStartData struct {
 	roundTime int64
+	roundMap  data.GameMap
 }
 
 type Room struct {
@@ -24,11 +30,13 @@ type Room struct {
 	Register     chan *Client
 	Unregister   chan *Client
 	StartGame    chan *Client
+	NextRound    chan *Client
 	Shutdown     chan struct{}
 	GameModel    *data.GameModel
 	PlayerModel  *data.PlayerModel
 	Code         string
 	State        data.GameState
+	lastMap      data.GameMap
 	currentMap   data.GameMap
 	logger       *slog.Logger
 	maxPlayers   int
@@ -47,10 +55,12 @@ func NewRoom(models *data.Models, code string, maxPlayers int, gm *data.GameMode
 		Register:     make(chan *Client),
 		Unregister:   make(chan *Client),
 		StartGame:    make(chan *Client),
+		NextRound:    make(chan *Client),
 		Shutdown:     make(chan struct{}),
 		GameModel:    gm,
 		PlayerModel:  pm,
 		currentMap:   data.GameMapNone,
+		lastMap:      data.GameMapNone,
 		State:        data.GameStateLobby,
 		Code:         code,
 		maxPlayers:   maxPlayers,
@@ -58,19 +68,19 @@ func NewRoom(models *data.Models, code string, maxPlayers int, gm *data.GameMode
 		Broadcast:    make(chan *wsmessages.WSMessage),
 		engine:       engine,
 		PlayerLookup: make(chan playerLookupRequest),
-		timer:        time.NewTimer(5 * time.Minute),
-		backupTimer:  time.NewTimer(15 * time.Second),
+		timer:        time.NewTimer(RoundTime),
+		backupTimer:  time.NewTimer(BackupTime),
 		resetTimer:   make(chan roundStartData),
 		roundEndTime: 0,
 	}
 }
 
-func (r *Room) setupGameForPlayer(player *Client, treasures []gamedata.TreasureItem) {
+func (r *Room) setupGameForPlayer(player *Client, treasures []gamedata.TreasureItem, gameMap data.GameMap) {
 	player.setTreasureSet(treasures)
 	r.PlayerModel.UpdateTreasureSet(player.session, treasures)
 	err := player.Send(wsmessages.WSMessage{Type: wsmessages.GameDataTreasures, Data: map[string]any{
 		"treasures": treasures,
-		"map":       "first",
+		"map":       gameMap,
 	}})
 	if err != nil {
 		r.logger.Error("error sending treasures to player", "error", err)
@@ -94,9 +104,9 @@ func (r *Room) startGame(requester *Client, playerSnapshot []*Client, playerCoun
 		}
 
 		r.Broadcast <- &wsmessages.WSMessage{Type: wsmessages.ShowGameLoading}
-		treasures := r.engine.GenerateTreasureSet(playerCount)
+		treasures := r.engine.GenerateTreasureSet(playerCount, data.GameMapFirst)
 		for i, player := range playerSnapshot {
-			r.setupGameForPlayer(player, treasures[i])
+			r.setupGameForPlayer(player, treasures[i], data.GameMapFirst)
 		}
 
 		// Set TTL for the game as well as the players
@@ -132,15 +142,41 @@ func (r *Room) startGame(requester *Client, playerSnapshot []*Client, playerCoun
 			Type: wsmessages.BeginGame,
 			Data: map[string]any{
 				"serverNow": now.UnixMilli(),
-				"endsAt":    now.Add(5 * time.Minute).UnixMilli(),
+				"endsAt":    now.Add(RoundTime).UnixMilli(),
 			},
 		}
 
-		r.resetTimer <- roundStartData{roundTime: now.Add(5 * time.Minute).UnixMilli()}
+		r.resetTimer <- roundStartData{roundTime: now.Add(RoundTime).UnixMilli(), roundMap: data.GameMapFirst}
 	} else {
 		r.logger.Warn("non-creator player sent start game request", "player_session", requester.session, "gameroom", r.Code)
 		return
 	}
+}
+
+func (r *Room) nextRound(playerSnapshot []*Client, playerCount int, gameMap data.GameMap) {
+	r.Broadcast <- &wsmessages.WSMessage{Type: wsmessages.ShowGameLoading}
+	treasures := r.engine.GenerateTreasureSet(playerCount, gameMap)
+	for i, player := range playerSnapshot {
+		r.setupGameForPlayer(player, treasures[i], gameMap)
+	}
+
+	err := r.GameModel.SetGameAndMapState(r.Code, data.GameStateInProgress, gameMap)
+	if err != nil {
+		r.logger.Error("error updating game state", "error", err.Error())
+		return
+	}
+
+	now := time.Now()
+
+	r.Broadcast <- &wsmessages.WSMessage{
+		Type: wsmessages.BeginGame,
+		Data: map[string]any{
+			"serverNow": now.UnixMilli(),
+			"endsAt":    now.Add(RoundTime).UnixMilli(),
+		},
+	}
+
+	r.resetTimer <- roundStartData{roundTime: now.Add(RoundTime).UnixMilli(), roundMap: gameMap}
 }
 
 func (r *Room) Run() {
@@ -166,6 +202,40 @@ func (r *Room) Run() {
 
 			go func() {
 				r.startGame(client, playerSnapshot, playerCount)
+			}()
+		case client := <-r.NextRound:
+			if !client.isCreator {
+				r.logger.Warn("non-creator player requested next round start", "playerToken", client.session)
+				break
+			}
+
+			if r.State != data.GameStateTransitioning {
+				r.logger.Warn("received next round request when game state not in transitioning", "gameState", r.State, "requesterSession", client.session)
+				break
+			}
+
+			if r.lastMap == data.GameMapThird {
+				r.logger.Warn("received next round request when last game map was third", "requesterSession", client.session)
+				break
+			}
+
+			playerSnapshot := make([]*Client, 0, len(r.Players))
+			for p := range r.Players {
+				playerSnapshot = append(playerSnapshot, p)
+			}
+
+			playerCount := len(r.Players)
+
+			var nextMap data.GameMap
+
+			if r.lastMap == data.GameMapFirst {
+				nextMap = data.GameMapSecond
+			} else {
+				nextMap = data.GameMapThird
+			}
+
+			go func() {
+				r.nextRound(playerSnapshot, playerCount, nextMap)
 			}()
 		case req := <-r.PlayerLookup:
 			var found *Client
@@ -232,9 +302,9 @@ func (r *Room) Run() {
 			}
 		case gameData := <-r.resetTimer:
 			r.State = data.GameStateInProgress
-			r.currentMap = data.GameMapFirst
-			r.timer.Reset(5 * time.Minute)
-			r.backupTimer.Reset(15 * time.Second)
+			r.currentMap = gameData.roundMap
+			r.timer.Reset(RoundTime)
+			r.backupTimer.Reset(BackupTime)
 			r.roundEndTime = gameData.roundTime
 		case <-r.backupTimer.C:
 			if r.State != data.GameStateInProgress {
@@ -250,27 +320,44 @@ func (r *Room) Run() {
 					r.logger.Error("error backing up player stats", "session_token", p.session, "error", err.Error())
 				}
 			}
-			r.backupTimer.Reset(15 * time.Second)
+			r.backupTimer.Reset(BackupTime)
 		case <-r.timer.C:
 			if r.State != data.GameStateInProgress {
 				break
 			}
 
+			r.lastMap = r.currentMap
+
+			r.logger.Debug("lastmap set", "lastmap", r.lastMap)
+
 			r.State = data.GameStateTransitioning
 			r.currentMap = data.GameMapNone
+
+			playerStatsMap := make(map[string]ClientSnapshot)
 
 			// Backup game and player states here
 			r.GameModel.SetGameAndMapState(r.Code, r.State, r.currentMap)
 			for p := range r.Players {
 				snapshot := p.Snapshot()
+				playerStatsMap[p.id] = snapshot
 				err := r.PlayerModel.BackupPlayerStats(p.session, snapshot.TreasureSet, snapshot.TreasureCount, snapshot.Inventory, snapshot.Points)
 				if err != nil {
 					r.logger.Error("error backing up player stats after round over", "session_token", p.session, "error", err.Error())
 				}
 			}
 
+			allPlayerPoints := make(map[string]int)
 			for p := range r.Players {
-				err := p.Send(wsmessages.WSMessage{Type: wsmessages.MapRoundOver})
+				allPlayerPoints[p.id] = playerStatsMap[p.id].Points
+			}
+
+			for p := range r.Players {
+				err := p.Send(wsmessages.WSMessage{Type: wsmessages.MapRoundOver, Data: map[string]any{
+					"map":               r.lastMap,
+					"treasures_claimed": len(playerStatsMap[p.id].Inventory),
+					"treasures_failed":  playerStatsMap[p.id].FailedToClaimCount,
+					"all_player_points": allPlayerPoints,
+				}})
 				if err != nil {
 					r.logger.Error("error sending map round over message to player", "error", err, "playerId", p.id)
 				}

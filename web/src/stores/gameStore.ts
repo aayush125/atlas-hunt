@@ -1,10 +1,9 @@
-import type { Game } from '$lib/types/game';
+import type { Game, GameMap, MapRoundOverStats } from '$lib/types/game';
 import type { Member, Player } from '$lib/types/player';
 import type { TreasureItem } from '$lib/types/treasure';
-import { writable } from 'svelte/store';
+import { derived, writable } from 'svelte/store';
 
-type GamePhase = 'idle' | 'waiting' | 'loading' | 'in-game' | 'game-over';
-type GameMap = 'first' | 'second' | 'third';
+type GamePhase = 'idle' | 'waiting' | 'loading' | 'in-game' | 'game-over' | 'transitioning';
 
 interface GameState {
 	joinCode: string | null;
@@ -23,6 +22,7 @@ interface GameState {
 	treasureCountThisRound: number | null;
 	serverNow: number | null;
 	roundEndsAt: number | null;
+	mapRoundStats: Record<GameMap, MapRoundOverStats | null>;
 }
 
 const initial: GameState = {
@@ -41,7 +41,12 @@ const initial: GameState = {
 	treasureCount: {},
 	treasureCountThisRound: null,
 	serverNow: null,
-	roundEndsAt: null
+	roundEndsAt: null,
+	mapRoundStats: {
+		first: null,
+		second: null,
+		third: null
+	}
 };
 
 function createGameStore() {
@@ -66,7 +71,12 @@ function createGameStore() {
 				treasureCount: {},
 				treasureCountThisRound: 0,
 				serverNow: null,
-				roundEndsAt: null
+				roundEndsAt: null,
+				mapRoundStats: {
+					first: null,
+					second: null,
+					third: null
+				}
 			})),
 		setGameState: (state: GamePhase) => update((game) => ({ ...game, state })),
 		addPlayer: (id: string, nickname: string) =>
@@ -89,6 +99,10 @@ function createGameStore() {
 					[treasureId]: count
 				}
 			})),
+		setMapRoundStats: (map: GameMap, stats: MapRoundOverStats) =>
+			update((game) => ({ ...game, mapRoundStats: { ...game.mapRoundStats, [map]: stats } })),
+		getMapRoundStats: (map: GameMap) =>
+			derived({ subscribe }, ($gameStore) => $gameStore.mapRoundStats[map]),
 		startRound: (serverNow: number, endsAt: number) =>
 			update((game) => ({ ...game, serverNow: serverNow, roundEndsAt: endsAt })),
 		updateRoundTreasureCount: (count: number) =>

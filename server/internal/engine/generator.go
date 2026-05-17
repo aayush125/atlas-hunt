@@ -4,6 +4,7 @@ import (
 	"crypto/rand"
 	"math/big"
 
+	"game.crisis-control.com/internal/data"
 	"game.crisis-control.com/internal/gamedata"
 	"github.com/google/uuid"
 )
@@ -67,19 +68,33 @@ func (e *Engine) pickTreasures(pool []gamedata.Treasure, points []gamedata.Point
 	return items
 }
 
-func (e *Engine) GenerateTreasuresForPlayer() []gamedata.TreasureItem {
+func (e *Engine) getPointsForMap(gameMap data.GameMap) []gamedata.Point {
+	switch gameMap {
+	case data.GameMapFirst:
+		gamedata.GetFirstMapPoints()
+	case data.GameMapSecond:
+		gamedata.GetSecondMapPoints()
+	default:
+		gamedata.GetThirdMapPoints()
+	}
+
+	return gamedata.GetFirstMapPoints()
+}
+
+func (e *Engine) GenerateTreasuresForPlayer(gameMap data.GameMap) []gamedata.TreasureItem {
+	points := e.getPointsForMap(gameMap)
 	items := make([]gamedata.TreasureItem, 0, countTotal)
-	items = append(items, e.pickTreasures(gamedata.GetCommonTreasures(), gamedata.GetFirstMapPoints(), countCommon)...)
-	items = append(items, e.pickTreasures(gamedata.GetRareTreasures(), gamedata.GetFirstMapPoints(), countRare)...)
-	items = append(items, e.pickTreasures(gamedata.GetEpicTreasures(), gamedata.GetFirstMapPoints(), countEpic)...)
-	items = append(items, e.pickTreasures(gamedata.GetLegendaryTreasures(), gamedata.GetFirstMapPoints(), countLegendary)...)
+	items = append(items, e.pickTreasures(gamedata.GetCommonTreasures(), points, countCommon)...)
+	items = append(items, e.pickTreasures(gamedata.GetRareTreasures(), points, countRare)...)
+	items = append(items, e.pickTreasures(gamedata.GetEpicTreasures(), points, countEpic)...)
+	items = append(items, e.pickTreasures(gamedata.GetLegendaryTreasures(), points, countLegendary)...)
 	return items
 }
 
-func (e *Engine) GenerateTreasureSet(players int) [][]gamedata.TreasureItem {
+func (e *Engine) GenerateTreasureSet(players int, gameMap data.GameMap) [][]gamedata.TreasureItem {
 	sets := make([][]gamedata.TreasureItem, 0, players)
 	for range players {
-		sets = append(sets, e.GenerateTreasuresForPlayer())
+		sets = append(sets, e.GenerateTreasuresForPlayer(gameMap))
 	}
 	return sets
 }

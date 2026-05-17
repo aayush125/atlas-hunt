@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Events } from '$lib/constants/wsmessages';
-	import type { Game } from '$lib/types/game';
+	import type { Game, MapRoundOverStats } from '$lib/types/game';
 	import type { Member, Player } from '$lib/types/player';
 	import type { Treasure } from '$lib/types/treasure';
 	import type { WSMessage } from '$lib/types/wsmessage';
@@ -11,6 +11,7 @@
 	import GamePlay from '../../components/ingame/GamePlay.svelte';
 	import { gameStore } from '../../stores/gameStore';
 	import { onDestroy } from 'svelte';
+	import Transitioning from '../../components/ingame/Transitioning.svelte';
 
 	let gate = $state<'join' | 'create'>('join');
 
@@ -125,6 +126,16 @@
 				gameStore.updateTreasureCount(info.treasure_id, info.treasure_count);
 				break;
 			}
+			case Events.MapRoundOver: {
+				const stats = data.data as MapRoundOverStats;
+				gameStore.setMapRoundStats(stats.map, stats);
+				console.log('gamestate:', $gameStore.mapRoundStats);
+				if ($gameStore.playerId)
+					gameStore.updatePoints(stats.all_player_points[$gameStore.playerId]);
+				gameStore.setGameState('transitioning');
+				console.log('Received map round over message');
+				break;
+			}
 			default: {
 				console.warn('Unhandled message type:', data.type);
 			}
@@ -227,6 +238,15 @@
 			onFail={(t) => {
 				mapTreasures = mapTreasures.filter((tr) => tr.instanceId !== t.instanceId);
 			}}
+		/>
+	{:else if $gameStore.state === 'transitioning'}
+		<Transitioning
+			onNextRound={$gameStore.playerIsCreator
+				? () => {
+						console.log('Sending next round message');
+						sendMessage({ type: Events.NextRound, data: null });
+					}
+				: undefined}
 		/>
 	{/if}
 </div>

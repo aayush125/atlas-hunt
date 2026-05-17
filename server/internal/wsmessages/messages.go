@@ -14,6 +14,7 @@ const (
 	TreasureClaimSuccessful = WSEvent("game:treasureclaim:successful")
 	BeginGame               = WSEvent("game:begin")
 	MapRoundOver            = WSEvent("game:round:over")
+	NextRound               = WSEvent("game:round:next")
 )
 
 type WSMessage struct {

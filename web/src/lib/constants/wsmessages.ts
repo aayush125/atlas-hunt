@@ -8,7 +8,9 @@ export const Events = {
 	GameDataTreasures: 'game:data:treasures',
 	NotEnoughPlayers: 'game:insufficient:players',
 	TreasureClaimSuccessful: 'game:treasureclaim:successful',
-	BeginGame: 'game:begin'
+	BeginGame: 'game:begin',
+	MapRoundOver: 'game:round:over',
+	NextRound: 'game:round:next'
 } as const;
 
 export type Event = (typeof Events)[keyof typeof Events];
