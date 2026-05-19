@@ -23,18 +23,20 @@ const (
 )
 
 type Client struct {
-	conn               *websocket.Conn
-	send               chan wsmessages.WSMessage
-	logger             *slog.Logger
-	done               chan struct{}
-	room               *Room
-	nickname           string
-	id                 string
-	session            string
-	isCreator          bool
-	treasureSet        []gamedata.TreasureItem
-	inventory          []gamedata.InventoryItem
-	failedToClaimCount int
+	conn        *websocket.Conn
+	send        chan wsmessages.WSMessage
+	logger      *slog.Logger
+	done        chan struct{}
+	room        *Room
+	nickname    string
+	id          string
+	session     string
+	isCreator   bool
+	treasureSet []gamedata.TreasureItem
+	inventory   []gamedata.InventoryItem
+
+	successfullyClaimed int
+	failedToClaimCount  int
 
 	mu            sync.Mutex
 	points        int
@@ -42,11 +44,12 @@ type Client struct {
 }
 
 type ClientSnapshot struct {
-	TreasureSet        []gamedata.TreasureItem
-	Inventory          []gamedata.InventoryItem
-	FailedToClaimCount int
-	TreasureCount      map[string]int
-	Points             int
+	TreasureSet         []gamedata.TreasureItem
+	Inventory           []gamedata.InventoryItem
+	SuccessfullyClaimed int
+	FailedToClaimCount  int
+	TreasureCount       map[string]int
+	Points              int
 }
 
 func NewClient(conn *websocket.Conn, room *Room, nickname, id, session string, logger *slog.Logger, isCreator bool) *Client {
@@ -69,11 +72,12 @@ func (c *Client) Snapshot() ClientSnapshot {
 	c.mu.Lock()
 	defer c.mu.Unlock()
 	return ClientSnapshot{
-		TreasureSet:        append([]gamedata.TreasureItem{}, c.treasureSet...),
-		Inventory:          append([]gamedata.InventoryItem{}, c.inventory...),
-		FailedToClaimCount: c.failedToClaimCount,
-		TreasureCount:      maps.Clone(c.treasureCount),
-		Points:             c.points,
+		TreasureSet:         append([]gamedata.TreasureItem{}, c.treasureSet...),
+		Inventory:           append([]gamedata.InventoryItem{}, c.inventory...),
+		SuccessfullyClaimed: c.successfullyClaimed,
+		FailedToClaimCount:  c.failedToClaimCount,
+		TreasureCount:       maps.Clone(c.treasureCount),
+		Points:              c.points,
 	}
 }
 
@@ -105,6 +109,7 @@ func (c *Client) TryClaimTreasure(treasureInstanceID uuid.UUID, questionID, sele
 	if correct {
 		c.treasureCount[t.ID]++
 		c.points += t.Points
+		c.successfullyClaimed++
 		c.treasureSet = newTreasureSet
 		c.inventory = append(c.inventory, gamedata.InventoryItem{InventoryItemBase: t.InventoryItemBase})
 
@@ -129,6 +134,15 @@ func (c *Client) setTreasureSet(set []gamedata.TreasureItem) {
 	c.mu.Lock()
 	defer c.mu.Unlock()
 	c.treasureSet = set
+}
+
+func (c *Client) ResetState() {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+
+	c.successfullyClaimed = 0
+	c.failedToClaimCount = 0
+	c.treasureSet = []gamedata.TreasureItem{}
 }
 
 func (c *Client) Send(v wsmessages.WSMessage) error {

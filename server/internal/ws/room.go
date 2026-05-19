@@ -76,6 +76,7 @@ func NewRoom(models *data.Models, code string, maxPlayers int, gm *data.GameMode
 }
 
 func (r *Room) setupGameForPlayer(player *Client, treasures []gamedata.TreasureItem, gameMap data.GameMap) {
+	player.ResetState()
 	player.setTreasureSet(treasures)
 	r.PlayerModel.UpdateTreasureSet(player.session, treasures)
 	err := player.Send(wsmessages.WSMessage{Type: wsmessages.GameDataTreasures, Data: map[string]any{
@@ -290,9 +291,7 @@ func (r *Room) Run() {
 				break
 			}
 
-			r.logger.Info("backing up player game state to redis...")
 			for p := range r.Players {
-				r.logger.Info("backing up stats for player", "nickname", p.nickname)
 				snapshot := p.Snapshot()
 				err := r.PlayerModel.BackupPlayerStats(p.session, snapshot.TreasureSet, snapshot.TreasureCount, snapshot.Inventory, snapshot.Points)
 				if err != nil {
@@ -333,7 +332,7 @@ func (r *Room) Run() {
 			for p := range r.Players {
 				err := p.Send(wsmessages.WSMessage{Type: wsmessages.MapRoundOver, Data: map[string]any{
 					"map":               r.lastMap,
-					"treasures_claimed": len(playerStatsMap[p.id].Inventory),
+					"treasures_claimed": playerStatsMap[p.id].SuccessfullyClaimed,
 					"treasures_failed":  playerStatsMap[p.id].FailedToClaimCount,
 					"all_player_points": allPlayerPoints,
 				}})
