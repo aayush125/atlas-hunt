@@ -12,6 +12,7 @@
 	import { gameStore } from '../../stores/gameStore';
 	import { onDestroy } from 'svelte';
 	import Transitioning from '../../components/ingame/Transitioning.svelte';
+	import { env } from '$env/dynamic/public';
 
 	let gate = $state<'join' | 'create'>('join');
 
@@ -31,7 +32,7 @@
 		if (ws && (ws.readyState === WebSocket.OPEN || ws.readyState === WebSocket.CONNECTING)) return;
 
 		manualClose = false;
-		ws = new WebSocket('ws://localhost:4000/ws');
+		ws = new WebSocket(`${env.PUBLIC_WS_BASE}/ws`);
 
 		ws.onopen = () => {
 			console.log('WebSocket connected');
