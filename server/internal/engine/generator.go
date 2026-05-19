@@ -71,14 +71,12 @@ func (e *Engine) pickTreasures(pool []gamedata.Treasure, points []gamedata.Point
 func (e *Engine) getPointsForMap(gameMap data.GameMap) []gamedata.Point {
 	switch gameMap {
 	case data.GameMapFirst:
-		gamedata.GetFirstMapPoints()
+		return gamedata.GetFirstMapPoints()
 	case data.GameMapSecond:
-		gamedata.GetSecondMapPoints()
+		return gamedata.GetSecondMapPoints()
 	default:
-		gamedata.GetThirdMapPoints()
+		return gamedata.GetThirdMapPoints()
 	}
-
-	return gamedata.GetFirstMapPoints()
 }
 
 func (e *Engine) GenerateTreasuresForPlayer(gameMap data.GameMap) []gamedata.TreasureItem {
