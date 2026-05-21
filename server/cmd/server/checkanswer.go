@@ -35,6 +35,10 @@ func (app *application) checkTriviaAnswer(w http.ResponseWriter, r *http.Request
 	}
 
 	playerClient := room.GetPlayerClientWithSessionToken(player.SessionToken)
+	if playerClient == nil {
+		app.serverErrorResponse(w, r, err)
+		return
+	}
 
 	claimed, err := playerClient.TryClaimTreasure(treasureInstanceID, input.QuestionID, input.SelectedAnswer)
 	if err != nil {

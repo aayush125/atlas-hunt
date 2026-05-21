@@ -35,6 +35,8 @@ type PlayerInfo struct {
 	ID       string `json:"id"`
 }
 
+const playerTTL = 20 * time.Minute
+
 func getPlayerKey(sessionToken string) string {
 	return fmt.Sprintf("player:%s", sessionToken)
 }
@@ -113,7 +115,7 @@ func (m *PlayerModel) SetTTL(token string) error {
 
 	key := getPlayerKey(token)
 
-	if err := m.RDB.Expire(ctx, key, 20*time.Minute).Err(); err != nil {
+	if err := m.RDB.Expire(ctx, key, playerTTL).Err(); err != nil {
 		return err
 	}
 

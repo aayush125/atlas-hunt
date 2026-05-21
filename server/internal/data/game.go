@@ -26,6 +26,8 @@ const (
 	GameStateTransitioning GameState = "transitioning"
 )
 
+const gameTTL = 20 * time.Minute
+
 type GameMap string
 
 func (g GameMap) MarshalBinary() ([]byte, error) {
@@ -120,7 +122,7 @@ func (m *GameModel) SetTTL(code string) error {
 
 	key := getGameKey(code)
 
-	if err := m.RDB.Expire(ctx, key, 20*time.Minute).Err(); err != nil {
+	if err := m.RDB.Expire(ctx, key, gameTTL).Err(); err != nil {
 		return err
 	}
 

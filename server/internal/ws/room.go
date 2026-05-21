@@ -11,8 +11,9 @@ import (
 )
 
 const (
-	RoundTime  = 5 * time.Minute
-	BackupTime = 15 * time.Second
+	RoundTime      = 5 * time.Minute
+	BackupTime     = 15 * time.Second
+	TTLResetPeriod = 2 * time.Minute
 )
 
 type playerLookupRequest struct {
@@ -126,10 +127,6 @@ func (r *Room) startRound(playerSnapshot []*Client, playerCount int, gameMap dat
 		r.setupGameForPlayer(player, treasures[i], gameMap)
 	}
 
-	if gameMap == data.GameMapFirst {
-		r.setTTLForGameAndPlayers(playerSnapshot)
-	}
-
 	err := r.GameModel.SetGameAndMapState(r.Code, data.GameStateInProgress, gameMap)
 	if err != nil {
 		r.logger.Error("error updating game state", "error", err.Error())
@@ -150,6 +147,12 @@ func (r *Room) startRound(playerSnapshot []*Client, playerCount int, gameMap dat
 }
 
 func (r *Room) Run() {
+	ttlResetTicker := time.NewTicker(TTLResetPeriod)
+
+	defer func() {
+		ttlResetTicker.Stop()
+	}()
+
 	for {
 		select {
 		case <-r.Shutdown:
@@ -340,6 +343,13 @@ func (r *Room) Run() {
 					r.logger.Error("error sending map round over message to player", "error", err, "playerId", p.id)
 				}
 			}
+		case <-ttlResetTicker.C:
+			playerSnapshot := make([]*Client, 0, len(r.Players))
+			for p := range r.Players {
+				playerSnapshot = append(playerSnapshot, p)
+			}
+
+			r.setTTLForGameAndPlayers(playerSnapshot)
 		}
 	}
 }
