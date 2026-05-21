@@ -113,15 +113,17 @@ func (c *Client) TryClaimTreasure(treasureInstanceID uuid.UUID, questionID, sele
 		c.treasureSet = newTreasureSet
 		c.inventory = append(c.inventory, gamedata.InventoryItem{InventoryItemBase: t.InventoryItemBase})
 
-		err := c.Send(wsmessages.WSMessage{Type: wsmessages.TreasureClaimSuccessful, Data: map[string]any{
-			"instance_id":    treasureInstanceID,
-			"treasure_id":    t.ID,
-			"treasure_count": c.treasureCount[t.ID],
-			"points":         c.points,
-		}})
-
-		if err != nil {
-			c.logger.Error("error updating player stats", "playerID", c.id)
+		c.room.NotifyTreasureClaimed <- treasureClaimNotification{
+			Client: c,
+			Message: wsmessages.WSMessage{
+				Type: wsmessages.TreasureClaimSuccessful,
+				Data: map[string]any{
+					"instance_id":    treasureInstanceID,
+					"treasure_id":    t.ID,
+					"treasure_count": c.treasureCount[t.ID],
+					"points":         c.points,
+				},
+			},
 		}
 	} else {
 		c.failedToClaimCount++

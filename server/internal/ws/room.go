@@ -21,58 +21,65 @@ type playerLookupRequest struct {
 	result  chan *Client
 }
 
+type treasureClaimNotification struct {
+	Client  *Client
+	Message wsmessages.WSMessage
+}
+
 type roundStartData struct {
 	roundTime int64
 	roundMap  data.GameMap
 }
 
 type Room struct {
-	Players      map[*Client]bool
-	Register     chan *Client
-	Unregister   chan *Client
-	StartGame    chan *Client
-	NextRound    chan *Client
-	Shutdown     chan struct{}
-	GameModel    *data.GameModel
-	PlayerModel  *data.PlayerModel
-	Code         string
-	State        data.GameState
-	lastMap      data.GameMap
-	currentMap   data.GameMap
-	logger       *slog.Logger
-	maxPlayers   int
-	Broadcast    chan *wsmessages.WSMessage
-	engine       *engine.Engine
-	PlayerLookup chan playerLookupRequest
-	timer        *time.Timer
-	resetTimer   chan roundStartData
-	backupTimer  *time.Timer
-	roundEndTime int64
+	Players               map[*Client]bool
+	Register              chan *Client
+	Unregister            chan *Client
+	StartGame             chan *Client
+	NextRound             chan *Client
+	Shutdown              chan struct{}
+	GameModel             *data.GameModel
+	PlayerModel           *data.PlayerModel
+	Code                  string
+	State                 data.GameState
+	lastMap               data.GameMap
+	currentMap            data.GameMap
+	logger                *slog.Logger
+	maxPlayers            int
+	Broadcast             chan *wsmessages.WSMessage
+	engine                *engine.Engine
+	PlayerLookup          chan playerLookupRequest
+	NotifyTreasureClaimed chan treasureClaimNotification
+	timer                 *time.Timer
+	resetTimer            chan roundStartData
+	backupTimer           *time.Timer
+	roundEndTime          int64
 }
 
 func NewRoom(models *data.Models, code string, maxPlayers int, gm *data.GameModel, pm *data.PlayerModel, logger *slog.Logger, engine *engine.Engine) *Room {
 	return &Room{
-		Players:      make(map[*Client]bool),
-		Register:     make(chan *Client),
-		Unregister:   make(chan *Client),
-		StartGame:    make(chan *Client),
-		NextRound:    make(chan *Client),
-		Shutdown:     make(chan struct{}),
-		GameModel:    gm,
-		PlayerModel:  pm,
-		currentMap:   data.GameMapNone,
-		lastMap:      data.GameMapNone,
-		State:        data.GameStateLobby,
-		Code:         code,
-		maxPlayers:   maxPlayers,
-		logger:       logger,
-		Broadcast:    make(chan *wsmessages.WSMessage),
-		engine:       engine,
-		PlayerLookup: make(chan playerLookupRequest),
-		timer:        time.NewTimer(RoundTime),
-		backupTimer:  time.NewTimer(BackupTime),
-		resetTimer:   make(chan roundStartData),
-		roundEndTime: 0,
+		Players:               make(map[*Client]bool),
+		Register:              make(chan *Client),
+		Unregister:            make(chan *Client),
+		StartGame:             make(chan *Client),
+		NextRound:             make(chan *Client),
+		Shutdown:              make(chan struct{}),
+		GameModel:             gm,
+		PlayerModel:           pm,
+		currentMap:            data.GameMapNone,
+		lastMap:               data.GameMapNone,
+		State:                 data.GameStateLobby,
+		Code:                  code,
+		maxPlayers:            maxPlayers,
+		logger:                logger,
+		Broadcast:             make(chan *wsmessages.WSMessage),
+		engine:                engine,
+		PlayerLookup:          make(chan playerLookupRequest),
+		NotifyTreasureClaimed: make(chan treasureClaimNotification),
+		timer:                 time.NewTimer(RoundTime),
+		backupTimer:           time.NewTimer(BackupTime),
+		resetTimer:            make(chan roundStartData),
+		roundEndTime:          0,
 	}
 }
 
@@ -229,6 +236,11 @@ func (r *Room) Run() {
 				}
 			}
 			req.result <- found
+		case notification := <-r.NotifyTreasureClaimed:
+			err := notification.Client.Send(notification.Message)
+			if err != nil {
+				r.logger.Error("error updating player stats", "playerSession", notification.Client.session)
+			}
 		case player := <-r.Register:
 			r.Players[player] = true
 			err := r.GameModel.IncrementPlayerCount(r.Code)
