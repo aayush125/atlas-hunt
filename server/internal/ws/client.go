@@ -175,7 +175,6 @@ func (c *Client) handleMessage(message []byte) {
 func (c *Client) ReadPump() {
 	defer func() {
 		close(c.done)
-		close(c.send)
 		c.conn.Close()
 		c.room.Unregister <- c
 	}()

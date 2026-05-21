@@ -263,6 +263,7 @@ func (r *Room) Run() {
 			}
 
 			delete(r.Players, player)
+			close(player.send)
 
 			for p := range r.Players {
 				err = p.Send(wsmessages.WSMessage{Type: wsmessages.PlayerLeft, Data: map[string]any{
