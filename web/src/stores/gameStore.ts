@@ -99,6 +99,19 @@ function createGameStore() {
 					[treasureId]: count
 				}
 			})),
+		deleteTreasureCount: (treasureId: string) =>
+			update((game) => {
+				const { [treasureId]: _, ...remainingCounts } = game.treasureCount;
+				return {
+					...game,
+					treasureCount: remainingCounts
+				};
+			}),
+		removeTreasureFromInventory: (treasureId: string) =>
+			update((game) => ({
+				...game,
+				treasures: game.treasures.filter((t) => t.id !== treasureId)
+			})),
 		setMapRoundStats: (map: GameMap, stats: MapRoundOverStats) =>
 			update((game) => ({ ...game, mapRoundStats: { ...game.mapRoundStats, [map]: stats } })),
 		getMapRoundStats: (map: GameMap) =>

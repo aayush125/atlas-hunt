@@ -127,6 +127,17 @@
 				gameStore.updateTreasureCount(info.treasure_id, info.treasure_count);
 				break;
 			}
+			case Events.BonusClaimSuccessful: {
+				const info = data.data as {
+					points: number;
+					treasure_id: string;
+				};
+				console.log('received bonus claimed update:', info);
+				gameStore.updatePoints(info.points);
+				gameStore.deleteTreasureCount(info.treasure_id);
+				gameStore.removeTreasureFromInventory(info.treasure_id);
+				break;
+			}
 			case Events.MapRoundOver: {
 				const stats = data.data as MapRoundOverStats;
 				gameStore.setMapRoundStats(stats.map, stats);

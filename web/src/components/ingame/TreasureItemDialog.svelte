@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { getBonusPointsForPoints, rarityToMultiplier } from '$lib/helpers';
 	import type { TreasureItem } from '$lib/types/treasure';
 	import { gameStore } from '../../stores/gameStore';
 
@@ -14,6 +15,8 @@
 		onDiscard: (item: TreasureItem) => void;
 	} = $props();
 
+	let bonusClaimed = $state<boolean | null>(null);
+
 	function rarityClass(rarity: string) {
 		switch (rarity.toLowerCase()) {
 			case 'common':
@@ -28,6 +31,33 @@
 				return 'badge-outline';
 		}
 	}
+
+	async function handleBonusClaim(treasure: TreasureItem) {
+		console.log('Claiming bonus for:', treasure.id, treasure.name);
+		const res = await fetch('/api/game/claimbonus', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				treasure_id: treasure.id
+			})
+		});
+
+		if (!res.ok) {
+			console.error('There was an error claiming bonus points.');
+			return;
+		}
+
+		const json = await res.json();
+		const claimResult = json.claimed === true ? 'correct' : 'incorrect';
+		console.log('claim result:', claimResult);
+
+		bonusClaimed = true;
+		setTimeout(() => {
+			onClose();
+		}, 1000);
+	}
 </script>
 
 <!-- Backdrop -->
@@ -40,10 +70,20 @@
 <!-- Dialog -->
 <div class="pointer-events-none fixed inset-0 z-50 flex items-center justify-center p-4">
 	<div
-		class="animate-pop pointer-events-auto w-full max-w-md rounded-2xl border border-base-300 bg-base-100 shadow-2xl"
+		class="animate-pop pointer-events-auto w-full max-w-md overflow-hidden rounded-2xl border border-base-300 bg-base-100 shadow-2xl"
 		role="dialog"
 		aria-label={item.name}
 	>
+		<!-- Bonus Claimed Banner -->
+		<!-- {#if bonusClaimed}
+			<div
+				class="animate-slide-down flex items-center justify-center gap-2 bg-success px-4 py-3 text-success-content"
+			>
+				<span class="text-lg">✅</span>
+				<span class="font-semibold tracking-wide">Bonus Claimed!</span>
+			</div>
+		{/if} -->
+
 		<div class="space-y-4 p-5">
 			<!-- Close -->
 			<button class="btn absolute top-3 right-3 btn-circle btn-ghost btn-sm" onclick={onClose}>
@@ -77,7 +117,15 @@
 				</div>
 				<div class="flex justify-between rounded-lg bg-base-200 px-3 py-2">
 					<span>Boost</span>
-					<span class="font-semibold text-primary">+{item.boostPoints}</span>
+					<span class="font-semibold text-primary"
+						>+{$gameStore.treasureCount[item.id] > 1
+							? getBonusPointsForPoints(
+									item.points,
+									$gameStore.treasureCount[item.id],
+									rarityToMultiplier[item.rarity.toLowerCase()]
+								)
+							: 0}</span
+					>
 				</div>
 			</div>
 
@@ -87,15 +135,39 @@
 				Donate this treasure to help another player, or discard it to free up inventory space.
 			</p>
 
+			{#if bonusClaimed !== null}
+				<div class={`alert text-sm ${bonusClaimed ? 'alert-success' : 'alert-error'}`}>
+					<span>
+						{bonusClaimed ? `🎉 Bonus claimed!` : 'There was an error claiming your bonus points.'}
+					</span>
+				</div>
+			{/if}
+
 			<!-- Actions -->
 			<div class="flex flex-col gap-2 pt-1">
-				<button class="btn w-full gap-2 btn-primary" onclick={() => onDonate(item)}>
+				<button
+					class="btn w-full gap-2 btn-primary"
+					disabled={bonusClaimed}
+					onclick={() => onDonate(item)}
+				>
 					<span>🎁</span>
 					<span>Donate Treasure</span>
 				</button>
-				<button class="btn w-full gap-2 btn-outline btn-error" onclick={() => onDiscard(item)}>
+				<button
+					class="btn w-full gap-2 btn-outline btn-error"
+					disabled={bonusClaimed}
+					onclick={() => onDiscard(item)}
+				>
 					<span>🗑️</span>
 					<span>Discard Treasure</span>
+				</button>
+				<button
+					class="btn w-full gap-2 btn-outline btn-success"
+					disabled={bonusClaimed}
+					onclick={async () => await handleBonusClaim(item)}
+				>
+					<span>✨</span>
+					<span>Claim Bonus</span>
 				</button>
 			</div>
 		</div>
@@ -115,5 +187,19 @@
 	}
 	.animate-pop {
 		animation: pop 0.2s ease-out;
+	}
+
+	@keyframes slide-down {
+		0% {
+			opacity: 0;
+			transform: translateY(-100%);
+		}
+		100% {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+	.animate-slide-down {
+		animation: slide-down 0.25s ease-out;
 	}
 </style>

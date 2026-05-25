@@ -21,6 +21,7 @@ func (app *application) routes() http.Handler {
 	router.HandlerFunc(http.MethodPost, "/game/join", app.registerPlayerHandler)
 	router.HandlerFunc(http.MethodPost, "/game/leave", app.requireSessionToken(app.leaveGameHandler))
 	router.HandlerFunc(http.MethodPost, "/game/checkanswer", app.requireSessionToken(app.checkTriviaAnswer))
+	router.HandlerFunc(http.MethodPost, "/game/claimbonus", app.requireSessionToken(app.claimBonusPointsHandler))
 	router.HandlerFunc(http.MethodGet, "/ws", app.requireSessionToken(app.websocketHandler))
 
 	// profiler

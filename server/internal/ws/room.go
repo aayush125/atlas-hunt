@@ -21,7 +21,7 @@ type playerLookupRequest struct {
 	result  chan *Client
 }
 
-type treasureClaimNotification struct {
+type playerNotification struct {
 	Client  *Client
 	Message wsmessages.WSMessage
 }
@@ -49,7 +49,8 @@ type Room struct {
 	Broadcast             chan *wsmessages.WSMessage
 	engine                *engine.Engine
 	PlayerLookup          chan playerLookupRequest
-	NotifyTreasureClaimed chan treasureClaimNotification
+	NotifyTreasureClaimed chan playerNotification
+	NotifyBonusClaimed    chan playerNotification
 	timer                 *time.Timer
 	resetTimer            chan roundStartData
 	backupTimer           *time.Timer
@@ -75,7 +76,8 @@ func NewRoom(models *data.Models, code string, maxPlayers int, gm *data.GameMode
 		Broadcast:             make(chan *wsmessages.WSMessage),
 		engine:                engine,
 		PlayerLookup:          make(chan playerLookupRequest),
-		NotifyTreasureClaimed: make(chan treasureClaimNotification),
+		NotifyTreasureClaimed: make(chan playerNotification),
+		NotifyBonusClaimed:    make(chan playerNotification),
 		timer:                 time.NewTimer(RoundTime),
 		backupTimer:           time.NewTimer(BackupTime),
 		resetTimer:            make(chan roundStartData),
@@ -240,6 +242,11 @@ func (r *Room) Run() {
 			err := notification.Client.Send(notification.Message)
 			if err != nil {
 				r.logger.Error("error updating player stats", "playerSession", notification.Client.session)
+			}
+		case notification := <-r.NotifyBonusClaimed:
+			err := notification.Client.Send(notification.Message)
+			if err != nil {
+				r.logger.Error("error notifying bonus claim", "playerSession", notification.Client.session)
 			}
 		case player := <-r.Register:
 			r.Players[player] = true

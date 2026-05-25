@@ -12,6 +12,7 @@ const (
 	GameDataTreasures       = WSEvent("game:data:treasures")
 	NotEnoughPlayers        = WSEvent("game:insufficient:players")
 	TreasureClaimSuccessful = WSEvent("game:treasureclaim:successful")
+	BonusClaimSuccessful    = WSEvent("game:bonusclaim:successful")
 	BeginGame               = WSEvent("game:begin")
 	MapRoundOver            = WSEvent("game:round:over")
 	NextRound               = WSEvent("game:round:next")

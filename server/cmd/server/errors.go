@@ -65,3 +65,7 @@ func (app *application) roomNotFoundResponse(w http.ResponseWriter, r *http.Requ
 func (app *application) roomFullResponse(w http.ResponseWriter, r *http.Request) {
 	app.errorResponse(w, r, http.StatusConflict, envelope{"message": "the requested game room is already full"})
 }
+
+func (app *application) treasureNotFoundResponse(w http.ResponseWriter, r *http.Request) {
+	app.errorResponse(w, r, http.StatusNotAcceptable, envelope{"message": "the requested treasure could not be found"})
+}

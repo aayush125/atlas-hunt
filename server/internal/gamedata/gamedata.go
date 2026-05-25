@@ -20,7 +20,8 @@ var rareTreasures []Treasure
 var epicTreasures []Treasure
 var legendaryTreasures []Treasure
 
-var answers map[string]string // question id -> correct answer
+var answers map[string]string       // question id -> correct answer
+var treasureMap map[string]Treasure // treasure id -> treasure
 
 func init() {
 	var raw []rawTreasure
@@ -33,6 +34,7 @@ func init() {
 	}
 
 	answers = make(map[string]string)
+	treasureMap = make(map[string]Treasure)
 
 	for _, r := range raw {
 		questions := make([]Question, len(r.Questions))
@@ -56,6 +58,7 @@ func init() {
 		}
 
 		treasures = append(treasures, treasure)
+		treasureMap[treasure.ID] = treasure
 
 		switch r.Rarity {
 		case CommonRarity:

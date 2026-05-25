@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"net/http"
 
 	"game.crisis-control.com/internal/cc_context"
@@ -36,7 +37,7 @@ func (app *application) checkTriviaAnswer(w http.ResponseWriter, r *http.Request
 
 	playerClient := room.GetPlayerClientWithSessionToken(player.SessionToken)
 	if playerClient == nil {
-		app.serverErrorResponse(w, r, err)
+		app.serverErrorResponse(w, r, errors.New("player client not found"))
 		return
 	}
 

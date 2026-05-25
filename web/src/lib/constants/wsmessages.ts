@@ -8,6 +8,7 @@ export const Events = {
 	GameDataTreasures: 'game:data:treasures',
 	NotEnoughPlayers: 'game:insufficient:players',
 	TreasureClaimSuccessful: 'game:treasureclaim:successful',
+	BonusClaimSuccessful: 'game:bonusclaim:successful',
 	BeginGame: 'game:begin',
 	MapRoundOver: 'game:round:over',
 	NextRound: 'game:round:next'

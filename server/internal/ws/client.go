@@ -22,6 +22,11 @@ const (
 	maxMessageSize = 512
 )
 
+var (
+	ErrPlayerDoesNotHaveRequestedTreasure = errors.New("player does not have requested treasure")
+	ErrInvalidTreasureCount               = errors.New("invalid treasure count")
+)
+
 type Client struct {
 	conn        *websocket.Conn
 	send        chan wsmessages.WSMessage
@@ -81,6 +86,48 @@ func (c *Client) Snapshot() ClientSnapshot {
 	}
 }
 
+func (c *Client) TryClaimBonusPoints(treasureID string) error {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+
+	count, ok := c.treasureCount[treasureID]
+	if !ok {
+		return ErrPlayerDoesNotHaveRequestedTreasure
+	}
+
+	if count <= 0 {
+		return ErrInvalidTreasureCount
+	}
+
+	bonus, err := gamedata.GetBonusPoints(treasureID, count)
+	if err != nil {
+		return err
+	}
+
+	delete(c.treasureCount, treasureID)
+	newInventory := []gamedata.InventoryItem{}
+	for _, item := range c.inventory {
+		if item.ID != treasureID {
+			newInventory = append(newInventory, item)
+		}
+	}
+	c.inventory = newInventory
+	c.points += bonus
+
+	c.room.NotifyBonusClaimed <- playerNotification{
+		Client: c,
+		Message: wsmessages.WSMessage{
+			Type: wsmessages.BonusClaimSuccessful,
+			Data: map[string]any{
+				"points":      c.points,
+				"treasure_id": treasureID,
+			},
+		},
+	}
+
+	return nil
+}
+
 func (c *Client) TryClaimTreasure(treasureInstanceID uuid.UUID, questionID, selectedAnswer string) (bool, error) {
 	c.mu.Lock()
 	defer c.mu.Unlock()
@@ -113,7 +160,7 @@ func (c *Client) TryClaimTreasure(treasureInstanceID uuid.UUID, questionID, sele
 		c.treasureSet = newTreasureSet
 		c.inventory = append(c.inventory, gamedata.InventoryItem{InventoryItemBase: t.InventoryItemBase})
 
-		c.room.NotifyTreasureClaimed <- treasureClaimNotification{
+		c.room.NotifyTreasureClaimed <- playerNotification{
 			Client: c,
 			Message: wsmessages.WSMessage{
 				Type: wsmessages.TreasureClaimSuccessful,
