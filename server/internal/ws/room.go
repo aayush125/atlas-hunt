@@ -55,9 +55,10 @@ type Room struct {
 	resetTimer            chan roundStartData
 	backupTimer           *time.Timer
 	roundEndTime          int64
+	onExit                func(code string)
 }
 
-func NewRoom(models *data.Models, code string, maxPlayers int, gm *data.GameModel, pm *data.PlayerModel, logger *slog.Logger, engine *engine.Engine) *Room {
+func NewRoom(models *data.Models, code string, maxPlayers int, gm *data.GameModel, pm *data.PlayerModel, logger *slog.Logger, engine *engine.Engine, onExit func(code string)) *Room {
 	return &Room{
 		Players:               make(map[*Client]bool),
 		Register:              make(chan *Client),
@@ -82,6 +83,7 @@ func NewRoom(models *data.Models, code string, maxPlayers int, gm *data.GameMode
 		backupTimer:           time.NewTimer(BackupTime),
 		resetTimer:            make(chan roundStartData),
 		roundEndTime:          0,
+		onExit:                onExit,
 	}
 }
 
@@ -160,6 +162,22 @@ func (r *Room) Run() {
 
 	defer func() {
 		ttlResetTicker.Stop()
+		players, err := r.GameModel.GetAllPlayers(r.Code)
+		if err != nil {
+			r.logger.Error("error retrieving players for game room", "gameCode", r.Code, "error", err)
+		} else {
+			for _, session := range players {
+				err := r.PlayerModel.Delete(session)
+				if err != nil {
+					r.logger.Error("error deleting player from redis", "playerSession", session, "error", err)
+				}
+			}
+		}
+		err = r.GameModel.CleanupGame(r.Code)
+		if err != nil {
+			r.logger.Error("error cleaning up game from redis", "gameCode", r.Code, "error", err)
+		}
+		r.onExit(r.Code)
 	}()
 
 	for {
@@ -274,11 +292,6 @@ func (r *Room) Run() {
 			err := r.GameModel.DecrementPlayerCount(r.Code)
 			if err != nil {
 				r.logger.Error("error decrementing player count in redis", "error", err)
-			}
-
-			err = r.GameModel.RemovePlayerFromSet(r.Code, player.session)
-			if err != nil {
-				r.logger.Error("error removing player from set", "error", err)
 			}
 
 			delete(r.Players, player)

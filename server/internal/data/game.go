@@ -190,6 +190,29 @@ func (m *GameModel) Delete(gameCode string) error {
 	return nil
 }
 
+func (m *GameModel) DeletePlayerSet(gameCode string) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	key := getGamePlayerSetKey(gameCode)
+
+	if err := m.RDB.Del(ctx, key).Err(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *GameModel) CleanupGame(gameCode string) error {
+	err := m.DeletePlayerSet(gameCode)
+	if err != nil {
+		return err
+	}
+
+	err = m.Delete(gameCode)
+	return err
+}
+
 func (m *GameModel) IncrementPlayerCount(gameCode string) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
