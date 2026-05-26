@@ -99,6 +99,11 @@ function createGameStore() {
 					[treasureId]: count
 				}
 			})),
+		setMembers: (members: Member[]) => update((game) => ({ ...game, otherPlayers: members })),
+		setInventory: (inventory: TreasureItem[]) =>
+			update((game) => ({ ...game, treasures: inventory })),
+		setTreasureCount: (treasure_count: Record<string, number>) =>
+			update((game) => ({ ...game, treasureCount: treasure_count })),
 		deleteTreasureCount: (treasureId: string) =>
 			update((game) => {
 				const { [treasureId]: _, ...remainingCounts } = game.treasureCount;
@@ -107,6 +112,21 @@ function createGameStore() {
 					treasureCount: remainingCounts
 				};
 			}),
+		setGameInfo: (code: string, max_players: number, current_players: number) =>
+			update((game) => ({
+				...game,
+				joinCode: code,
+				maxPlayers: max_players,
+				currentPlayerCount: current_players
+			})),
+		setPlayerInfo: (nickname: string, id: string, points: number, is_creator: boolean) =>
+			update((game) => ({
+				...game,
+				playerId: id,
+				playerName: nickname,
+				points: points,
+				playerIsCreator: is_creator
+			})),
 		removeTreasureFromInventory: (treasureId: string) =>
 			update((game) => ({
 				...game,

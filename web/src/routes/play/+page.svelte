@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { Events } from '$lib/constants/wsmessages';
-	import type { Game, MapRoundOverStats } from '$lib/types/game';
+	import type { Game, GameMap, MapRoundOverStats } from '$lib/types/game';
 	import type { Member, Player } from '$lib/types/player';
-	import type { Treasure } from '$lib/types/treasure';
+	import type { Treasure, TreasureItem } from '$lib/types/treasure';
 	import type { WSMessage } from '$lib/types/wsmessage';
 	import CreateGame from '../../components/CreateGame.svelte';
 	import GameLoading from '../../components/ingame/GameLoading.svelte';
@@ -13,8 +13,15 @@
 	import { onDestroy } from 'svelte';
 	import Transitioning from '../../components/ingame/Transitioning.svelte';
 	import { env } from '$env/dynamic/public';
+	import type { PageProps } from './$types';
+	import Rejoin from '../../components/Rejoin.svelte';
+
+	let { data }: PageProps = $props();
+
+	let reconnectInfo = (() => $state.snapshot(data.reconnectInfo))();
 
 	let gate = $state<'join' | 'create'>('join');
+	let rejoinPromptDismissed = $state(false);
 
 	const MAX_RETRIES = 5;
 	const BASE_RETRY_DELAY_MS = 1000;
@@ -28,11 +35,11 @@
 	let wsReady = $state(false);
 	let connectionState = $state<'connected' | 'reconnecting' | 'failed'>('connected');
 
-	function connectToWs() {
+	function connectToWs(reconnecting: boolean = false) {
 		if (ws && (ws.readyState === WebSocket.OPEN || ws.readyState === WebSocket.CONNECTING)) return;
 
 		manualClose = false;
-		ws = new WebSocket(`${env.PUBLIC_WS_BASE}/ws`);
+		ws = new WebSocket(`${env.PUBLIC_WS_BASE}/${reconnecting ? 'game/reconnect' : 'ws'}`);
 
 		ws.onopen = () => {
 			console.log('WebSocket connected');
@@ -63,7 +70,7 @@
 				console.log(`Reconnecting in ${delay}ms (attempt ${retryCount + 1}/${MAX_RETRIES})...`);
 				retryTimeout = setTimeout(() => {
 					retryCount++;
-					connectToWs();
+					// connectToWs();
 				}, delay);
 			} else if (retryCount >= MAX_RETRIES) {
 				connectionState = 'failed';
@@ -113,6 +120,79 @@
 				const info = data.data as { endsAt: number; serverNow: number };
 				gameStore.startRound(info.serverNow, info.endsAt);
 				gameStore.setGameState('in-game');
+				break;
+			}
+			case Events.ResumeGameTransitioning: {
+				const info = data.data as {
+					map: GameMap;
+					treasures_claimed: number;
+					treasures_failed: number;
+					all_player_points: Record<string, number>;
+					inventory: TreasureItem[];
+					treasure_count: Record<string, number>;
+					nickname: string;
+					player_id: string;
+					points: number;
+					members: Member[];
+					is_creator: boolean;
+					game_info: { code: string; max_players: number; current_players: number };
+				};
+				gameStore.setPlayerInfo(info.nickname, info.player_id, info.points, info.is_creator);
+				gameStore.updateRoundTreasureCount(40);
+				gameStore.setGameInfo(
+					info.game_info.code,
+					info.game_info.max_players,
+					info.game_info.current_players
+				);
+				gameStore.setTreasureCount(info.treasure_count);
+				gameStore.setInventory(info.inventory);
+				gameStore.setMembers(info.members);
+				gameStore.setMap(info.map);
+
+				const stats: MapRoundOverStats = {
+					map: info.map,
+					treasures_claimed: info.treasures_claimed,
+					treasures_failed: info.treasures_failed,
+					all_player_points: info.all_player_points
+				};
+				gameStore.setMapRoundStats(stats.map, stats);
+				if ($gameStore.playerId)
+					gameStore.updatePoints(stats.all_player_points[$gameStore.playerId]);
+				gameStore.setGameState('transitioning');
+
+				rejoinPromptDismissed = true;
+				break;
+			}
+			case Events.ResumeGame: {
+				const info = data.data as {
+					map: GameMap;
+					inventory: TreasureItem[];
+					treasure_set: Treasure[];
+					treasure_count: Record<string, number>;
+					nickname: string;
+					player_id: string;
+					points: number;
+					members: Member[];
+					is_creator: boolean;
+					server_now: number;
+					ends_at: number;
+					game_info: { code: string; max_players: number; current_players: number };
+				};
+				gameStore.setPlayerInfo(info.nickname, info.player_id, info.points, info.is_creator);
+				gameStore.setGameInfo(
+					info.game_info.code,
+					info.game_info.max_players,
+					info.game_info.current_players
+				);
+				mapTreasures = info.treasure_set;
+				gameStore.updateRoundTreasureCount(mapTreasures.length);
+				gameStore.setTreasureCount(info.treasure_count);
+				gameStore.setInventory(info.inventory);
+				gameStore.setMembers(info.members);
+				gameStore.setMap(info.map);
+				gameStore.startRound(info.server_now, info.ends_at);
+				gameStore.setGameState('in-game');
+				rejoinPromptDismissed = true;
 				break;
 			}
 			case Events.TreasureClaimSuccessful: {
@@ -202,7 +282,15 @@
 {/if}
 
 <div class="flex flex-col items-center justify-center gap-8 p-8">
-	{#if $gameStore.state === 'waiting'}
+	{#if !rejoinPromptDismissed && reconnectInfo !== null}
+		<Rejoin
+			{reconnectInfo}
+			onLeaveGame={() => (rejoinPromptDismissed = true)}
+			onRejoin={() => {
+				connectToWs(true);
+			}}
+		/>
+	{:else if $gameStore.state === 'waiting'}
 		<Lobby
 			{wsReady}
 			onStartGame={async () => {

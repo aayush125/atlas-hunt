@@ -44,6 +44,7 @@ type Client struct {
 	failedToClaimCount  int
 
 	mu            sync.Mutex
+	PumpsWg       sync.WaitGroup
 	points        int
 	treasureCount map[string]int
 }
@@ -203,6 +204,15 @@ func (c *Client) Send(v wsmessages.WSMessage) error {
 	}
 }
 
+func (c *Client) Instantiate(conn *websocket.Conn) {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+
+	c.conn = conn
+	c.send = make(chan wsmessages.WSMessage, 8)
+	c.done = make(chan struct{})
+}
+
 func (c *Client) handleMessage(message []byte) {
 	var msg wsmessages.WSMessage
 	err := json.Unmarshal(message, &msg)
@@ -226,6 +236,7 @@ func (c *Client) ReadPump() {
 		close(c.done)
 		c.conn.Close()
 		c.room.Unregister <- c
+		c.PumpsWg.Done()
 	}()
 
 	c.conn.SetReadLimit(maxMessageSize)
@@ -251,6 +262,7 @@ func (c *Client) WritePump() {
 	defer func() {
 		ticker.Stop()
 		c.conn.Close()
+		c.PumpsWg.Done()
 	}()
 
 	// notify the client that the websocket connection has been established

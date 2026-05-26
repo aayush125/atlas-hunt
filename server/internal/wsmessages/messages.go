@@ -16,6 +16,8 @@ const (
 	BeginGame               = WSEvent("game:begin")
 	MapRoundOver            = WSEvent("game:round:over")
 	NextRound               = WSEvent("game:round:next")
+	ResumeGameInProgress    = WSEvent("game:resume")
+	ResumeGameTransitioning = WSEvent("game:resume:transitioning")
 )
 
 type WSMessage struct {

@@ -99,17 +99,10 @@
 			</div>
 
 			<!-- Rewards -->
-			<div class="grid grid-cols-2 gap-2 text-sm">
+			<div class="grid w-full grid-cols-2 gap-2 text-sm">
 				<div class="flex justify-between rounded-lg bg-base-200 px-3 py-2">
 					<span>Points</span>
 					<span class="font-semibold">+{treasure.points}</span>
-				</div>
-
-				<div class="flex justify-between rounded-lg bg-base-200 px-3 py-2">
-					<span>Boost</span>
-					<span class="font-semibold text-primary">
-						+{treasure.boostPoints}
-					</span>
 				</div>
 			</div>
 

@@ -69,3 +69,7 @@ func (app *application) roomFullResponse(w http.ResponseWriter, r *http.Request)
 func (app *application) treasureNotFoundResponse(w http.ResponseWriter, r *http.Request) {
 	app.errorResponse(w, r, http.StatusNotAcceptable, envelope{"message": "the requested treasure could not be found"})
 }
+
+func (app *application) customErrorResponse(w http.ResponseWriter, r *http.Request, status int, err error) {
+	app.errorResponse(w, r, status, envelope{"message": err.Error()})
+}

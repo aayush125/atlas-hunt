@@ -11,7 +11,9 @@ export const Events = {
 	BonusClaimSuccessful: 'game:bonusclaim:successful',
 	BeginGame: 'game:begin',
 	MapRoundOver: 'game:round:over',
-	NextRound: 'game:round:next'
+	NextRound: 'game:round:next',
+	ResumeGame: 'game:resume',
+	ResumeGameTransitioning: 'game:resume:transitioning'
 } as const;
 
 export type Event = (typeof Events)[keyof typeof Events];
