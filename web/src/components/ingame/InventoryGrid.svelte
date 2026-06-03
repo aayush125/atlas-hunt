@@ -40,7 +40,6 @@
 				showTreasureModal = false;
 				selectedTreasure = null;
 			}}
-			onDiscard={() => {}}
 			onDonate={() => {}}
 		/>
 	{/if}

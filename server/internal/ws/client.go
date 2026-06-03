@@ -87,6 +87,18 @@ func (c *Client) Snapshot() ClientSnapshot {
 	}
 }
 
+func (c *Client) DeleteTreasure(instanceID string) {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+
+	for i, item := range c.inventory {
+		if item.InstanceID.String() == instanceID {
+			c.inventory = append(c.inventory[:i], c.inventory[i+1:]...)
+			break
+		}
+	}
+}
+
 func (c *Client) TryClaimBonusPoints(treasureID string) error {
 	c.mu.Lock()
 	defer c.mu.Unlock()
@@ -184,6 +196,13 @@ func (c *Client) setTreasureSet(set []gamedata.TreasureItem) {
 	c.mu.Lock()
 	defer c.mu.Unlock()
 	c.treasureSet = set
+}
+
+func (c *Client) SetInventory(inventory []gamedata.InventoryItem) {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+
+	c.inventory = inventory
 }
 
 func (c *Client) ResetState() {

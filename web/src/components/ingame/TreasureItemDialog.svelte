@@ -6,16 +6,15 @@
 	let {
 		item,
 		onClose,
-		onDonate,
-		onDiscard
+		onDonate
 	}: {
 		item: TreasureItem;
 		onClose: () => void;
 		onDonate: (item: TreasureItem) => void;
-		onDiscard: (item: TreasureItem) => void;
 	} = $props();
 
 	let bonusClaimed = $state<boolean | null>(null);
+	let treasureDiscarded = $state<boolean | null>(null);
 
 	function rarityClass(rarity: string) {
 		switch (rarity.toLowerCase()) {
@@ -55,6 +54,33 @@
 
 		bonusClaimed = true;
 		setTimeout(() => {
+			bonusClaimed = false;
+			onClose();
+		}, 1000);
+	}
+
+	async function handleTreasureDiscard(treasure: TreasureItem) {
+		console.log('Discarding treasure:', treasure.name);
+		const res = await fetch('/api/treasure/delete', {
+			method: 'DELETE',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				instanceId: treasure.instanceId
+			})
+		});
+
+		if (!res.ok) {
+			console.error('There was an error discarding treasure.');
+			return;
+		}
+
+		const json = await res.json();
+		treasureDiscarded = true;
+		setTimeout(() => {
+			gameStore.deleteTreasure(json.instanceId);
+			treasureDiscarded = false;
 			onClose();
 		}, 1000);
 	}
@@ -143,6 +169,12 @@
 				</div>
 			{/if}
 
+			{#if treasureDiscarded !== null}
+				<div class="alert text-sm alert-info">
+					<span>Treasure discarded. Inventory space is now available.</span>
+				</div>
+			{/if}
+
 			<!-- Actions -->
 			<div class="flex flex-col gap-2 pt-1">
 				<button
@@ -156,7 +188,7 @@
 				<button
 					class="btn w-full gap-2 btn-outline btn-error"
 					disabled={bonusClaimed}
-					onclick={() => onDiscard(item)}
+					onclick={async () => await handleTreasureDiscard(item)}
 				>
 					<span>🗑️</span>
 					<span>Discard Treasure</span>

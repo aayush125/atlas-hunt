@@ -112,6 +112,11 @@ function createGameStore() {
 					treasureCount: remainingCounts
 				};
 			}),
+		deleteTreasure: (instanceId: string) =>
+			update((game) => ({
+				...game,
+				treasures: game.treasures.filter((item) => item.instanceId !== instanceId)
+			})),
 		setGameInfo: (code: string, max_players: number, current_players: number) =>
 			update((game) => ({
 				...game,
