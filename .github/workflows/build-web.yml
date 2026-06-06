@@ -1,6 +1,7 @@
 name: Docker Image CI - SvelteKit Web App
 
 on:
+  workflow_dispatch:
   push:
     branches: ["main"]
     paths:
