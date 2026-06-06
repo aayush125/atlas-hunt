@@ -21,6 +21,11 @@ run/server:
 run/race:
 	@go run -race ./cmd/server -port=${CC_PORT} -env=${CC_ENVIRONMENT} -redis-addr=${CC_REDIS_ADDR} -redis-password=${CC_REDIS_PASSWORD}
 
+.PHONY: build/server
+build/server:
+	@echo 'Building cmd/server...'
+	go build -o=./bin/server ./cmd/server
+
 ## tidy: format all .go files and tidy module dependencies
 .PHONY: tidy
 tidy:

@@ -17,7 +17,6 @@ export const load: PageServerLoad = async ({ cookies, fetch }) => {
 	}
 
 	const json = await res.json();
-	console.log('RESPONSE FROM GO SERVER', json);
 
 	const reconnectInfo = json;
 	return { reconnectInfo };
