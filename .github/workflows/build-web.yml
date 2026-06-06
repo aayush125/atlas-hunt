@@ -51,3 +51,6 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          build-args: |
+            PUBLIC_SERVER_URL=${{ vars.PUBLIC_SERVER_URL }}
+            PUBLIC_WS_BASE=${{ vars.PUBLIC_WS_BASE }}
