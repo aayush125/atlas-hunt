@@ -12,7 +12,7 @@
 	import { gameStore } from '../../stores/gameStore';
 	import { onDestroy } from 'svelte';
 	import Transitioning from '../../components/ingame/Transitioning.svelte';
-	import { env } from '$env/dynamic/public';
+	import { PUBLIC_WS_BASE } from '$env/static/public';
 	import type { PageProps } from './$types';
 	import Rejoin from '../../components/Rejoin.svelte';
 
@@ -39,7 +39,7 @@
 		if (ws && (ws.readyState === WebSocket.OPEN || ws.readyState === WebSocket.CONNECTING)) return;
 
 		manualClose = false;
-		ws = new WebSocket(`${env.PUBLIC_WS_BASE}/${reconnecting ? 'game/reconnect' : 'ws'}`);
+		ws = new WebSocket(`${PUBLIC_WS_BASE}/${reconnecting ? 'game/reconnect' : 'ws'}`);
 
 		ws.onopen = () => {
 			console.log('WebSocket connected');
