@@ -74,7 +74,7 @@
 </svelte:head>
 
 <!-- Carousel -->
-<div class="relative h-1/2 w-full overflow-hidden border border-red-500 bg-black">
+<div class="relative h-1/2 w-full overflow-hidden bg-black">
 	<!-- Slides -->
 	{#each slides as slide, i (i)}
 		<img

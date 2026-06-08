@@ -108,7 +108,7 @@ func (c *Client) TryClaimBonusPoints(treasureID string) error {
 		return ErrPlayerDoesNotHaveRequestedTreasure
 	}
 
-	if count <= 0 {
+	if count <= 1 {
 		return ErrInvalidTreasureCount
 	}
 

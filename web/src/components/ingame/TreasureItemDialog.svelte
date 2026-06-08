@@ -100,16 +100,6 @@
 		role="dialog"
 		aria-label={item.name}
 	>
-		<!-- Bonus Claimed Banner -->
-		<!-- {#if bonusClaimed}
-			<div
-				class="animate-slide-down flex items-center justify-center gap-2 bg-success px-4 py-3 text-success-content"
-			>
-				<span class="text-lg">✅</span>
-				<span class="font-semibold tracking-wide">Bonus Claimed!</span>
-			</div>
-		{/if} -->
-
 		<div class="space-y-4 p-5">
 			<!-- Close -->
 			<button class="btn absolute top-3 right-3 btn-circle btn-ghost btn-sm" onclick={onClose}>
@@ -195,7 +185,7 @@
 				</button>
 				<button
 					class="btn w-full gap-2 btn-outline btn-success"
-					disabled={bonusClaimed}
+					disabled={bonusClaimed || $gameStore.treasureCount[item.id] <= 1}
 					onclick={async () => await handleBonusClaim(item)}
 				>
 					<span>✨</span>

@@ -43,6 +43,8 @@ func (app *application) claimBonusPointsHandler(w http.ResponseWriter, r *http.R
 		switch {
 		case errors.Is(err, ws.ErrPlayerDoesNotHaveRequestedTreasure):
 			app.treasureNotFoundResponse(w, r)
+		case errors.Is(err, ws.ErrInvalidTreasureCount):
+			app.customErrorResponse(w, r, http.StatusUnprocessableEntity, err)
 		default:
 			app.serverErrorResponse(w, r, err)
 		}

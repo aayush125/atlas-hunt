@@ -249,6 +249,18 @@
 		ws = null;
 	}
 
+	async function leaveGameHandler() {
+		const res = await fetch('/api/game/leave', { method: 'POST' });
+
+		if (!res.ok) {
+			console.log('failed to logout');
+		}
+
+		disconnectWs();
+		gameStore.reset();
+		gate = 'join';
+	}
+
 	onDestroy(disconnectWs);
 </script>
 
@@ -296,17 +308,7 @@
 			onStartGame={async () => {
 				sendMessage({ type: 'request:game:start', data: null });
 			}}
-			onLeaveGame={async () => {
-				const res = await fetch('/api/game/leave', { method: 'POST' });
-
-				if (!res.ok) {
-					console.log('failed to logout');
-				}
-
-				disconnectWs();
-				gameStore.reset();
-				gate = 'join';
-			}}
+			onLeaveGame={leaveGameHandler}
 		/>
 	{:else if $gameStore.state === 'loading'}
 		<GameLoading />
@@ -338,6 +340,7 @@
 			onFail={(t) => {
 				mapTreasures = mapTreasures.filter((tr) => tr.instanceId !== t.instanceId);
 			}}
+			onLeaveGame={leaveGameHandler}
 		/>
 	{:else if $gameStore.state === 'transitioning'}
 		<Transitioning

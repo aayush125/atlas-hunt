@@ -11,9 +11,14 @@
 	let {
 		treasures,
 		onClaim,
-		onFail
-	}: { treasures: Treasure[]; onClaim: (t: Treasure) => void; onFail: (t: Treasure) => void } =
-		$props();
+		onFail,
+		onLeaveGame
+	}: {
+		treasures: Treasure[];
+		onClaim: (t: Treasure) => void;
+		onFail: (t: Treasure) => void;
+		onLeaveGame: () => Promise<void>;
+	} = $props();
 
 	let showInfoModal = $state(false);
 	let showLeaveConfirm = $state(false);
@@ -59,9 +64,9 @@
 	function cancelLeave() {
 		showLeaveConfirm = false;
 	}
-	function confirmLeave() {
+	async function confirmLeave() {
+		await onLeaveGame();
 		showLeaveConfirm = false;
-		// TODO: wire up leave game logic
 	}
 </script>
 
