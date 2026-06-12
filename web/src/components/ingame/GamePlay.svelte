@@ -7,6 +7,7 @@
 	import { gameStore } from '../../stores/gameStore';
 	import InventoryGrid from './InventoryGrid.svelte';
 	import type { Treasure } from '$lib/types/treasure';
+	import PlayerList from './PlayerList.svelte';
 
 	let {
 		treasures,
@@ -146,7 +147,8 @@
 					{/if}
 				</div>
 			{:else}
-				<div class="mt-8 text-center text-sm text-base-content/50">No players to show.</div>
+				<!-- <div class="mt-8 text-center text-sm text-base-content/50">No players to show.</div> -->
+				<PlayerList players={$gameStore.otherPlayers} />
 			{/if}
 		</div>
 	</div>

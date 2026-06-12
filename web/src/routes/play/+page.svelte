@@ -116,6 +116,10 @@
 				gameStore.setMap(info.map);
 				break;
 			}
+			case Events.ResetGame: {
+				gameStore.newGame();
+				break;
+			}
 			case Events.BeginGame: {
 				const info = data.data as { endsAt: number; serverNow: number };
 				gameStore.startRound(info.serverNow, info.endsAt);
@@ -346,8 +350,12 @@
 		<Transitioning
 			onNextRound={$gameStore.playerIsCreator
 				? () => {
-						console.log('Sending next round message');
 						sendMessage({ type: Events.NextRound, data: null });
+					}
+				: undefined}
+			onNewGame={$gameStore.playerIsCreator
+				? () => {
+						sendMessage({ type: Events.NewGame, data: null });
 					}
 				: undefined}
 		/>

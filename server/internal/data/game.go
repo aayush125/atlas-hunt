@@ -68,8 +68,7 @@ func validateNickname(v *validator.Validator, nickname string) {
 
 func validateNumberOfPlayers(v *validator.Validator, numberOfPlayers int) {
 	v.Check(numberOfPlayers > 0, "number_of_players", "Number of players must be non-zero")
-	// TODO: Uncomment this line
-	// v.Check(numberOfPlayers >= 4 && numberOfPlayers <= 10, "number_of_players", "Number of players must be between 4 and 10")
+	v.Check(numberOfPlayers >= 2 && numberOfPlayers <= 10, "number_of_players", "Number of players must be between 2 and 10")
 }
 
 func validateGameCode(v *validator.Validator, code string) {

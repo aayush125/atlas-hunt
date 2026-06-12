@@ -10,7 +10,7 @@ import (
 )
 
 func (r *Room) setupGameForPlayer(player *Client, online bool, treasures []gamedata.TreasureItem, gameMap data.GameMap) {
-	player.ResetState()
+	player.PrepareForNextRound()
 	player.setTreasureSet(treasures)
 	r.PlayerModel.UpdateTreasureSet(player.session, treasures)
 	if online {
@@ -98,4 +98,24 @@ func (r *Room) getPlayerSnapshot() map[*Client]bool {
 	playerSnapshot := make(map[*Client]bool)
 	maps.Copy(playerSnapshot, r.Players)
 	return playerSnapshot
+}
+
+func (r *Room) newGame(client *Client) {
+	r.lastMap = data.GameMapNone
+	for player := range r.Players {
+		player.Reset()
+	}
+
+	if r.onlinePlayerCount() != r.maxPlayers {
+		client.Send(wsmessages.WSMessage{Type: wsmessages.NotEnoughPlayers})
+		return
+	}
+
+	playerSnapshot := r.getPlayerSnapshot()
+
+	playerCount := len(r.Players)
+
+	go func() {
+		r.startRound(playerSnapshot, playerCount, data.GameMapFirst)
+	}()
 }

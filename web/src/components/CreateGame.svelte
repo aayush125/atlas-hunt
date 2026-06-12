@@ -69,11 +69,11 @@
 				type="range"
 				min="2"
 				max="10"
-				step="2"
+				step="1"
 				class="range w-full"
 			/>
 			<div class="mt-2 flex justify-between text-xs">
-				{#each [2, 4, 6, 8, 10] as n (n)}
+				{#each [2, 3, 4, 5, 6, 7, 8, 9, 10] as n (n)}
 					<div class="flex flex-col items-center gap-0.5">
 						<span>|</span>
 						<span>{n}</span>

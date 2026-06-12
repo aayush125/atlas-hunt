@@ -13,7 +13,9 @@ export const Events = {
 	MapRoundOver: 'game:round:over',
 	NextRound: 'game:round:next',
 	ResumeGame: 'game:resume',
-	ResumeGameTransitioning: 'game:resume:transitioning'
+	ResumeGameTransitioning: 'game:resume:transitioning',
+	NewGame: 'game:new',
+	ResetGame: 'game:reset'
 } as const;
 
 export type Event = (typeof Events)[keyof typeof Events];

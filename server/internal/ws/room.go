@@ -36,6 +36,7 @@ type Room struct {
 	Unregister            chan *Client
 	StartGame             chan *Client
 	NextRound             chan *Client
+	NewGame               chan *Client
 	Shutdown              chan struct{}
 	ResumeGame            chan *Client
 	GameModel             *data.GameModel
@@ -65,6 +66,7 @@ func NewRoom(models *data.Models, code string, maxPlayers int, gm *data.GameMode
 		Unregister:            make(chan *Client),
 		StartGame:             make(chan *Client),
 		NextRound:             make(chan *Client),
+		NewGame:               make(chan *Client),
 		Shutdown:              make(chan struct{}),
 		ResumeGame:            make(chan *Client),
 		GameModel:             gm,
@@ -227,6 +229,34 @@ func (r *Room) Run() {
 			go func() {
 				r.startRound(playerSnapshot, playerCount, data.GameMapFirst)
 			}()
+		case client := <-r.NewGame:
+			if !client.isCreator {
+				r.logger.Warn("non-creator player requested new game", "playerToken", client.session)
+				break
+			}
+
+			if r.State != data.GameStateTransitioning {
+				r.logger.Warn("received new game request when game state not in transitioning", "gameState", r.State, "requesterSessio", client.session)
+				break
+			}
+
+			if r.lastMap != data.GameMapThird {
+				r.logger.Warn("received new game request when last map wasn't third", "lastMap", r.lastMap, "requesterSession", client.session)
+				break
+			}
+
+			for player, online := range r.Players {
+				if !online {
+					continue
+				}
+
+				err := player.Send(wsmessages.WSMessage{Type: wsmessages.ResetGame})
+				if err != nil {
+					r.logger.Error("error sending reset game state message to player", "playerSession", player.session, "error", err)
+				}
+			}
+
+			r.newGame(client)
 		case client := <-r.NextRound:
 			if !client.isCreator {
 				r.logger.Warn("non-creator player requested next round start", "playerToken", client.session)

@@ -150,7 +150,17 @@ function createGameStore() {
 				...game,
 				otherPlayers: game.otherPlayers.filter((member) => member.id !== id)
 			})),
-		reset: () => set(initial)
+		reset: () => set(initial),
+		newGame: () =>
+			update((game) => ({
+				...game,
+				map: null,
+				treasures: [],
+				points: 0,
+				treasureCount: {},
+				treasureCountThisRound: null,
+				mapRoundStats: { first: null, second: null, third: null }
+			}))
 	};
 }
 

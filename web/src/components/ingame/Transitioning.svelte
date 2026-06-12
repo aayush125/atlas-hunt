@@ -4,7 +4,7 @@
 	import { gameStore } from '../../stores/gameStore';
 	import InventoryListDialog from './InventoryListDialog.svelte';
 
-	let { onNextRound }: { onNextRound?: () => void } = $props();
+	let { onNextRound, onNewGame }: { onNextRound?: () => void; onNewGame?: () => void } = $props();
 
 	let showInventoryDialog = $state(false);
 
@@ -118,10 +118,13 @@
 				<button class="btn btn-outline btn-sm" onclick={() => (showInventoryDialog = true)}>
 					🎒 Inventory
 				</button>
-				{#if $gameStore.playerIsCreator && onNextRound}
+				{#if $gameStore.playerIsCreator && $gameStore.map !== 'third' && onNextRound}
 					<button class="btn btn-outline btn-sm" onclick={onNextRound}>
 						⚔️ Begin Next Round
 					</button>
+				{/if}
+				{#if $gameStore.map === 'third' && onNewGame}
+					<button class="btn btn-outline btn-sm" onclick={onNewGame}> ⚔️ Start a New Game </button>
 				{/if}
 			</div>
 		</div>

@@ -205,13 +205,25 @@ func (c *Client) SetInventory(inventory []gamedata.InventoryItem) {
 	c.inventory = inventory
 }
 
-func (c *Client) ResetState() {
+func (c *Client) PrepareForNextRound() {
 	c.mu.Lock()
 	defer c.mu.Unlock()
 
 	c.successfullyClaimed = 0
 	c.failedToClaimCount = 0
 	c.treasureSet = []gamedata.TreasureItem{}
+}
+
+func (c *Client) Reset() {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+
+	c.successfullyClaimed = 0
+	c.failedToClaimCount = 0
+	c.treasureSet = []gamedata.TreasureItem{}
+	c.inventory = []gamedata.InventoryItem{}
+	c.treasureCount = map[string]int{}
+	c.points = 0
 }
 
 func (c *Client) Send(v wsmessages.WSMessage) error {
@@ -245,6 +257,8 @@ func (c *Client) handleMessage(message []byte) {
 		c.room.StartGame <- c
 	case wsmessages.NextRound:
 		c.room.NextRound <- c
+	case wsmessages.NewGame:
+		c.room.NewGame <- c
 	default:
 		c.logger.Warn("unrecognized message from client", "clientSession", c.session, "message", msg)
 	}
