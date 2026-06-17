@@ -1,5 +1,7 @@
 <script lang="ts">
+	import { INVENTORY_SIZE } from '$lib/constants/gameplay';
 	import type { Treasure } from '$lib/types/treasure';
+	import { gameStore } from '../../stores/gameStore';
 
 	let {
 		treasure,
@@ -142,7 +144,9 @@
 			<div class="pt-1">
 				<button
 					class="btn w-full gap-2 btn-primary"
-					disabled={selectedOption === null || submitted}
+					disabled={selectedOption === null ||
+						submitted ||
+						$gameStore.treasures.length >= INVENTORY_SIZE}
 					onclick={handleClaim}
 				>
 					{#if submitted && claimResult === null}

@@ -2,6 +2,7 @@
 	import './layout.css';
 	import favicon from '$lib/assets/favicon.svg';
 	import Navbar from '../components/Navbar.svelte';
+	import Toaster from '../components/Toaster.svelte';
 
 	let { children } = $props();
 </script>
@@ -14,5 +15,6 @@
 		<main class="flex-1 overflow-auto">
 			{@render children()}
 		</main>
+		<Toaster />
 	</div>
 </div>

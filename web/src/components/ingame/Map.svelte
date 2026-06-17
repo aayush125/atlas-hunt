@@ -7,6 +7,7 @@
 	import thirdMap from '$lib/assets/maps/round_3.svg';
 	import TreasureDialog from './TreasureDialog.svelte';
 	import { gameStore } from '../../stores/gameStore';
+	import { toast } from '../../stores/toast';
 
 	let {
 		allTreasures,
@@ -38,7 +39,6 @@
 	}
 
 	async function handleTreasureClaim(treasure: Treasure, selectedAnswer: string) {
-		console.log('selected answer:', selectedAnswer);
 		const res = await fetch('/api/game/checkanswer', {
 			method: 'POST',
 			headers: {
@@ -52,7 +52,14 @@
 		});
 
 		if (!res.ok) {
-			console.error('There was an error checking the answer.');
+			const json = await res.json();
+			if (res.status === 404 || res.status === 409) {
+				toast(json.error, 'error');
+				console.error(json.error);
+			} else {
+				toast('There was an error claiming the treasure. Please try again.', 'error');
+				console.error('There was an error checking the answer.');
+			}
 			return;
 		}
 

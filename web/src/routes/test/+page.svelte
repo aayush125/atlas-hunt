@@ -1,5 +1,6 @@
 <script>
 	import Transitioning from '../../components/ingame/Transitioning.svelte';
+	// import { toast } from '../../stores/toast';
 </script>
 
 <!-- <h1>Welcome to SvelteKit</h1>
@@ -14,3 +15,9 @@
 <button class="btn btn-error">Error</button> -->
 
 <Transitioning />
+
+<!-- <button
+	class="btn btn-primary"
+	onclick={() => toast('This is a very long toast message. I hope it works.', 'error')}
+	>Show Toast</button -->
+>

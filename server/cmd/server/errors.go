@@ -71,5 +71,5 @@ func (app *application) treasureNotFoundResponse(w http.ResponseWriter, r *http.
 }
 
 func (app *application) customErrorResponse(w http.ResponseWriter, r *http.Request, status int, err error) {
-	app.errorResponse(w, r, status, envelope{"message": err.Error()})
+	app.errorResponse(w, r, status, err.Error())
 }

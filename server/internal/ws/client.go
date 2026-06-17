@@ -20,11 +20,14 @@ const (
 	pongWait       = 60 * time.Second
 	pingPeriod     = (pongWait * 9) / 10
 	maxMessageSize = 512
+	inventorySize  = 25
 )
 
 var (
 	ErrPlayerDoesNotHaveRequestedTreasure = errors.New("player does not have requested treasure")
 	ErrInvalidTreasureCount               = errors.New("invalid treasure count")
+	ErrInventoryFull                      = errors.New("inventory is full")
+	ErrTreasureNotFound                   = errors.New("treasure not found")
 )
 
 type Client struct {
@@ -145,6 +148,10 @@ func (c *Client) TryClaimTreasure(treasureInstanceID uuid.UUID, questionID, sele
 	c.mu.Lock()
 	defer c.mu.Unlock()
 
+	if len(c.inventory) >= inventorySize {
+		return false, ErrInventoryFull
+	}
+
 	var newTreasureSet []gamedata.TreasureItem
 	found := false
 	var t gamedata.TreasureItem
@@ -158,7 +165,7 @@ func (c *Client) TryClaimTreasure(treasureInstanceID uuid.UUID, questionID, sele
 	}
 
 	if !found {
-		return false, errors.New("treasure not assigned to player")
+		return false, ErrTreasureNotFound
 	}
 
 	correct, err := gamedata.CheckAnswer(questionID, selectedAnswer)

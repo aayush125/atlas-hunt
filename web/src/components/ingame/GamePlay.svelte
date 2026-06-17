@@ -8,6 +8,7 @@
 	import InventoryGrid from './InventoryGrid.svelte';
 	import type { Treasure } from '$lib/types/treasure';
 	import PlayerList from './PlayerList.svelte';
+	import { INVENTORY_SIZE } from '$lib/constants/gameplay';
 
 	let {
 		treasures,
@@ -126,6 +127,9 @@
 				onclick={() => (activeTab = 'inventory')}
 			>
 				Inventory ({$gameStore.treasures.length})
+				{#if $gameStore.treasures.length >= INVENTORY_SIZE}
+					<span class="badge badge-sm badge-warning">Full</span>
+				{/if}
 			</button>
 			<button
 				role="tab"
