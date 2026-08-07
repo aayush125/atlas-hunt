@@ -1,13 +1,12 @@
 <script lang="ts">
 	import './layout.css';
-	import favicon from '$lib/assets/favicon.svg';
 	import Navbar from '../components/Navbar.svelte';
 	import Toaster from '../components/Toaster.svelte';
 
 	let { children } = $props();
 </script>
 
-<svelte:head><link rel="icon" href={favicon} /></svelte:head>
+<svelte:head><link rel="icon" href="/favicon.svg" /></svelte:head>
 
 <div class="min-h-screen">
 	<div class="flex h-screen flex-col">
