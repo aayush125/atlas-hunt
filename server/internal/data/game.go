@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	"game.crisis-control.com/internal/validator"
+	"atlas.sageyutta.com/internal/validator"
 	"github.com/redis/go-redis/v9"
 )
 

@@ -4,9 +4,9 @@ import (
 	"log/slog"
 	"time"
 
-	"game.crisis-control.com/internal/data"
-	"game.crisis-control.com/internal/engine"
-	"game.crisis-control.com/internal/wsmessages"
+	"atlas.sageyutta.com/internal/data"
+	"atlas.sageyutta.com/internal/engine"
+	"atlas.sageyutta.com/internal/wsmessages"
 )
 
 const (

@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"net/http"
 
-	"game.crisis-control.com/internal/cc_context"
-	"game.crisis-control.com/internal/ws"
+	"atlas.sageyutta.com/internal/cc_context"
+	"atlas.sageyutta.com/internal/ws"
 )
 
 func (app *application) reconnectPlayerHandler(w http.ResponseWriter, r *http.Request) {

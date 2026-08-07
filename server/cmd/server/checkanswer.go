@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"net/http"
 
-	"game.crisis-control.com/internal/cc_context"
-	"game.crisis-control.com/internal/ws"
+	"atlas.sageyutta.com/internal/cc_context"
+	"atlas.sageyutta.com/internal/ws"
 	"github.com/google/uuid"
 )
 
@@ -47,9 +47,9 @@ func (app *application) checkTriviaAnswer(w http.ResponseWriter, r *http.Request
 	if err != nil {
 		switch {
 		case errors.Is(err, ws.ErrInventoryFull):
-			app.customErrorResponse(w, r, http.StatusConflict, fmt.Errorf("Inventory full"))
+			app.customErrorResponse(w, r, http.StatusConflict, fmt.Errorf("inventory full"))
 		case errors.Is(err, ws.ErrTreasureNotFound):
-			app.customErrorResponse(w, r, http.StatusNotFound, fmt.Errorf("Treasure not found"))
+			app.customErrorResponse(w, r, http.StatusNotFound, fmt.Errorf("treasure not found"))
 		default:
 			app.serverErrorResponse(w, r, err)
 		}

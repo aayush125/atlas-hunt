@@ -21,6 +21,7 @@ run/server:
 run/race:
 	@go run -race ./cmd/server -port=${CC_PORT} -env=${CC_ENVIRONMENT} -redis-addr=${CC_REDIS_ADDR} -redis-password=${CC_REDIS_PASSWORD}
 
+## build/server: build the game server
 .PHONY: build/server
 build/server:
 	@echo 'Building cmd/server...'

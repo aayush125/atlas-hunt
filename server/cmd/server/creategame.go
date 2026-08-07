@@ -5,10 +5,10 @@ import (
 	"net/http"
 	"time"
 
-	"game.crisis-control.com/internal/data"
-	"game.crisis-control.com/internal/gameauth"
-	"game.crisis-control.com/internal/validator"
-	"game.crisis-control.com/internal/ws"
+	"atlas.sageyutta.com/internal/data"
+	"atlas.sageyutta.com/internal/gameauth"
+	"atlas.sageyutta.com/internal/validator"
+	"atlas.sageyutta.com/internal/ws"
 	"github.com/google/uuid"
 )
 

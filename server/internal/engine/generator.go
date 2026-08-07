@@ -4,8 +4,8 @@ import (
 	"crypto/rand"
 	"math/big"
 
-	"game.crisis-control.com/internal/data"
-	"game.crisis-control.com/internal/gamedata"
+	"atlas.sageyutta.com/internal/data"
+	"atlas.sageyutta.com/internal/gamedata"
 	"github.com/google/uuid"
 )
 

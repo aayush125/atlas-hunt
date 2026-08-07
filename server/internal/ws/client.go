@@ -9,8 +9,8 @@ import (
 	"sync"
 	"time"
 
-	"game.crisis-control.com/internal/gamedata"
-	"game.crisis-control.com/internal/wsmessages"
+	"atlas.sageyutta.com/internal/gamedata"
+	"atlas.sageyutta.com/internal/wsmessages"
 	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
 )

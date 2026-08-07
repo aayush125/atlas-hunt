@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"net/http"
 
-	"game.crisis-control.com/internal/cc_context"
-	"game.crisis-control.com/internal/data"
+	"atlas.sageyutta.com/internal/cc_context"
+	"atlas.sageyutta.com/internal/data"
 )
 
 func (app *application) recoverPanic(next http.Handler) http.Handler {
