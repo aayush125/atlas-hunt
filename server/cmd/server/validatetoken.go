@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"game.crisis-control.com/internal/cc_context"
+	"atlas.sageyutta.com/internal/cc_context"
 )
 
 func (app *application) validateTokenHandler(w http.ResponseWriter, r *http.Request) {

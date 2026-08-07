@@ -4,7 +4,7 @@ import (
 	"context"
 	"net/http"
 
-	"game.crisis-control.com/internal/data"
+	"atlas.sageyutta.com/internal/data"
 )
 
 type contextKey string

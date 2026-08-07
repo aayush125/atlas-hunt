@@ -8,10 +8,10 @@ import (
 	"sync"
 	"time"
 
-	"game.crisis-control.com/internal/data"
-	"game.crisis-control.com/internal/engine"
-	"game.crisis-control.com/internal/validator"
-	"game.crisis-control.com/internal/ws"
+	"atlas.sageyutta.com/internal/data"
+	"atlas.sageyutta.com/internal/engine"
+	"atlas.sageyutta.com/internal/validator"
+	"atlas.sageyutta.com/internal/ws"
 	"github.com/redis/go-redis/v9"
 )
 

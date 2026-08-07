@@ -2,7 +2,7 @@
 @plugin '@tailwindcss/typography';
 @plugin 'daisyui';
 @plugin 'daisyui/theme' {
-	name: 'crisis-theme';
+	name: 'atlashunt-theme';
 	default: true; /* set as default */
 	prefersdark: false; /* light mode by default */
 	color-scheme: light;

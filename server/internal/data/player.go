@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"time"
 
-	"game.crisis-control.com/internal/gamedata"
+	"atlas.sageyutta.com/internal/gamedata"
 	"github.com/google/uuid"
 	"github.com/redis/go-redis/v9"
 )

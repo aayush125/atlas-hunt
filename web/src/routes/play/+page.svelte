@@ -269,13 +269,13 @@
 </script>
 
 <svelte:head>
-	<title>Play - Crisis Control</title>
+	<title>Play - Atlas Hunt</title>
 	<meta
 		name="description"
 		content="Join an existing game or create a new one and invite your friends to play."
 	/>
 	<meta name="robots" content="noindex, nofollow" />
-	<meta property="og:title" content="Play - Crisis Control" />
+	<meta property="og:title" content="Play - Atlas Hunt" />
 	<meta
 		property="og:description"
 		content="Join an existing game or create a new one and invite your friends to play."

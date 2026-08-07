@@ -4,9 +4,9 @@ import (
 	"maps"
 	"time"
 
-	"game.crisis-control.com/internal/data"
-	"game.crisis-control.com/internal/gamedata"
-	"game.crisis-control.com/internal/wsmessages"
+	"atlas.sageyutta.com/internal/data"
+	"atlas.sageyutta.com/internal/gamedata"
+	"atlas.sageyutta.com/internal/wsmessages"
 )
 
 func (r *Room) setupGameForPlayer(player *Client, online bool, treasures []gamedata.TreasureItem, gameMap data.GameMap) {

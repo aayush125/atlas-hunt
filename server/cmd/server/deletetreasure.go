@@ -4,7 +4,7 @@ import (
 	"errors"
 	"net/http"
 
-	"game.crisis-control.com/internal/cc_context"
+	"atlas.sageyutta.com/internal/cc_context"
 )
 
 func (app *application) deleteTreasureHandler(w http.ResponseWriter, r *http.Request) {

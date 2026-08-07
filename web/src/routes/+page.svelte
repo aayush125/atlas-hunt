@@ -65,10 +65,10 @@
 </script>
 
 <svelte:head>
-	<title>Crisis Control</title>
+	<title>Atlas Hunt</title>
 	<meta name="description" content="Treasure game." />
 	<meta name="robots" content="noindex, nofollow" />
-	<meta property="og:title" content="Crisis Control" />
+	<meta property="og:title" content="Atlas Hunt" />
 	<meta property="og:description" content="Treasure game." />
 	<meta property="og:type" content="website" />
 </svelte:head>
@@ -144,7 +144,7 @@
 <!-- Game Info -->
 <div class="bg-base-200 px-8 py-10">
 	<div class="mx-auto mb-10 max-w-3xl text-center">
-		<h1 class="mb-3 text-4xl font-bold">Crisis Control</h1>
+		<h1 class="mb-3 text-4xl font-bold">Atlas Hunt</h1>
 		<p class="text-lg text-base-content/70">
 			Just... answer the quiz and take your treasures. That's it, really.
 		</p>

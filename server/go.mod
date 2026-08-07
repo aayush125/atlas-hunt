@@ -1,4 +1,4 @@
-module game.crisis-control.com
+module atlas.sageyutta.com
 
 go 1.24.5
 
