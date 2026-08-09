@@ -76,11 +76,11 @@ func (r *Room) startRound(playerSnapshot map[*Client]bool, playerCount int, game
 		Type: wsmessages.BeginGame,
 		Data: map[string]any{
 			"serverNow": now.UnixMilli(),
-			"endsAt":    now.Add(RoundTime).UnixMilli(),
+			"endsAt":    now.Add(r.roundTime).UnixMilli(),
 		},
 	}
 
-	r.resetTimer <- roundStartData{roundTime: now.Add(RoundTime).UnixMilli(), roundMap: gameMap}
+	r.resetTimer <- roundStartData{roundTime: now.Add(r.roundTime).UnixMilli(), roundMap: gameMap}
 }
 
 func (r *Room) onlinePlayerCount() int {

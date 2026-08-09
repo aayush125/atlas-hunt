@@ -6,13 +6,8 @@ import (
 
 	"atlas.sageyutta.com/internal/data"
 	"atlas.sageyutta.com/internal/engine"
+	"atlas.sageyutta.com/internal/gamedata"
 	"atlas.sageyutta.com/internal/wsmessages"
-)
-
-const (
-	RoundTime      = 5 * time.Minute
-	BackupTime     = 15 * time.Second
-	TTLResetPeriod = 2 * time.Minute
 )
 
 type playerLookupRequest struct {
@@ -30,6 +25,24 @@ type roundStartData struct {
 	roundMap  data.GameMap
 }
 
+type Player interface {
+	Delete(session string) error
+	BackupPlayerStats(token string, treasureSet []gamedata.TreasureItem, treasureCount map[string]int, inventory []gamedata.InventoryItem, points int) error
+	UpdateTreasureSet(token string, treasureSet []gamedata.TreasureItem) error
+	SetTTL(token string) error
+}
+
+type Game interface {
+	GetAllPlayers(gameCode string) ([]string, error)
+	CleanupGame(gameCode string) error
+	IncrementPlayerCount(gameCode string) error
+	DecrementPlayerCount(gameCode string) error
+	RemovePlayerFromSet(gameCode, playerSessionToken string) error
+	SetGameAndMapState(code string, state data.GameState, gameMap data.GameMap) error
+	SetTTL(code string) error
+	SetTTLForPlayerSet(gameCode string, ttl time.Duration) error
+}
+
 type Room struct {
 	Players               map[*Client]bool
 	Register              chan *Client
@@ -39,8 +52,8 @@ type Room struct {
 	NewGame               chan *Client
 	Shutdown              chan struct{}
 	ResumeGame            chan *Client
-	GameModel             *data.GameModel
-	PlayerModel           *data.PlayerModel
+	GameModel             Game
+	PlayerModel           Player
 	Code                  string
 	State                 data.GameState
 	lastMap               data.GameMap
@@ -57,9 +70,23 @@ type Room struct {
 	backupTimer           *time.Timer
 	roundEndTime          int64
 	onExit                func(code string)
+	roundTime             time.Duration
+	backupTime            time.Duration
+	ttlResetPeriod        time.Duration
 }
 
-func NewRoom(models *data.Models, code string, maxPlayers int, gm *data.GameModel, pm *data.PlayerModel, logger *slog.Logger, engine *engine.Engine, onExit func(code string)) *Room {
+func NewRoom(
+	code string,
+	maxPlayers int,
+	gm Game,
+	pm Player,
+	logger *slog.Logger,
+	engine *engine.Engine,
+	onExit func(code string),
+	roundTime,
+	backupTime,
+	ttlResetPeriod time.Duration,
+) *Room {
 	return &Room{
 		Players:               make(map[*Client]bool),
 		Register:              make(chan *Client),
@@ -82,16 +109,20 @@ func NewRoom(models *data.Models, code string, maxPlayers int, gm *data.GameMode
 		PlayerLookup:          make(chan playerLookupRequest),
 		NotifyTreasureClaimed: make(chan playerNotification),
 		NotifyBonusClaimed:    make(chan playerNotification),
-		timer:                 time.NewTimer(RoundTime),
-		backupTimer:           time.NewTimer(BackupTime),
+		timer:                 time.NewTimer(roundTime),
+		backupTimer:           time.NewTimer(backupTime),
 		resetTimer:            make(chan roundStartData),
 		roundEndTime:          0,
 		onExit:                onExit,
+
+		roundTime:      roundTime,
+		backupTime:     backupTime,
+		ttlResetPeriod: ttlResetPeriod,
 	}
 }
 
 func (r *Room) Run() {
-	ttlResetTicker := time.NewTicker(TTLResetPeriod)
+	ttlResetTicker := time.NewTicker(r.ttlResetPeriod)
 
 	defer func() {
 		ttlResetTicker.Stop()
@@ -384,8 +415,8 @@ func (r *Room) Run() {
 		case gameData := <-r.resetTimer:
 			r.State = data.GameStateInProgress
 			r.currentMap = gameData.roundMap
-			r.timer.Reset(RoundTime)
-			r.backupTimer.Reset(BackupTime)
+			r.timer.Reset(r.roundTime)
+			r.backupTimer.Reset(r.backupTime)
 			r.roundEndTime = gameData.roundTime
 		case <-r.backupTimer.C:
 			if r.State != data.GameStateInProgress {
@@ -399,7 +430,7 @@ func (r *Room) Run() {
 					r.logger.Error("error backing up player stats", "session_token", p.session, "error", err.Error())
 				}
 			}
-			r.backupTimer.Reset(BackupTime)
+			r.backupTimer.Reset(r.backupTime)
 		case <-r.timer.C:
 			if r.State != data.GameStateInProgress {
 				break

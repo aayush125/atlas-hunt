@@ -12,6 +12,12 @@ import (
 	"github.com/google/uuid"
 )
 
+const (
+	RoundTime      = 5 * time.Minute
+	BackupTime     = 15 * time.Second
+	TTLResetPeriod = 2 * time.Minute
+)
+
 func (app *application) createGameHandler(w http.ResponseWriter, r *http.Request) {
 	var input struct {
 		Nickname        string `json:"nickname"`
@@ -110,7 +116,6 @@ func (app *application) createGameHandler(w http.ResponseWriter, r *http.Request
 	}
 
 	room := ws.NewRoom(
-		app.models,
 		gameRequest.GameID,
 		gameRequest.MaxPlayerCount,
 		app.models.Game,
@@ -122,6 +127,9 @@ func (app *application) createGameHandler(w http.ResponseWriter, r *http.Request
 			delete(app.gameRooms, code)
 			app.mu.Unlock()
 		},
+		RoundTime,
+		BackupTime,
+		TTLResetPeriod,
 	)
 
 	app.mu.Lock()
