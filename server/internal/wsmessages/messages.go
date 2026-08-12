@@ -3,23 +3,23 @@ package wsmessages
 type WSEvent string
 
 const (
-	ConnectionEstablished   = WSEvent("connection:established")
-	WelcomeToTheGame        = WSEvent("game:welcome")
-	PlayerJoined            = WSEvent("player:joined")
-	PlayerLeft              = WSEvent("player:left")
-	StartGameRequest        = WSEvent("request:game:start")
-	ShowGameLoading         = WSEvent("ingame:show:loading")
-	GameDataTreasures       = WSEvent("game:data:treasures")
-	NotEnoughPlayers        = WSEvent("game:insufficient:players")
-	TreasureClaimSuccessful = WSEvent("game:treasureclaim:successful")
-	BonusClaimSuccessful    = WSEvent("game:bonusclaim:successful")
-	BeginGame               = WSEvent("game:begin")
-	MapRoundOver            = WSEvent("game:round:over")
-	NextRound               = WSEvent("game:round:next")
-	ResumeGameInProgress    = WSEvent("game:resume")
-	ResumeGameTransitioning = WSEvent("game:resume:transitioning")
-	NewGame                 = WSEvent("game:new")
-	ResetGame               = WSEvent("game:reset")
+	ConnectionEstablished   = WSEvent("connection:established")        // server->client
+	WelcomeToTheGame        = WSEvent("game:welcome")                  // server->client
+	PlayerJoined            = WSEvent("player:joined")                 // server->client
+	PlayerLeft              = WSEvent("player:left")                   // server->client
+	StartGameRequest        = WSEvent("request:game:start")            // client->server
+	ShowGameLoading         = WSEvent("ingame:show:loading")           // server->client
+	GameDataTreasures       = WSEvent("game:data:treasures")           // server->client
+	NotEnoughPlayers        = WSEvent("game:insufficient:players")     // server->client
+	TreasureClaimSuccessful = WSEvent("game:treasureclaim:successful") // server->client
+	BonusClaimSuccessful    = WSEvent("game:bonusclaim:successful")    // server->client
+	BeginGame               = WSEvent("game:begin")                    // server->client
+	MapRoundOver            = WSEvent("game:round:over")               // server->client
+	NextRound               = WSEvent("game:round:next")               // client->server
+	ResumeGameInProgress    = WSEvent("game:resume")                   // server->client
+	ResumeGameTransitioning = WSEvent("game:resume:transitioning")     // server->client
+	NewGame                 = WSEvent("game:new")                      // client->server
+	ResetGame               = WSEvent("game:reset")                    // server->client
 )
 
 type WSMessage struct {
