@@ -20,3 +20,16 @@ export function getBonusPointsForPoints(points: number, count: number, multiplie
 	const overflow = count - factors.length;
 	return round(p * factors[factors.length - 1] * m + overflow * (p * 0.8 * m));
 }
+
+const RARITY_STYLES: Record<string, string> = {
+	common: 'badge badge-sm badge-ghost font-semibold',
+	rare: 'badge badge-sm badge-info font-bold',
+	epic: 'badge badge-sm badge-secondary font-bold',
+	legendary: 'badge badge-sm badge-warning font-extrabold'
+};
+
+export function getPlayerClaimedTreasureToastMessage(claimer: string, rarity: string): string {
+	const rarityClass = RARITY_STYLES[rarity.toLowerCase()] ?? 'font-bold';
+
+	return `<span class="font-semibold text-secondary">${claimer}</span> has claimed a <span class="${rarityClass}">${rarity}</span> item!`;
+}

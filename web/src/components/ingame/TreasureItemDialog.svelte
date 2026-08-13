@@ -6,7 +6,7 @@
 	let {
 		item,
 		onClose,
-		onDonate
+		onDonate: _onDonate
 	}: {
 		item: TreasureItem;
 		onClose: () => void;
@@ -167,14 +167,14 @@
 
 			<!-- Actions -->
 			<div class="flex flex-col gap-2 pt-1">
-				<button
+				<!-- <button
 					class="btn w-full gap-2 btn-primary"
 					disabled={bonusClaimed}
 					onclick={() => onDonate(item)}
 				>
 					<span>🎁</span>
 					<span>Donate Treasure</span>
-				</button>
+				</button> -->
 				<button
 					class="btn w-full gap-2 btn-outline btn-error"
 					disabled={bonusClaimed}

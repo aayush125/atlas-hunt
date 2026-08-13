@@ -191,6 +191,9 @@ func (c *Client) TryClaimTreasure(treasureInstanceID uuid.UUID, questionID, sele
 					"points":         c.points,
 				},
 			},
+			Info: map[string]any{
+				"rarity": t.Rarity,
+			},
 		}
 	} else {
 		c.failedToClaimCount++

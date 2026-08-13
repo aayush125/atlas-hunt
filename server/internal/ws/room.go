@@ -18,6 +18,7 @@ type playerLookupRequest struct {
 type playerNotification struct {
 	Client  *Client
 	Message wsmessages.WSMessage
+	Info    map[string]any
 }
 
 type roundStartData struct {
@@ -333,6 +334,22 @@ func (r *Room) Run() {
 			if err != nil {
 				r.logger.Error("error updating player stats", "playerSession", notification.Client.session)
 			}
+
+			for player, online := range r.Players {
+				if !online || player == notification.Client {
+					continue
+				}
+				err := player.Send(wsmessages.WSMessage{
+					Type: wsmessages.PlayerClaimedTreasure,
+					Data: map[string]any{
+						"claimer": notification.Client.nickname,
+						"rarity":  notification.Info["rarity"],
+					},
+				})
+				if err != nil {
+					r.logger.Error("error broadcasting treasure claim notification to player", "error", err, "playerId", player.id)
+				}
+			}
 		case notification := <-r.NotifyBonusClaimed:
 			err := notification.Client.Send(notification.Message)
 			if err != nil {
@@ -370,10 +387,13 @@ func (r *Room) Run() {
 			}
 
 			if r.State == data.GameStateLobby { // if game is still in lobby, delete the player
+				playerCount := len(r.Players)
 				delete(r.Players, player)
-				err := r.GameModel.RemovePlayerFromSet(r.Code, player.session)
-				if err != nil {
-					r.logger.Error("error removing player from set in redis", "playerSession", player.session, "error", err)
+				if playerCount > 1 { // to prevent "record not found" error when the room's defer function tries to clean up the player set
+					err := r.GameModel.RemovePlayerFromSet(r.Code, player.session)
+					if err != nil {
+						r.logger.Error("error removing player from set in redis", "playerSession", player.session, "error", err)
+					}
 				}
 
 				err = r.PlayerModel.Delete(player.session)

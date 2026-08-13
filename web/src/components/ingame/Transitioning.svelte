@@ -19,12 +19,6 @@
 				return 3;
 		}
 	}
-
-	function getPlayerNicknameFromId(id: string) {
-		if (id === $gameStore.playerId) return $gameStore.playerName;
-		const player = $gameStore.otherPlayers.find((p) => p.id === id);
-		return player?.nickname;
-	}
 </script>
 
 {#if $gameStore.map && $gameStore.mapRoundStats[$gameStore.map] !== null}
@@ -100,7 +94,7 @@
 											? 'font-bold'
 											: ''}"
 									>
-										{getPlayerNicknameFromId(player)}
+										{gameStore.getPlayerNicknameFromId(player)}
 									</span>
 									{#if player === $gameStore.playerId}
 										<span class="badge badge-sm badge-info">you</span>

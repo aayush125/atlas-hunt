@@ -15,7 +15,8 @@ export const Events = {
 	ResumeGame: 'game:resume',
 	ResumeGameTransitioning: 'game:resume:transitioning',
 	NewGame: 'game:new',
-	ResetGame: 'game:reset'
+	ResetGame: 'game:reset',
+	PlayerClaimedTreasure: 'player:claimed:treasure'
 } as const;
 
 export type Event = (typeof Events)[keyof typeof Events];

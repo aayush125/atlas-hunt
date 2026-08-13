@@ -6,7 +6,8 @@
 <div class="toast toast-end toast-bottom z-50">
 	{#each $toasts as t (t.id)}
 		<div class="alert alert-{t.type} transition-all duration-300" out:fade={{ duration: 300 }}>
-			<span>{t.message}</span>
+			<!-- eslint-disable-next-line svelte/no-at-html-tags -->
+			<span>{@html t.message}</span>
 		</div>
 	{/each}
 </div>

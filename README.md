@@ -2,7 +2,7 @@
 
 ## Gameplay
 
-This is a web-based multi-player game where players join a room to hunt treasures to collect points. Over 3 rounds, the player with the highest score in at least 2 rounds wins the game.
+This is a web-based multi-player game where players join a room to hunt treasures to collect points. After 3 rounds, the player with the highest score wins the game.
 
 ## Architecture
 
@@ -10,7 +10,6 @@ The server is made in Go using the Gorilla websocket package, following an actor
 
 The following images illustrate the high-level and the real-time architectures of the project.
 
-<br />
 <br />
 
 **High-Level Architecture:**
@@ -30,4 +29,4 @@ The following images illustrate the high-level and the real-time architectures o
 
 ## WebSocket Events
 
-All WebSocket message types are defined in [messages.go](./server/internal/wsmessage/messages.go), with direction annotated per event.
+All WebSocket message types are defined in [messages.go](./server/internal/wsmessages/messages.go), with direction annotated per event.

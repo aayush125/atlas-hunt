@@ -20,6 +20,7 @@ const (
 	ResumeGameTransitioning = WSEvent("game:resume:transitioning")     // server->client
 	NewGame                 = WSEvent("game:new")                      // client->server
 	ResetGame               = WSEvent("game:reset")                    // server->client
+	PlayerClaimedTreasure   = WSEvent("player:claimed:treasure")       // server->client
 )
 
 type WSMessage struct {

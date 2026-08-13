@@ -15,6 +15,8 @@
 	import { PUBLIC_WS_BASE } from '$env/static/public';
 	import type { PageProps } from './$types';
 	import Rejoin from '../../components/Rejoin.svelte';
+	import { toast } from '../../stores/toast';
+	import { getPlayerClaimedTreasureToastMessage } from '$lib/helpers';
 
 	let { data }: PageProps = $props();
 
@@ -94,10 +96,12 @@
 				if (info.id !== $gameStore.playerId) {
 					gameStore.addPlayer(info.id, info.nickname);
 				}
+				toast(`${info.nickname} has joined the game`, 'info');
 				break;
 			}
 			case Events.PlayerLeft: {
 				const info = data.data as { id: string };
+				toast(`${gameStore.getPlayerNicknameFromId(info.id)} has left the game`, 'info');
 				gameStore.removePlayer(info.id);
 				break;
 			}
@@ -107,6 +111,11 @@
 			}
 			case Events.NotEnoughPlayers: {
 				console.log('NOT ENOUGH PLAYERS');
+				break;
+			}
+			case Events.PlayerClaimedTreasure: {
+				const info = data.data as { claimer: string; rarity: string };
+				toast(getPlayerClaimedTreasureToastMessage(info.claimer, info.rarity), 'info');
 				break;
 			}
 			case Events.GameDataTreasures: {

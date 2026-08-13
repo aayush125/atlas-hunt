@@ -1,7 +1,7 @@
 import type { Game, GameMap, MapRoundOverStats } from '$lib/types/game';
 import type { Member, Player } from '$lib/types/player';
 import type { TreasureItem } from '$lib/types/treasure';
-import { derived, writable } from 'svelte/store';
+import { derived, get, writable } from 'svelte/store';
 
 type GamePhase = 'idle' | 'waiting' | 'loading' | 'in-game' | 'game-over' | 'transitioning';
 
@@ -141,6 +141,12 @@ function createGameStore() {
 			update((game) => ({ ...game, mapRoundStats: { ...game.mapRoundStats, [map]: stats } })),
 		getMapRoundStats: (map: GameMap) =>
 			derived({ subscribe }, ($gameStore) => $gameStore.mapRoundStats[map]),
+		getPlayerNicknameFromId: (id: string) => {
+			const $gameStore = get({ subscribe });
+			if (id === $gameStore.playerId) return $gameStore.playerName;
+			const player = $gameStore.otherPlayers.find((p) => p.id === id);
+			return player?.nickname;
+		},
 		startRound: (serverNow: number, endsAt: number) =>
 			update((game) => ({ ...game, serverNow: serverNow, roundEndsAt: endsAt })),
 		updateRoundTreasureCount: (count: number) =>
