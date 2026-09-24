@@ -72,7 +72,7 @@
 				console.log(`Reconnecting in ${delay}ms (attempt ${retryCount + 1}/${MAX_RETRIES})...`);
 				retryTimeout = setTimeout(() => {
 					retryCount++;
-					// connectToWs();
+					connectToWs(true);
 				}, delay);
 			} else if (retryCount >= MAX_RETRIES) {
 				connectionState = 'failed';
