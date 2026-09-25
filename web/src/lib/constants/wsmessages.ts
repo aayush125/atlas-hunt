@@ -16,7 +16,19 @@ export const Events = {
 	ResumeGameTransitioning: 'game:resume:transitioning',
 	NewGame: 'game:new',
 	ResetGame: 'game:reset',
-	PlayerClaimedTreasure: 'player:claimed:treasure'
+	PlayerClaimedTreasure: 'player:claimed:treasure',
+	RequestTreasure: 'game:treasure:request',
+	DonateTreasure: 'game:treasure:donate',
+
+	ErrorDonatingTreasure: 'game:treasuredonate:error',
+	ErrorInvalidTreasureRequest: 'game:treasuredonate:invalid:request',
+	ErrorTreasureRequestNotFound: 'game:treasuredonate:request:notfound',
+	ErrorDonationSlotsInsufficient: 'game:treasuredonate:slots:insufficient ',
+	ErrorInsufficientBalance: 'game:treasuredonate:insufficient:balance',
+	TreasureRequestAlreadyExists: 'game:treasurerequest:exists',
+
+	TreasureDonatedSuccessfully: 'game:treasuredonate:successful',
+	TreasureReceivedSuccessfully: 'game:treasurerequest:receive:successful'
 } as const;
 
 export type Event = (typeof Events)[keyof typeof Events];

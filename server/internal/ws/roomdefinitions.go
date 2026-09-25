@@ -17,13 +17,32 @@ type playerLookupRequest struct {
 
 type playerNotification struct {
 	Client  *Client
-	Message wsmessages.WSMessage
+	Message wsmessages.WSMessageOut
 	Info    map[string]any
 }
 
 type roundStartData struct {
 	roundTime int64
 	roundMap  data.GameMap
+}
+
+type treasureRequestState struct {
+	treasureId      string
+	requestedAmount int
+	amountReceived  int
+}
+
+type treasureRequestPayload struct {
+	PlayerId        string `json:"playerId"`
+	TreasureId      string `json:"treasureId"`
+	RequestedAmount int    `json:"requestedAmount"`
+}
+
+type treasureDonationPayload struct {
+	From          string `json:"from"` // donating player ID
+	To            string `json:"to"`   // receiving player ID
+	TreasureId    string `json:"treasureId"`
+	DonatedAmount int    `json:"donatedAmount"`
 }
 
 type Player interface {
@@ -61,7 +80,7 @@ type Room struct {
 	currentMap            data.GameMap
 	logger                *slog.Logger
 	maxPlayers            int
-	Broadcast             chan *wsmessages.WSMessage
+	Broadcast             chan *wsmessages.WSMessageOut
 	engine                *engine.Engine
 	PlayerLookup          chan playerLookupRequest
 	NotifyTreasureClaimed chan playerNotification
@@ -74,4 +93,7 @@ type Room struct {
 	roundTime             time.Duration
 	backupTime            time.Duration
 	ttlResetPeriod        time.Duration
+	treasureRequests      map[string]treasureRequestState // requesting player ID -> treasure request state
+	treasureRequestChan   chan treasureRequestPayload
+	treasureDonationChan  chan treasureDonationPayload
 }

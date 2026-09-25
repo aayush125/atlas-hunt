@@ -1,5 +1,7 @@
 package wsmessages
 
+import "encoding/json"
+
 type WSEvent string
 
 const (
@@ -21,9 +23,27 @@ const (
 	NewGame                 = WSEvent("game:new")                      // client->server
 	ResetGame               = WSEvent("game:reset")                    // server->client
 	PlayerClaimedTreasure   = WSEvent("player:claimed:treasure")       // server->client
+
+	RequestTreasure = WSEvent("game:treasure:request") // client->server
+	DonateTreasure  = WSEvent("game:treasure:donate")  // client->server
+
+	ErrorDonatingTreasure          = WSEvent("game:treasuredonate:error")                // server->client
+	ErrorInvalidTreasureRequest    = WSEvent("game:treasuredonate:invalid:request")      // server->client
+	ErrorTreasureRequestNotFound   = WSEvent("game:treasuredonate:request:notfound")     // server->client
+	ErrorDonationSlotsInsufficient = WSEvent("game:treasuredonate:slots:insufficient ")  // server->client
+	ErrorInsufficientBalance       = WSEvent("game:treasuredonate:insufficient:balance") // server->client
+	TreasureRequestAlreadyExists   = WSEvent("game:treasurerequest:exists")              // server->client
+
+	TreasureDonatedSuccessfully  = WSEvent("game:treasuredonate:successful")          // server->client
+	TreasureReceivedSuccessfully = WSEvent("game:treasurerequest:receive:successful") // server->client
 )
 
-type WSMessage struct {
+type WSMessageOut struct {
 	Type WSEvent        `json:"type"`
 	Data map[string]any `json:"data"`
+}
+
+type WSMessageIn struct {
+	Type WSEvent                    `json:"type"`
+	Data map[string]json.RawMessage `json:"data"`
 }

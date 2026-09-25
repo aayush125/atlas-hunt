@@ -32,7 +32,7 @@ var (
 
 type Client struct {
 	conn        *websocket.Conn
-	send        chan wsmessages.WSMessage
+	send        chan wsmessages.WSMessageOut
 	logger      *slog.Logger
 	done        chan struct{}
 	room        *Room
@@ -64,7 +64,7 @@ type ClientSnapshot struct {
 func NewClient(conn *websocket.Conn, room *Room, nickname, id, session string, logger *slog.Logger, isCreator bool) *Client {
 	return &Client{
 		conn:          conn,
-		send:          make(chan wsmessages.WSMessage, 8),
+		send:          make(chan wsmessages.WSMessageOut, 8),
 		logger:        logger,
 		done:          make(chan struct{}),
 		room:          room,
@@ -132,7 +132,7 @@ func (c *Client) TryClaimBonusPoints(treasureID string) error {
 
 	c.room.NotifyBonusClaimed <- playerNotification{
 		Client: c,
-		Message: wsmessages.WSMessage{
+		Message: wsmessages.WSMessageOut{
 			Type: wsmessages.BonusClaimSuccessful,
 			Data: map[string]any{
 				"points":      c.points,
@@ -182,7 +182,7 @@ func (c *Client) TryClaimTreasure(treasureInstanceID uuid.UUID, questionID, sele
 
 		c.room.NotifyTreasureClaimed <- playerNotification{
 			Client: c,
-			Message: wsmessages.WSMessage{
+			Message: wsmessages.WSMessageOut{
 				Type: wsmessages.TreasureClaimSuccessful,
 				Data: map[string]any{
 					"instance_id":    treasureInstanceID,
@@ -200,6 +200,48 @@ func (c *Client) TryClaimTreasure(treasureInstanceID uuid.UUID, questionID, sele
 	}
 
 	return correct, nil
+}
+
+func (c *Client) tryDonateTreasure(treasureId string, amount int) error {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+
+	if c.treasureCount[treasureId] < amount {
+		return ErrInvalidTreasureCount
+	}
+
+	c.treasureCount[treasureId] -= amount
+
+	if c.treasureCount[treasureId] <= 0 {
+		delete(c.treasureCount, treasureId)
+	}
+
+	newInventory := []gamedata.InventoryItem{}
+	requestedAmount := amount
+	for _, item := range c.inventory {
+		if item.ID == treasureId && requestedAmount > 0 {
+			requestedAmount--
+			continue
+		}
+		newInventory = append(newInventory, item)
+	}
+
+	c.inventory = newInventory
+
+	return nil
+}
+
+func (c *Client) receiveTreasure(treasureId string, treasureItems []gamedata.InventoryItem) {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+
+	if _, ok := c.treasureCount[treasureId]; !ok {
+		c.treasureCount[treasureId] = len(treasureItems)
+	} else {
+		c.treasureCount[treasureId] += len(treasureItems)
+	}
+
+	c.inventory = append(c.inventory, treasureItems...)
 }
 
 func (c *Client) setTreasureSet(set []gamedata.TreasureItem) {
@@ -236,7 +278,7 @@ func (c *Client) Reset() {
 	c.points = 0
 }
 
-func (c *Client) Send(v wsmessages.WSMessage) error {
+func (c *Client) Send(v wsmessages.WSMessageOut) error {
 	select {
 	case c.send <- v:
 		return nil
@@ -250,12 +292,12 @@ func (c *Client) Instantiate(conn *websocket.Conn) {
 	defer c.mu.Unlock()
 
 	c.conn = conn
-	c.send = make(chan wsmessages.WSMessage, 8)
+	c.send = make(chan wsmessages.WSMessageOut, 8)
 	c.done = make(chan struct{})
 }
 
 func (c *Client) handleMessage(message []byte) {
-	var msg wsmessages.WSMessage
+	var msg wsmessages.WSMessageIn
 	err := json.Unmarshal(message, &msg)
 	if err != nil {
 		c.logger.Error("ws message unmarshal error", "error", err.Error(), "client", c.session)
@@ -269,6 +311,20 @@ func (c *Client) handleMessage(message []byte) {
 		c.room.NextRound <- c
 	case wsmessages.NewGame:
 		c.room.NewGame <- c
+	case wsmessages.RequestTreasure:
+		var req treasureRequestPayload
+		if err := json.Unmarshal(msg.Data["request"], &req); err != nil {
+			c.logger.Error("ws message unmarshal error", "error", err.Error(), "client", c.session)
+			return
+		}
+		c.room.treasureRequestChan <- req
+	case wsmessages.DonateTreasure:
+		var req treasureDonationPayload
+		if err := json.Unmarshal(msg.Data["request"], &req); err != nil {
+			c.logger.Error("ws message unmarshal error", "error", err.Error(), "client", c.session)
+			return
+		}
+		c.room.treasureDonationChan <- req
 	default:
 		c.logger.Warn("unrecognized message from client", "clientSession", c.session, "message", msg)
 	}
@@ -310,7 +366,7 @@ func (c *Client) WritePump() {
 
 	// notify the client that the websocket connection has been established
 	c.conn.SetWriteDeadline(time.Now().Add(writeWait))
-	data, err := json.Marshal(wsmessages.WSMessage{Type: wsmessages.ConnectionEstablished})
+	data, err := json.Marshal(wsmessages.WSMessageOut{Type: wsmessages.ConnectionEstablished})
 	if err != nil {
 		c.logger.Error("failed to marshal websocket connection established message")
 		return
