@@ -6,7 +6,9 @@ import (
 
 	"atlas.sageyutta.com/internal/data"
 	"atlas.sageyutta.com/internal/engine"
+	"atlas.sageyutta.com/internal/gamedata"
 	"atlas.sageyutta.com/internal/wsmessages"
+	"github.com/google/uuid"
 )
 
 func NewRoom(
@@ -38,7 +40,7 @@ func NewRoom(
 		Code:                  code,
 		maxPlayers:            maxPlayers,
 		logger:                logger,
-		Broadcast:             make(chan *wsmessages.WSMessage),
+		Broadcast:             make(chan *wsmessages.WSMessageOut),
 		engine:                engine,
 		PlayerLookup:          make(chan playerLookupRequest),
 		NotifyTreasureClaimed: make(chan playerNotification),
@@ -137,7 +139,7 @@ func (r *Room) Run() {
 				r.logger.Error("error updating player stats", "playerSession", notification.Client.session)
 			}
 
-			treasureClaimedMessage := wsmessages.WSMessage{
+			treasureClaimedMessage := wsmessages.WSMessageOut{
 				Type: wsmessages.PlayerClaimedTreasure,
 				Data: map[string]any{
 					"claimer": notification.Client.nickname,
@@ -198,6 +200,241 @@ func (r *Room) Run() {
 			playerSnapshot := r.getPlayerSnapshot()
 
 			r.setTTLForGameAndPlayers(playerSnapshot)
+		case request := <-r.treasureRequestChan:
+			// basic validation
+			requester := r.getPlayerClientFromId(request.PlayerId)
+			if requester == nil {
+				r.sendMessageToPlayer(
+					requester,
+					wsmessages.WSMessageOut{
+						Type: wsmessages.ErrorDonatingTreasure,
+						Data: map[string]any{
+							"request": request,
+						},
+					},
+					"error sending ErrorDonatingTreasure message",
+				)
+				break
+			}
+
+			if request.RequestedAmount < 0 {
+				r.sendMessageToPlayer(
+					requester,
+					wsmessages.WSMessageOut{
+						Type: wsmessages.ErrorInvalidTreasureRequest,
+						Data: map[string]any{
+							"request": request,
+						},
+					},
+					"error sending ErrorInvalidTreasureRequest message",
+				)
+				break
+			}
+
+			_, ok := r.treasureRequests[request.PlayerId]
+
+			if ok {
+				r.sendMessageToPlayer(
+					requester,
+					wsmessages.WSMessageOut{
+						Type: wsmessages.TreasureRequestAlreadyExists,
+						Data: map[string]any{
+							"request": request,
+						},
+					},
+					"error sending ErrorInvalidTreasureRequest message",
+				)
+				break
+			}
+
+			r.treasureRequests[request.PlayerId] = treasureRequestState{
+				treasureId:      request.TreasureId,
+				requestedAmount: request.RequestedAmount,
+			}
+		case donation := <-r.treasureDonationChan:
+			// basic validation
+			donor := r.getPlayerClientFromId(donation.From)
+			receiver := r.getPlayerClientFromId(donation.To)
+
+			if donor == nil || receiver == nil {
+				r.sendMessageToPlayer(
+					donor,
+					wsmessages.WSMessageOut{
+						Type: wsmessages.ErrorDonatingTreasure,
+						Data: map[string]any{
+							"request": donation,
+						},
+					},
+					"error sending ErrorDonatingTreasure message",
+				)
+				break
+			}
+
+			if donation.DonatedAmount < 0 {
+				r.sendMessageToPlayer(
+					donor,
+					wsmessages.WSMessageOut{
+						Type: wsmessages.ErrorInvalidTreasureRequest,
+						Data: map[string]any{
+							"request": donation,
+						},
+					},
+					"error sending ErrorInvalidTreasureRequest message",
+				)
+				break
+			}
+
+			if donation.From == donation.To {
+				r.sendMessageToPlayer(
+					donor,
+					wsmessages.WSMessageOut{
+						Type: wsmessages.ErrorInvalidTreasureRequest,
+						Data: map[string]any{
+							"request": donation,
+						},
+					},
+					"error sending ErrorInvalidTreasureRequest message",
+				)
+				break
+			}
+
+			// check if receiving player has an active request
+			req, ok := r.treasureRequests[donation.To]
+			if !ok {
+				r.sendMessageToPlayer(
+					donor,
+					wsmessages.WSMessageOut{
+						Type: wsmessages.ErrorTreasureRequestNotFound,
+						Data: map[string]any{
+							"request": donation,
+						},
+					},
+					"error sending ErrorTreasureRequestNotFound message",
+				)
+				break
+			}
+
+			// ensure donated amount is less than or equal to available slots
+			if donation.DonatedAmount > req.requestedAmount-req.amountReceived {
+				// can't donate more than available slots
+				r.sendMessageToPlayer(
+					donor,
+					wsmessages.WSMessageOut{
+						Type: wsmessages.ErrorDonationSlotsInsufficient,
+						Data: map[string]any{
+							"request": donation,
+						},
+					},
+					"error sending ErrorDonationSlotsInsufficient message",
+				)
+				break
+			}
+
+			treasureInfo := r.engine.GetTreasureInfoFromId(donation.TreasureId)
+			if treasureInfo == nil {
+				// return an "error donating treasure" to client
+				r.sendMessageToPlayer(
+					donor,
+					wsmessages.WSMessageOut{
+						Type: wsmessages.ErrorDonatingTreasure,
+						Data: map[string]any{
+							"request": donation,
+						},
+					},
+					"error sending ErrorDonatingTreasure message",
+				)
+				break
+			}
+
+			// construct the treasure set
+			set := []gamedata.InventoryItem{}
+			for _ = range donation.DonatedAmount {
+				treasure_uuid, err := uuid.NewRandom()
+				if err != nil {
+					r.logger.Error("error generating uuid for donated treasure item", "error", err, "donatingPlayerId", donation.From)
+					break
+				}
+				treasureItem := gamedata.InventoryItem{
+					InventoryItemBase: gamedata.InventoryItemBase{
+						InstanceID:  treasure_uuid,
+						ID:          treasureInfo.ID,
+						Name:        treasureInfo.Name,
+						Icon:        treasureInfo.Icon,
+						Cat:         treasureInfo.Cat,
+						Rarity:      treasureInfo.Rarity,
+						Points:      treasureInfo.Points,
+						BoostPoints: treasureInfo.BoostPoints,
+					},
+				}
+				set = append(set, treasureItem)
+			}
+
+			if len(set) < donation.DonatedAmount {
+				r.sendMessageToPlayer(
+					donor,
+					wsmessages.WSMessageOut{
+						Type: wsmessages.ErrorDonatingTreasure,
+						Data: map[string]any{
+							"request": donation,
+						},
+					},
+					"error sending ErrorDonatingTreasure message",
+				)
+				break
+			}
+
+			// finally, donate
+			err := donor.tryDonateTreasure(donation.TreasureId, donation.DonatedAmount)
+			if err != nil {
+				r.sendMessageToPlayer(
+					donor,
+					wsmessages.WSMessageOut{
+						Type: wsmessages.ErrorInsufficientBalance,
+						Data: map[string]any{
+							"request": donation,
+						},
+					},
+					"error sending ErrorInsufficientBalance message",
+				)
+				break
+			}
+
+			// receive treasure
+			receiver.receiveTreasure(donation.TreasureId, set)
+
+			// remove or update treasure request
+			req.amountReceived += donation.DonatedAmount
+			if req.amountReceived >= req.requestedAmount {
+				delete(r.treasureRequests, donation.To)
+			} else {
+				r.treasureRequests[donation.To] = req
+			}
+
+			r.sendMessageToPlayer(
+				donor,
+				wsmessages.WSMessageOut{
+					Type: wsmessages.TreasureDonatedSuccessfully,
+					Data: map[string]any{
+						"treasureId":    donation.TreasureId,
+						"donatedAmount": donation.DonatedAmount,
+						"donatedTo":     donation.To,
+					},
+				},
+				"error sending TreasureDonatedSuccessfully message",
+			)
+
+			r.sendMessageToPlayer(
+				receiver,
+				wsmessages.WSMessageOut{
+					Type: wsmessages.TreasureReceivedSuccessfully,
+					Data: map[string]any{
+						"treasureId":     donation.TreasureId,
+						"receivedAmount": donation.DonatedAmount,
+						"donatedBy":      donation.From,
+					},
+				},
+				"error sending TreasureReceivedSuccessfully message",
+			)
 		}
 	}
 }
