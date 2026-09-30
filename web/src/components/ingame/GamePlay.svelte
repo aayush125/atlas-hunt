@@ -1,14 +1,15 @@
 <script lang="ts">
+	import { INVENTORY_SIZE } from '$lib/constants/gameplay';
+	import type { Treasure } from '$lib/types/treasure';
+	import { gameStore } from '../../stores/gameStore';
 	import InfoIcon from '../icons/InfoIcon.svelte';
 	import LeaveIcon from '../icons/LeaveIcon.svelte';
 	import GameInfoDialog from './GameInfoDialog.svelte';
+	import InventoryGrid from './InventoryGrid.svelte';
 	import LeaveGameDialog from './LeaveGameDialog.svelte';
 	import Map from './Map.svelte';
-	import { gameStore } from '../../stores/gameStore';
-	import InventoryGrid from './InventoryGrid.svelte';
-	import type { Treasure } from '$lib/types/treasure';
 	import PlayerList from './PlayerList.svelte';
-	import { INVENTORY_SIZE } from '$lib/constants/gameplay';
+	import Requests from './Requests.svelte';
 
 	let {
 		treasures,
@@ -24,7 +25,7 @@
 
 	let showInfoModal = $state(false);
 	let showLeaveConfirm = $state(false);
-	let activeTab = $state<'inventory' | 'players'>('inventory');
+	let activeTab = $state<'inventory' | 'players' | 'donations'>('inventory');
 
 	let now = $state(Date.now());
 	let timeLeft = $derived.by(() => {
@@ -138,6 +139,13 @@
 			>
 				Players
 			</button>
+			<button
+				role="tab"
+				class="tab {activeTab === 'donations' ? 'tab-active' : ''}"
+				onclick={() => (activeTab = 'donations')}
+			>
+				Requests
+			</button>
 		</div>
 
 		<!-- Tab content -->
@@ -150,9 +158,38 @@
 						<InventoryGrid treasures={$gameStore.treasures} />
 					{/if}
 				</div>
-			{:else}
-				<!-- <div class="mt-8 text-center text-sm text-base-content/50">No players to show.</div> -->
+			{:else if activeTab == 'players'}
 				<PlayerList players={$gameStore.otherPlayers} />
+			{:else}
+				<Requests
+					requests={{
+						player_001: {
+							treasureId: 'ng02',
+							requestedAmount: 100,
+							amountReceived: 35
+						},
+						player_002: {
+							treasureId: 'st05',
+							requestedAmount: 250,
+							amountReceived: 120
+						},
+						player_003: {
+							treasureId: 'hc07',
+							requestedAmount: 150,
+							amountReceived: 150
+						},
+						player_004: {
+							treasureId: 'fd07',
+							requestedAmount: 500,
+							amountReceived: 275
+						},
+						player_005: {
+							treasureId: 'ae07',
+							requestedAmount: 75,
+							amountReceived: 10
+						}
+					}}
+				/>
 			{/if}
 		</div>
 	</div>

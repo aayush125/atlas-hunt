@@ -231,6 +231,20 @@ func (r *Room) Run() {
 				break
 			}
 
+			if !requester.canReceiveTreasure(request.RequestedAmount) {
+				r.sendMessageToPlayer(
+					requester,
+					wsmessages.WSMessageOut{
+						Type: wsmessages.InsufficientInventorySpace,
+						Data: map[string]any{
+							"request": request,
+						},
+					},
+					"error sending InsufficientInventorySpace messagge",
+				)
+				break
+			}
+
 			_, ok := r.treasureRequests[request.PlayerId]
 
 			if ok {
@@ -251,6 +265,19 @@ func (r *Room) Run() {
 				treasureId:      request.TreasureId,
 				requestedAmount: request.RequestedAmount,
 			}
+
+			r.broadcastMessage(
+				&wsmessages.WSMessageOut{
+					Type: wsmessages.UpdateTreasureRequests,
+					Data: map[string]any{
+						"requests": r.treasureRequests,
+					},
+				},
+				func(online bool, player *Client) bool {
+					return !online
+				},
+				"error sending UpdateTreasureRequests message to player",
+			)
 		case donation := <-r.treasureDonationChan:
 			// basic validation
 			donor := r.getPlayerClientFromId(donation.From)
@@ -274,12 +301,12 @@ func (r *Room) Run() {
 				r.sendMessageToPlayer(
 					donor,
 					wsmessages.WSMessageOut{
-						Type: wsmessages.ErrorInvalidTreasureRequest,
+						Type: wsmessages.ErrorInvalidTreasureDonateRequest,
 						Data: map[string]any{
 							"request": donation,
 						},
 					},
-					"error sending ErrorInvalidTreasureRequest message",
+					"error sending ErrorInvalidTreasureDonateRequest message",
 				)
 				break
 			}
@@ -288,12 +315,12 @@ func (r *Room) Run() {
 				r.sendMessageToPlayer(
 					donor,
 					wsmessages.WSMessageOut{
-						Type: wsmessages.ErrorInvalidTreasureRequest,
+						Type: wsmessages.ErrorInvalidTreasureDonateRequest,
 						Data: map[string]any{
 							"request": donation,
 						},
 					},
-					"error sending ErrorInvalidTreasureRequest message",
+					"error sending ErrorInvalidTreasureDonateRequest message",
 				)
 				break
 			}
@@ -310,6 +337,22 @@ func (r *Room) Run() {
 						},
 					},
 					"error sending ErrorTreasureRequestNotFound message",
+				)
+				break
+			}
+
+			// ensure the requesting player has inventory space
+			canReceive := receiver.canReceiveTreasure(donation.DonatedAmount)
+			if !canReceive {
+				r.sendMessageToPlayer(
+					receiver,
+					wsmessages.WSMessageOut{
+						Type: wsmessages.ErrorReceiverInventoryInsufficient,
+						Data: map[string]any{
+							"request": donation,
+						},
+					},
+					"error sending ErrorReceiverInventoryInsufficient message",
 				)
 				break
 			}
@@ -410,6 +453,7 @@ func (r *Room) Run() {
 				r.treasureRequests[donation.To] = req
 			}
 
+			donorSnapshot := donor.Snapshot()
 			r.sendMessageToPlayer(
 				donor,
 				wsmessages.WSMessageOut{
@@ -418,11 +462,15 @@ func (r *Room) Run() {
 						"treasureId":    donation.TreasureId,
 						"donatedAmount": donation.DonatedAmount,
 						"donatedTo":     donation.To,
+						"inventory":     donorSnapshot.Inventory,
+						"treasureCount": donorSnapshot.TreasureCount,
+						"points":        donorSnapshot.Points,
 					},
 				},
 				"error sending TreasureDonatedSuccessfully message",
 			)
 
+			receiverSnapshot := receiver.Snapshot()
 			r.sendMessageToPlayer(
 				receiver,
 				wsmessages.WSMessageOut{
@@ -431,9 +479,24 @@ func (r *Room) Run() {
 						"treasureId":     donation.TreasureId,
 						"receivedAmount": donation.DonatedAmount,
 						"donatedBy":      donation.From,
+						"inventory":      receiverSnapshot.Inventory,
+						"treasureCount":  receiverSnapshot.TreasureCount,
 					},
 				},
 				"error sending TreasureReceivedSuccessfully message",
+			)
+
+			r.broadcastMessage(
+				&wsmessages.WSMessageOut{
+					Type: wsmessages.UpdateTreasureRequests,
+					Data: map[string]any{
+						"requests": r.treasureRequests,
+					},
+				},
+				func(online bool, player *Client) bool {
+					return !online
+				},
+				"error sending UpdateTreasureRequests message to player",
 			)
 		}
 	}

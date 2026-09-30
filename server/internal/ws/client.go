@@ -144,6 +144,17 @@ func (c *Client) TryClaimBonusPoints(treasureID string) error {
 	return nil
 }
 
+func (c *Client) canReceiveTreasure(amount int) bool {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+
+	if inventorySize-len(c.inventory) < amount {
+		return false
+	}
+
+	return true
+}
+
 func (c *Client) TryClaimTreasure(treasureInstanceID uuid.UUID, questionID, selectedAnswer string) (bool, error) {
 	c.mu.Lock()
 	defer c.mu.Unlock()
@@ -228,6 +239,10 @@ func (c *Client) tryDonateTreasure(treasureId string, amount int) error {
 
 	c.inventory = newInventory
 
+	// TODO: reward points based on the rarity of the donated treasure
+	updatedPoints := 5 * amount
+	c.points += updatedPoints
+
 	return nil
 }
 
@@ -235,12 +250,7 @@ func (c *Client) receiveTreasure(treasureId string, treasureItems []gamedata.Inv
 	c.mu.Lock()
 	defer c.mu.Unlock()
 
-	if _, ok := c.treasureCount[treasureId]; !ok {
-		c.treasureCount[treasureId] = len(treasureItems)
-	} else {
-		c.treasureCount[treasureId] += len(treasureItems)
-	}
-
+	c.treasureCount[treasureId] += len(treasureItems)
 	c.inventory = append(c.inventory, treasureItems...)
 }
 
