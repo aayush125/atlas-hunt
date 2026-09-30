@@ -1,3 +1,5 @@
+import raw from './assets/treasures.json';
+
 export const placeHolderTreasures = [
 	{ id: '1', name: 'golden-crown', icon: '👑' },
 	{ id: '2', name: 'ruby-gem', icon: '💎' },
@@ -16,3 +18,21 @@ export const placeHolderTreasures = [
 	{ id: '15', name: 'dragon-egg', icon: '🥚' },
 	{ id: '16', name: 'shining-star', icon: '⭐' }
 ];
+
+export const rawTreasures = raw;
+export const treasuresById = new Map(raw.map((item) => [item.id, item]));
+
+export function rarityClass(rarity: string) {
+	switch (rarity.toLowerCase()) {
+		case 'common':
+			return 'badge-ghost';
+		case 'uncommon':
+			return 'badge-info';
+		case 'rare':
+			return 'badge-secondary';
+		case 'legendary':
+			return 'badge-warning';
+		default:
+			return 'badge-outline';
+	}
+}

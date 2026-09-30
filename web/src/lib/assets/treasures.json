@@ -1,0 +1,834 @@
+[
+  {
+    "id": "ng01",
+    "name": "Amazon River Stone",
+    "icon": "🪨",
+    "cat": "Nature & Geography",
+    "rarity": "Common",
+    "points": 10
+  },
+  {
+    "id": "ng02",
+    "name": "Sahara Sand Vial",
+    "icon": "🏜️",
+    "cat": "Nature & Geography",
+    "rarity": "Common",
+    "points": 10
+  },
+  {
+    "id": "ng03",
+    "name": "Everest Summit Flag",
+    "icon": "🚩",
+    "cat": "Nature & Geography",
+    "rarity": "Legendary",
+    "points": 150
+  },
+  {
+    "id": "ng04",
+    "name": "Pacific Shell",
+    "icon": "🐚",
+    "cat": "Nature & Geography",
+    "rarity": "Common",
+    "points": 10
+  },
+  {
+    "id": "ng05",
+    "name": "Nile Papyrus",
+    "icon": "📜",
+    "cat": "Nature & Geography",
+    "rarity": "Rare",
+    "points": 25
+  },
+  {
+    "id": "ng06",
+    "name": "Volcanic Crystal",
+    "icon": "💎",
+    "cat": "Nature & Geography",
+    "rarity": "Epic",
+    "points": 60
+  },
+  {
+    "id": "ng07",
+    "name": "Northern Lights Orb",
+    "icon": "🔮",
+    "cat": "Nature & Geography",
+    "rarity": "Legendary",
+    "points": 150
+  },
+  {
+    "id": "ng08",
+    "name": "Glacier Ice Cube",
+    "icon": "🧊",
+    "cat": "Nature & Geography",
+    "rarity": "Rare",
+    "points": 25
+  },
+  {
+    "id": "ng09",
+    "name": "Rainforest Leaf",
+    "icon": "🌿",
+    "cat": "Nature & Geography",
+    "rarity": "Common",
+    "points": 10
+  },
+  {
+    "id": "ng10",
+    "name": "Mariana Trench Pearl",
+    "icon": "🫧",
+    "cat": "Nature & Geography",
+    "rarity": "Epic",
+    "points": 60
+  },
+  {
+    "id": "ng11",
+    "name": "Great Barrier Reef Coral",
+    "icon": "🪸",
+    "cat": "Nature & Geography",
+    "rarity": "Rare",
+    "points": 25
+  },
+  {
+    "id": "ng12",
+    "name": "Victoria Falls Mist",
+    "icon": "💧",
+    "cat": "Nature & Geography",
+    "rarity": "Epic",
+    "points": 60
+  },
+  {
+    "id": "ng13",
+    "name": "Dead Sea Salt Crystal",
+    "icon": "🧂",
+    "cat": "Nature & Geography",
+    "rarity": "Rare",
+    "points": 25
+  },
+  {
+    "id": "st01",
+    "name": "DNA Double Helix",
+    "icon": "🧬",
+    "cat": "Science & Technology",
+    "rarity": "Epic",
+    "points": 60
+  },
+  {
+    "id": "st02",
+    "name": "Newton's Apple",
+    "icon": "🍎",
+    "cat": "Science & Technology",
+    "rarity": "Common",
+    "points": 10
+  },
+  {
+    "id": "st03",
+    "name": "Periodic Table Tile",
+    "icon": "⚗️",
+    "cat": "Science & Technology",
+    "rarity": "Rare",
+    "points": 25
+  },
+  {
+    "id": "st04",
+    "name": "Circuit Board Fragment",
+    "icon": "💻",
+    "cat": "Science & Technology",
+    "rarity": "Common",
+    "points": 10
+  },
+  {
+    "id": "st05",
+    "name": "Black Hole Shard",
+    "icon": "🌑",
+    "cat": "Science & Technology",
+    "rarity": "Legendary",
+    "points": 150
+  },
+  {
+    "id": "st06",
+    "name": "Tesla Coil Spark",
+    "icon": "⚡",
+    "cat": "Science & Technology",
+    "rarity": "Rare",
+    "points": 25
+  },
+  {
+    "id": "st07",
+    "name": "Quantum Qubit",
+    "icon": "🔵",
+    "cat": "Science & Technology",
+    "rarity": "Legendary",
+    "points": 150
+  },
+  {
+    "id": "st08",
+    "name": "Lab Flask",
+    "icon": "🧪",
+    "cat": "Science & Technology",
+    "rarity": "Common",
+    "points": 10
+  },
+  {
+    "id": "st09",
+    "name": "Genome Sequencer Token",
+    "icon": "🔬",
+    "cat": "Science & Technology",
+    "rarity": "Epic",
+    "points": 60
+  },
+  {
+    "id": "st10",
+    "name": "Higgs Boson Badge",
+    "icon": "⚛️",
+    "cat": "Science & Technology",
+    "rarity": "Legendary",
+    "points": 150
+  },
+  {
+    "id": "st11",
+    "name": "Internet Node",
+    "icon": "🌐",
+    "cat": "Science & Technology",
+    "rarity": "Rare",
+    "points": 25
+  },
+  {
+    "id": "st12",
+    "name": "Rocket Nozzle",
+    "icon": "🚀",
+    "cat": "Science & Technology",
+    "rarity": "Epic",
+    "points": 60
+  },
+  {
+    "id": "st13",
+    "name": "Solar Cell",
+    "icon": "☀️",
+    "cat": "Science & Technology",
+    "rarity": "Common",
+    "points": 10
+  },
+  {
+    "id": "hc01",
+    "name": "Egyptian Cartouche",
+    "icon": "📿",
+    "cat": "History & Culture",
+    "rarity": "Rare",
+    "points": 25
+  },
+  {
+    "id": "hc02",
+    "name": "Roman Coin",
+    "icon": "🪙",
+    "cat": "History & Culture",
+    "rarity": "Common",
+    "points": 10
+  },
+  {
+    "id": "hc03",
+    "name": "Magna Carta Seal",
+    "icon": "📜",
+    "cat": "History & Culture",
+    "rarity": "Epic",
+    "points": 60
+  },
+  {
+    "id": "hc04",
+    "name": "Samurai Blade Fragment",
+    "icon": "⚔️",
+    "cat": "History & Culture",
+    "rarity": "Rare",
+    "points": 25
+  },
+  {
+    "id": "hc05",
+    "name": "Berlin Wall Chip",
+    "icon": "🧱",
+    "cat": "History & Culture",
+    "rarity": "Epic",
+    "points": 60
+  },
+  {
+    "id": "hc06",
+    "name": "Viking Compass",
+    "icon": "🧭",
+    "cat": "History & Culture",
+    "rarity": "Rare",
+    "points": 25
+  },
+  {
+    "id": "hc07",
+    "name": "Aztec Sun Stone",
+    "icon": "☀️",
+    "cat": "History & Culture",
+    "rarity": "Legendary",
+    "points": 150
+  },
+  {
+    "id": "hc08",
+    "name": "Gutenberg Bible Page",
+    "icon": "📖",
+    "cat": "History & Culture",
+    "rarity": "Epic",
+    "points": 60
+  },
+  {
+    "id": "hc09",
+    "name": "Ancient Olympic Torch",
+    "icon": "🔥",
+    "cat": "History & Culture",
+    "rarity": "Common",
+    "points": 10
+  },
+  {
+    "id": "hc10",
+    "name": "French Revolution Cockade",
+    "icon": "🎗️",
+    "cat": "History & Culture",
+    "rarity": "Rare",
+    "points": 25
+  },
+  {
+    "id": "hc11",
+    "name": "Silk Road Spice Pouch",
+    "icon": "🌶️",
+    "cat": "History & Culture",
+    "rarity": "Common",
+    "points": 10
+  },
+  {
+    "id": "hc12",
+    "name": "Moon Landing Module",
+    "icon": "🌕",
+    "cat": "History & Culture",
+    "rarity": "Legendary",
+    "points": 150
+  },
+  {
+    "id": "hc13",
+    "name": "Inca Gold Idol",
+    "icon": "🗿",
+    "cat": "History & Culture",
+    "rarity": "Epic",
+    "points": 60
+  },
+  {
+    "id": "fd01",
+    "name": "Truffle Shaving",
+    "icon": "🍄",
+    "cat": "Food & Drink",
+    "rarity": "Legendary",
+    "points": 150
+  },
+  {
+    "id": "fd02",
+    "name": "Saffron Thread",
+    "icon": "🌸",
+    "cat": "Food & Drink",
+    "rarity": "Epic",
+    "points": 60
+  },
+  {
+    "id": "fd03",
+    "name": "Vintage Wine Cork",
+    "icon": "🍷",
+    "cat": "Food & Drink",
+    "rarity": "Rare",
+    "points": 25
+  },
+  {
+    "id": "fd04",
+    "name": "Street Taco",
+    "icon": "🌮",
+    "cat": "Food & Drink",
+    "rarity": "Common",
+    "points": 10
+  },
+  {
+    "id": "fd05",
+    "name": "Aged Cheese Wedge",
+    "icon": "🧀",
+    "cat": "Food & Drink",
+    "rarity": "Rare",
+    "points": 25
+  },
+  {
+    "id": "fd06",
+    "name": "Matcha Bowl",
+    "icon": "🍵",
+    "cat": "Food & Drink",
+    "rarity": "Rare",
+    "points": 25
+  },
+  {
+    "id": "fd07",
+    "name": "Sourdough Loaf",
+    "icon": "🍞",
+    "cat": "Food & Drink",
+    "rarity": "Common",
+    "points": 10
+  },
+  {
+    "id": "fd08",
+    "name": "Wagyu Cut",
+    "icon": "🥩",
+    "cat": "Food & Drink",
+    "rarity": "Legendary",
+    "points": 150
+  },
+  {
+    "id": "fd09",
+    "name": "Dark Chocolate Bar",
+    "icon": "🍫",
+    "cat": "Food & Drink",
+    "rarity": "Common",
+    "points": 10
+  },
+  {
+    "id": "fd10",
+    "name": "Ramen Bowl",
+    "icon": "🍜",
+    "cat": "Food & Drink",
+    "rarity": "Common",
+    "points": 10
+  },
+  {
+    "id": "fd11",
+    "name": "Hot Sauce Bottle",
+    "icon": "🌶️",
+    "cat": "Food & Drink",
+    "rarity": "Rare",
+    "points": 25
+  },
+  {
+    "id": "fd12",
+    "name": "Champagne Flute",
+    "icon": "🥂",
+    "cat": "Food & Drink",
+    "rarity": "Epic",
+    "points": 60
+  },
+  {
+    "id": "fd13",
+    "name": "Ancient Honey Jar",
+    "icon": "🍯",
+    "cat": "Food & Drink",
+    "rarity": "Epic",
+    "points": 60
+  },
+  {
+    "id": "ae01",
+    "name": "Mona Lisa Miniature",
+    "icon": "🖼️",
+    "cat": "Arts & Entertainment",
+    "rarity": "Legendary",
+    "points": 150
+  },
+  {
+    "id": "ae02",
+    "name": "Shakespeare Quill",
+    "icon": "✒️",
+    "cat": "Arts & Entertainment",
+    "rarity": "Epic",
+    "points": 60
+  },
+  {
+    "id": "ae03",
+    "name": "Film Reel",
+    "icon": "🎞️",
+    "cat": "Arts & Entertainment",
+    "rarity": "Rare",
+    "points": 25
+  },
+  {
+    "id": "ae04",
+    "name": "Beethoven Score",
+    "icon": "🎼",
+    "cat": "Arts & Entertainment",
+    "rarity": "Epic",
+    "points": 60
+  },
+  {
+    "id": "ae05",
+    "name": "Jazz Trumpet",
+    "icon": "🎺",
+    "cat": "Arts & Entertainment",
+    "rarity": "Rare",
+    "points": 25
+  },
+  {
+    "id": "ae06",
+    "name": "Ballet Slipper",
+    "icon": "🩰",
+    "cat": "Arts & Entertainment",
+    "rarity": "Common",
+    "points": 10
+  },
+  {
+    "id": "ae07",
+    "name": "Comic Book Issue #1",
+    "icon": "💬",
+    "cat": "Arts & Entertainment",
+    "rarity": "Rare",
+    "points": 25
+  },
+  {
+    "id": "ae08",
+    "name": "Starry Night Brush",
+    "icon": "🎨",
+    "cat": "Arts & Entertainment",
+    "rarity": "Epic",
+    "points": 60
+  },
+  {
+    "id": "ae09",
+    "name": "Grammy Gramophone",
+    "icon": "🏆",
+    "cat": "Arts & Entertainment",
+    "rarity": "Legendary",
+    "points": 150
+  },
+  {
+    "id": "ae10",
+    "name": "Neon Sign",
+    "icon": "🔴",
+    "cat": "Arts & Entertainment",
+    "rarity": "Common",
+    "points": 10
+  },
+  {
+    "id": "ae11",
+    "name": "Novel First Edition",
+    "icon": "📚",
+    "cat": "Arts & Entertainment",
+    "rarity": "Rare",
+    "points": 25
+  },
+  {
+    "id": "ae12",
+    "name": "Disco Ball Shard",
+    "icon": "✨",
+    "cat": "Arts & Entertainment",
+    "rarity": "Common",
+    "points": 10
+  },
+  {
+    "id": "ae13",
+    "name": "Oscar Statuette",
+    "icon": "🏅",
+    "cat": "Arts & Entertainment",
+    "rarity": "Legendary",
+    "points": 150
+  },
+  {
+    "id": "sg01",
+    "name": "World Cup Trophy",
+    "icon": "🏆",
+    "cat": "Sports & Games",
+    "rarity": "Legendary",
+    "points": 150
+  },
+  {
+    "id": "sg02",
+    "name": "Olympic Gold Medal",
+    "icon": "🥇",
+    "cat": "Sports & Games",
+    "rarity": "Epic",
+    "points": 60
+  },
+  {
+    "id": "sg03",
+    "name": "Chess King",
+    "icon": "♟️",
+    "cat": "Sports & Games",
+    "rarity": "Rare",
+    "points": 25
+  },
+  {
+    "id": "sg04",
+    "name": "Tennis Racket String",
+    "icon": "🎾",
+    "cat": "Sports & Games",
+    "rarity": "Common",
+    "points": 10
+  },
+  {
+    "id": "sg05",
+    "name": "Basketball",
+    "icon": "🏀",
+    "cat": "Sports & Games",
+    "rarity": "Common",
+    "points": 10
+  },
+  {
+    "id": "sg06",
+    "name": "Tour de France Jersey",
+    "icon": "🚴",
+    "cat": "Sports & Games",
+    "rarity": "Epic",
+    "points": 60
+  },
+  {
+    "id": "sg07",
+    "name": "Poker Chip Stack",
+    "icon": "🃏",
+    "cat": "Sports & Games",
+    "rarity": "Rare",
+    "points": 25
+  },
+  {
+    "id": "sg08",
+    "name": "Sumo Belt",
+    "icon": "🥋",
+    "cat": "Sports & Games",
+    "rarity": "Rare",
+    "points": 25
+  },
+  {
+    "id": "sg09",
+    "name": "Cricket Ball",
+    "icon": "🏏",
+    "cat": "Sports & Games",
+    "rarity": "Common",
+    "points": 10
+  },
+  {
+    "id": "sg10",
+    "name": "Formula 1 Trophy",
+    "icon": "🏎️",
+    "cat": "Sports & Games",
+    "rarity": "Legendary",
+    "points": 150
+  },
+  {
+    "id": "sg11",
+    "name": "Bowling Pin",
+    "icon": "🎳",
+    "cat": "Sports & Games",
+    "rarity": "Common",
+    "points": 10
+  },
+  {
+    "id": "sg12",
+    "name": "Fencing Foil",
+    "icon": "🤺",
+    "cat": "Sports & Games",
+    "rarity": "Rare",
+    "points": 25
+  },
+  {
+    "id": "sg13",
+    "name": "Ancient Dice",
+    "icon": "🎲",
+    "cat": "Sports & Games",
+    "rarity": "Epic",
+    "points": 60
+  },
+  {
+    "id": "sa01",
+    "name": "Moon Rock",
+    "icon": "🌑",
+    "cat": "Space & Astronomy",
+    "rarity": "Epic",
+    "points": 60
+  },
+  {
+    "id": "sa02",
+    "name": "Mars Dust Sample",
+    "icon": "🔴",
+    "cat": "Space & Astronomy",
+    "rarity": "Rare",
+    "points": 25
+  },
+  {
+    "id": "sa03",
+    "name": "Pulsar Beacon",
+    "icon": "💫",
+    "cat": "Space & Astronomy",
+    "rarity": "Legendary",
+    "points": 150
+  },
+  {
+    "id": "sa04",
+    "name": "Saturn Ring Fragment",
+    "icon": "🪐",
+    "cat": "Space & Astronomy",
+    "rarity": "Epic",
+    "points": 60
+  },
+  {
+    "id": "sa05",
+    "name": "Hubble Photo",
+    "icon": "🔭",
+    "cat": "Space & Astronomy",
+    "rarity": "Rare",
+    "points": 25
+  },
+  {
+    "id": "sa06",
+    "name": "Comet Tail",
+    "icon": "☄️",
+    "cat": "Space & Astronomy",
+    "rarity": "Rare",
+    "points": 25
+  },
+  {
+    "id": "sa07",
+    "name": "Supernova Core",
+    "icon": "💥",
+    "cat": "Space & Astronomy",
+    "rarity": "Legendary",
+    "points": 150
+  },
+  {
+    "id": "sa08",
+    "name": "Voyager Golden Record",
+    "icon": "💿",
+    "cat": "Space & Astronomy",
+    "rarity": "Legendary",
+    "points": 150
+  },
+  {
+    "id": "sa09",
+    "name": "ISS Bolt",
+    "icon": "🛸",
+    "cat": "Space & Astronomy",
+    "rarity": "Epic",
+    "points": 60
+  },
+  {
+    "id": "sa10",
+    "name": "Nebula Fragment",
+    "icon": "🌌",
+    "cat": "Space & Astronomy",
+    "rarity": "Epic",
+    "points": 60
+  },
+  {
+    "id": "sa11",
+    "name": "Solar Flare Ember",
+    "icon": "🌞",
+    "cat": "Space & Astronomy",
+    "rarity": "Rare",
+    "points": 25
+  },
+  {
+    "id": "sa12",
+    "name": "Exoplanet Token",
+    "icon": "🌍",
+    "cat": "Space & Astronomy",
+    "rarity": "Common",
+    "points": 10
+  },
+  {
+    "id": "sa13",
+    "name": "Dark Matter Trace",
+    "icon": "🕳️",
+    "cat": "Space & Astronomy",
+    "rarity": "Legendary",
+    "points": 150
+  },
+  {
+    "id": "aw01",
+    "name": "Octopus Ink Vial",
+    "icon": "🐙",
+    "cat": "Animals & Wildlife",
+    "rarity": "Epic",
+    "points": 60
+  },
+  {
+    "id": "aw02",
+    "name": "Tiger Stripe",
+    "icon": "🐯",
+    "cat": "Animals & Wildlife",
+    "rarity": "Rare",
+    "points": 25
+  },
+  {
+    "id": "aw03",
+    "name": "Whale Song Crystal",
+    "icon": "🐋",
+    "cat": "Animals & Wildlife",
+    "rarity": "Legendary",
+    "points": 150
+  },
+  {
+    "id": "aw04",
+    "name": "Monarch Butterfly Wing",
+    "icon": "🦋",
+    "cat": "Animals & Wildlife",
+    "rarity": "Rare",
+    "points": 25
+  },
+  {
+    "id": "aw05",
+    "name": "Chameleon Scale",
+    "icon": "🦎",
+    "cat": "Animals & Wildlife",
+    "rarity": "Rare",
+    "points": 25
+  },
+  {
+    "id": "aw06",
+    "name": "Honeybee Comb",
+    "icon": "🐝",
+    "cat": "Animals & Wildlife",
+    "rarity": "Common",
+    "points": 10
+  },
+  {
+    "id": "aw07",
+    "name": "Deep Sea Anglerfish Lure",
+    "icon": "🐟",
+    "cat": "Animals & Wildlife",
+    "rarity": "Epic",
+    "points": 60
+  },
+  {
+    "id": "aw08",
+    "name": "Wolf Pack Token",
+    "icon": "🐺",
+    "cat": "Animals & Wildlife",
+    "rarity": "Common",
+    "points": 10
+  },
+  {
+    "id": "aw09",
+    "name": "Tardigrade Vial",
+    "icon": "🔬",
+    "cat": "Animals & Wildlife",
+    "rarity": "Legendary",
+    "points": 150
+  },
+  {
+    "id": "aw10",
+    "name": "Platypus Bill",
+    "icon": "🦆",
+    "cat": "Animals & Wildlife",
+    "rarity": "Epic",
+    "points": 60
+  },
+  {
+    "id": "aw11",
+    "name": "Elephant Tusk Shard",
+    "icon": "🐘",
+    "cat": "Animals & Wildlife",
+    "rarity": "Rare",
+    "points": 25
+  },
+  {
+    "id": "aw12",
+    "name": "Migratory Bird Band",
+    "icon": "🐦",
+    "cat": "Animals & Wildlife",
+    "rarity": "Common",
+    "points": 10
+  },
+  {
+    "id": "aw13",
+    "name": "Coral Reef Spine",
+    "icon": "🪸",
+    "cat": "Animals & Wildlife",
+    "rarity": "Epic",
+    "points": 60
+  }
+]

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Events } from '$lib/constants/wsmessages';
+	import { ErrorEventsMap, Events } from '$lib/constants/wsmessages';
 	import type { Game, GameMap, MapRoundOverStats } from '$lib/types/game';
 	import type { Member, Player } from '$lib/types/player';
 	import type { Treasure, TreasureItem } from '$lib/types/treasure';
@@ -90,6 +90,12 @@
 	function handleMessage(data: WSMessage) {
 		console.log('Message received:', data);
 
+		const errorMessage = ErrorEventsMap[data.type];
+		if (errorMessage) {
+			toast(errorMessage, 'error');
+			return;
+		}
+
 		switch (data.type) {
 			case Events.PlayerJoined: {
 				const info = data.data as { id: string; nickname: string };
@@ -107,10 +113,6 @@
 			}
 			case Events.ShowGameLoading: {
 				gameStore.setGameState('loading');
-				break;
-			}
-			case Events.NotEnoughPlayers: {
-				console.log('NOT ENOUGH PLAYERS');
 				break;
 			}
 			case Events.PlayerClaimedTreasure: {
@@ -327,12 +329,23 @@
 		<GameLoading />
 	{:else if $gameStore.state === 'idle'}
 		{#if gate === 'join'}
-			<JoinGame
+			<!-- <JoinGame
 				onCreateGame={() => (gate = 'create')}
 				onGameJoined={(player: Player, game: Game, members: Member[]) => {
 					connectToWs();
 					gameStore.setupGame(game, player, members);
 				}}
+			/> -->
+			<GamePlay
+				treasures={mapTreasures}
+				onClaim={(t) => {
+					mapTreasures = mapTreasures.filter((tr) => tr.instanceId !== t.instanceId);
+					gameStore.addTreasure(t);
+				}}
+				onFail={(t) => {
+					mapTreasures = mapTreasures.filter((tr) => tr.instanceId !== t.instanceId);
+				}}
+				onLeaveGame={leaveGameHandler}
 			/>
 		{:else}
 			<CreateGame

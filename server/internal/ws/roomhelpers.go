@@ -1,6 +1,7 @@
 package ws
 
 import (
+	"fmt"
 	"maps"
 	"time"
 
@@ -232,7 +233,7 @@ func (r *Room) broadcastMessage(message *wsmessages.WSMessageOut, shouldSkip fun
 		if err != nil {
 			errMsg := customErrMsg
 			if errMsg == "" {
-				errMsg = "error sending broadcast message to player"
+				errMsg = fmt.Sprintf("error sending broadcast message (%s) to player", message.Type)
 			}
 			r.logger.Error(errMsg, "error", err, "playerId", player.id)
 		}
@@ -414,6 +415,11 @@ func (r *Room) getPlayerClientFromId(id string) *Client {
 }
 
 func (r *Room) sendMessageToPlayer(player *Client, message wsmessages.WSMessageOut, customErr string) bool {
+	if online := r.Players[player]; !online {
+		r.logger.Error("sendMessageToPlayer: player not online; skipping send message", "playerId", player.id)
+		return false
+	}
+
 	err := player.Send(message)
 	errMsg := customErr
 	if errMsg == "" {

@@ -1,3 +1,4 @@
+import type { TreasureRequests } from '$lib/types/requests';
 import type { Game, GameMap, MapRoundOverStats } from '$lib/types/game';
 import type { Member, Player } from '$lib/types/player';
 import type { TreasureItem } from '$lib/types/treasure';
@@ -23,6 +24,7 @@ interface GameState {
 	serverNow: number | null;
 	roundEndsAt: number | null;
 	mapRoundStats: Record<GameMap, MapRoundOverStats | null>;
+	treasureRequests: TreasureRequests;
 }
 
 const initial: GameState = {
@@ -34,11 +36,35 @@ const initial: GameState = {
 	createdAt: null,
 	playerIsCreator: false,
 	currentPlayerCount: 0,
-	otherPlayers: [],
+	otherPlayers: [
+		{
+			id: 'player_001',
+			nickname: 'DragonSlayer'
+		},
+		{
+			id: 'player_002',
+			nickname: 'TreasureHunter'
+		},
+		{
+			id: 'player_003',
+			nickname: 'NightWolf'
+		},
+		{
+			id: 'player_004',
+			nickname: 'GoldDigger'
+		},
+		{
+			id: 'player_005',
+			nickname: 'ShadowMage'
+		}
+	],
 	map: null,
 	treasures: [],
 	points: 0,
-	treasureCount: {},
+	treasureCount: {
+		ng02: 2,
+		ae07: 5
+	},
 	treasureCountThisRound: null,
 	serverNow: null,
 	roundEndsAt: null,
@@ -46,7 +72,8 @@ const initial: GameState = {
 		first: null,
 		second: null,
 		third: null
-	}
+	},
+	treasureRequests: {}
 };
 
 function createGameStore() {
@@ -76,7 +103,8 @@ function createGameStore() {
 					first: null,
 					second: null,
 					third: null
-				}
+				},
+				treasureRequests: {}
 			})),
 		setGameState: (state: GamePhase) => update((game) => ({ ...game, state })),
 		addPlayer: (id: string, nickname: string) =>
