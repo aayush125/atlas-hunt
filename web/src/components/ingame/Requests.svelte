@@ -1,15 +1,28 @@
 <script lang="ts">
-	import { gameStore } from '../../stores/gameStore';
+	import { treasuresById } from '$lib/treasures';
 	import type { TreasureRequests } from '$lib/types/requests';
-	import { rawTreasures, treasuresById } from '$lib/treasures';
-	import TreasureRequestDialog from './TreasureRequestDialog.svelte';
+	import { gameStore } from '../../stores/gameStore';
 	import TreasureDonateDialog from './TreasureDonateDialog.svelte';
+	import TreasureRequestDialog from './TreasureRequestDialog.svelte';
 
-	let { requests }: { requests: TreasureRequests } = $props();
+	let {
+		requests,
+		onRequest,
+		onDonate
+	}: {
+		requests: TreasureRequests;
+		onRequest: (treasureId: string, amount: number) => void;
+		onDonate: (treasureId: string, amount: number, donateTo: string) => void;
+	} = $props();
 
 	let showRequestModal = $state(false);
 	let showDonateModal = $state(false);
-	let treasureIdToDonate = $state('');
+	let donateModalData = $state<{
+		treasureId: string;
+		reqAmount: number;
+		recAmount: number;
+		donateTo: string;
+	}>();
 </script>
 
 <div class="space-y-3">
@@ -54,22 +67,35 @@
 							{/if}
 						</div>
 
-						<progress
-							class="progress mt-1 w-full progress-primary"
-							value={request.amountReceived}
-							max={request.requestedAmount}
-						></progress>
+						<div class="flex items-center gap-2">
+							<progress
+								class="progress mt-1 w-full progress-primary"
+								value={request.amountReceived}
+								max={request.requestedAmount}
+							></progress>
+							<span class="text-sm font-medium"
+								>{request.amountReceived}/{request.requestedAmount}</span
+							>
+						</div>
 					</div>
 
-					<button
-						class="btn shrink-0 btn-sm btn-primary"
-						onclick={() => {
-							treasureIdToDonate = request.treasureId;
-							showDonateModal = true;
-						}}
-					>
-						Donate
-					</button>
+					{#if requesterId !== $gameStore.playerId}
+						<button
+							class="btn shrink-0 btn-sm btn-primary"
+							onclick={() => {
+								const data = {
+									treasureId: request.treasureId,
+									reqAmount: request.requestedAmount,
+									recAmount: request.amountReceived,
+									donateTo: requesterId
+								};
+								donateModalData = data;
+								showDonateModal = true;
+							}}
+						>
+							Donate
+						</button>
+					{/if}
 				</div>
 			{/each}
 		</div>
@@ -78,11 +104,24 @@
 
 <!-- Request Modal -->
 {#if showRequestModal}
-	<TreasureRequestDialog onCancel={() => (showRequestModal = false)} onRequest={() => {}} />
-{:else if showDonateModal && treasureIdToDonate}
+	<TreasureRequestDialog
+		onCancel={() => (showRequestModal = false)}
+		onRequest={(treasureId: string, amount: number) => {
+			onRequest(treasureId, amount);
+			showRequestModal = false;
+		}}
+	/>
+{:else if showDonateModal && donateModalData}
 	<TreasureDonateDialog
-		treasureId={treasureIdToDonate}
+		treasureId={donateModalData.treasureId}
+		reqAmount={donateModalData.reqAmount}
+		recAmount={donateModalData.recAmount}
+		donateTo={donateModalData.donateTo}
 		onCancel={() => (showDonateModal = false)}
-		onDonate={() => {}}
+		onDonate={(treasureId: string, amount: number, donateTo: string) => {
+			onDonate(treasureId, amount, donateTo);
+			showDonateModal = false;
+			donateModalData = undefined;
+		}}
 	/>
 {/if}

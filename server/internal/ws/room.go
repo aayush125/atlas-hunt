@@ -54,6 +54,10 @@ func NewRoom(
 		roundTime:      roundTime,
 		backupTime:     backupTime,
 		ttlResetPeriod: ttlResetPeriod,
+
+		treasureRequests:     make(map[string]treasureRequestState),
+		treasureRequestChan:  make(chan treasureRequestPayload),
+		treasureDonationChan: make(chan treasureDonationPayload),
 	}
 }
 
@@ -217,7 +221,7 @@ func (r *Room) Run() {
 				break
 			}
 
-			if request.RequestedAmount < 0 {
+			if request.RequestedAmount <= 0 {
 				r.sendMessageToPlayer(
 					requester,
 					wsmessages.WSMessageOut{
@@ -262,8 +266,8 @@ func (r *Room) Run() {
 			}
 
 			r.treasureRequests[request.PlayerId] = treasureRequestState{
-				treasureId:      request.TreasureId,
-				requestedAmount: request.RequestedAmount,
+				TreasureId:      request.TreasureId,
+				RequestedAmount: request.RequestedAmount,
 			}
 
 			r.broadcastMessage(
@@ -284,16 +288,7 @@ func (r *Room) Run() {
 			receiver := r.getPlayerClientFromId(donation.To)
 
 			if donor == nil || receiver == nil {
-				r.sendMessageToPlayer(
-					donor,
-					wsmessages.WSMessageOut{
-						Type: wsmessages.ErrorDonatingTreasure,
-						Data: map[string]any{
-							"request": donation,
-						},
-					},
-					"error sending ErrorDonatingTreasure message",
-				)
+				r.logger.Error("receiver or donor nil")
 				break
 			}
 
@@ -345,7 +340,7 @@ func (r *Room) Run() {
 			canReceive := receiver.canReceiveTreasure(donation.DonatedAmount)
 			if !canReceive {
 				r.sendMessageToPlayer(
-					receiver,
+					donor,
 					wsmessages.WSMessageOut{
 						Type: wsmessages.ErrorReceiverInventoryInsufficient,
 						Data: map[string]any{
@@ -358,7 +353,7 @@ func (r *Room) Run() {
 			}
 
 			// ensure donated amount is less than or equal to available slots
-			if donation.DonatedAmount > req.requestedAmount-req.amountReceived {
+			if donation.DonatedAmount > req.RequestedAmount-req.AmountReceived {
 				// can't donate more than available slots
 				r.sendMessageToPlayer(
 					donor,
@@ -446,8 +441,8 @@ func (r *Room) Run() {
 			receiver.receiveTreasure(donation.TreasureId, set)
 
 			// remove or update treasure request
-			req.amountReceived += donation.DonatedAmount
-			if req.amountReceived >= req.requestedAmount {
+			req.AmountReceived += donation.DonatedAmount
+			if req.AmountReceived >= req.RequestedAmount {
 				delete(r.treasureRequests, donation.To)
 			} else {
 				r.treasureRequests[donation.To] = req

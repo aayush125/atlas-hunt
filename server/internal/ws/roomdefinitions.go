@@ -27,9 +27,9 @@ type roundStartData struct {
 }
 
 type treasureRequestState struct {
-	treasureId      string
-	requestedAmount int
-	amountReceived  int
+	TreasureId      string `json:"treasureId"`
+	RequestedAmount int    `json:"requestedAmount"`
+	AmountReceived  int    `json:"amountReceived"`
 }
 
 type treasureRequestPayload struct {

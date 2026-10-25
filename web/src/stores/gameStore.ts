@@ -36,35 +36,11 @@ const initial: GameState = {
 	createdAt: null,
 	playerIsCreator: false,
 	currentPlayerCount: 0,
-	otherPlayers: [
-		{
-			id: 'player_001',
-			nickname: 'DragonSlayer'
-		},
-		{
-			id: 'player_002',
-			nickname: 'TreasureHunter'
-		},
-		{
-			id: 'player_003',
-			nickname: 'NightWolf'
-		},
-		{
-			id: 'player_004',
-			nickname: 'GoldDigger'
-		},
-		{
-			id: 'player_005',
-			nickname: 'ShadowMage'
-		}
-	],
+	otherPlayers: [],
 	map: null,
 	treasures: [],
 	points: 0,
-	treasureCount: {
-		ng02: 2,
-		ae07: 5
-	},
+	treasureCount: {},
 	treasureCountThisRound: null,
 	serverNow: null,
 	roundEndsAt: null,
@@ -130,6 +106,8 @@ function createGameStore() {
 		setMembers: (members: Member[]) => update((game) => ({ ...game, otherPlayers: members })),
 		setInventory: (inventory: TreasureItem[]) =>
 			update((game) => ({ ...game, treasures: inventory })),
+		setTreasureRequests: (requests: TreasureRequests) =>
+			update((game) => ({ ...game, treasureRequests: requests })),
 		setTreasureCount: (treasure_count: Record<string, number>) =>
 			update((game) => ({ ...game, treasureCount: treasure_count })),
 		deleteTreasureCount: (treasureId: string) =>
