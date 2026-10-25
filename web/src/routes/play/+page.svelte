@@ -17,6 +17,8 @@
 	import Rejoin from '../../components/Rejoin.svelte';
 	import { toast } from '../../stores/toast';
 	import { getPlayerClaimedTreasureToastMessage } from '$lib/helpers';
+	import type { TreasureRequests } from '$lib/types/requests';
+	import { treasuresById } from '$lib/treasures';
 
 	let { data }: PageProps = $props();
 
@@ -145,6 +147,7 @@
 					all_player_points: Record<string, number>;
 					inventory: TreasureItem[];
 					treasure_count: Record<string, number>;
+					treasure_requests: TreasureRequests;
 					nickname: string;
 					player_id: string;
 					points: number;
@@ -163,6 +166,7 @@
 				gameStore.setInventory(info.inventory);
 				gameStore.setMembers(info.members);
 				gameStore.setMap(info.map);
+				gameStore.setTreasureRequests(info.treasure_requests);
 
 				const stats: MapRoundOverStats = {
 					map: info.map,
@@ -184,6 +188,7 @@
 					inventory: TreasureItem[];
 					treasure_set: Treasure[];
 					treasure_count: Record<string, number>;
+					treasure_requests: TreasureRequests;
 					nickname: string;
 					player_id: string;
 					points: number;
@@ -205,6 +210,7 @@
 				gameStore.setInventory(info.inventory);
 				gameStore.setMembers(info.members);
 				gameStore.setMap(info.map);
+				gameStore.setTreasureRequests(info.treasure_requests);
 				gameStore.startRound(info.server_now, info.ends_at);
 				gameStore.setGameState('in-game');
 				rejoinPromptDismissed = true;
@@ -241,6 +247,50 @@
 					gameStore.updatePoints(stats.all_player_points[$gameStore.playerId]);
 				gameStore.setGameState('transitioning');
 				console.log('Received map round over message');
+				break;
+			}
+			case Events.UpdateTreasureRequests: {
+				const requests = data.data as { requests: TreasureRequests };
+				console.log('received requests', requests.requests);
+				gameStore.setTreasureRequests(requests.requests);
+				break;
+			}
+			case Events.TreasureDonatedSuccessfully: {
+				const donationData = data.data as {
+					treasureId: string;
+					donatedAmount: number;
+					donatedTo: string;
+					inventory: TreasureItem[];
+					treasureCount: Record<string, number>;
+					points: number;
+				};
+
+				toast(
+					`You donated ${donationData.donatedAmount} ${treasuresById.get(donationData.treasureId)?.name} to ${gameStore.getPlayerNicknameFromId(donationData.donatedTo)}`,
+					'success'
+				);
+
+				gameStore.setInventory(donationData.inventory);
+				gameStore.setTreasureCount(donationData.treasureCount);
+				gameStore.updatePoints(donationData.points);
+				break;
+			}
+			case Events.TreasureReceivedSuccessfully: {
+				const receivedTreasureData = data.data as {
+					treasureId: string;
+					receivedAmount: number;
+					donatedBy: string;
+					inventory: TreasureItem[];
+					treasureCount: Record<string, number>;
+				};
+
+				toast(
+					`You received ${receivedTreasureData.receivedAmount} ${treasuresById.get(receivedTreasureData.treasureId)?.name} from ${gameStore.getPlayerNicknameFromId(receivedTreasureData.donatedBy)}`,
+					'success'
+				);
+
+				gameStore.setInventory(receivedTreasureData.inventory);
+				gameStore.setTreasureCount(receivedTreasureData.treasureCount);
 				break;
 			}
 			default: {
@@ -329,15 +379,40 @@
 		<GameLoading />
 	{:else if $gameStore.state === 'idle'}
 		{#if gate === 'join'}
-			<!-- <JoinGame
+			<JoinGame
 				onCreateGame={() => (gate = 'create')}
 				onGameJoined={(player: Player, game: Game, members: Member[]) => {
 					connectToWs();
 					gameStore.setupGame(game, player, members);
 				}}
-			/> -->
-			<GamePlay
+			/>
+			<!-- <GamePlay
 				treasures={mapTreasures}
+				onRequest={(treasureId: string, reqAmount: number) => {
+					sendMessage({
+						type: Events.RequestTreasure,
+						data: {
+							request: {
+								playerId: $gameStore.playerId,
+								treasureId: treasureId,
+								requestedAmount: reqAmount
+							}
+						}
+					});
+				}}
+				onDonate={(treasureId: string, amount: number, donateTo: string) => {
+					sendMessage({
+						type: Events.DonateTreasure,
+						data: {
+							request: {
+								from: $gameStore.playerId,
+								to: donateTo,
+								treasureId: treasureId,
+								donatedAmount: amount
+							}
+						}
+					});
+				}}
 				onClaim={(t) => {
 					mapTreasures = mapTreasures.filter((tr) => tr.instanceId !== t.instanceId);
 					gameStore.addTreasure(t);
@@ -346,7 +421,7 @@
 					mapTreasures = mapTreasures.filter((tr) => tr.instanceId !== t.instanceId);
 				}}
 				onLeaveGame={leaveGameHandler}
-			/>
+			/> -->
 		{:else}
 			<CreateGame
 				onJoinGame={() => (gate = 'join')}
@@ -359,6 +434,31 @@
 	{:else if $gameStore.state === 'in-game'}
 		<GamePlay
 			treasures={mapTreasures}
+			onRequest={(treasureId: string, reqAmount: number) => {
+				sendMessage({
+					type: Events.RequestTreasure,
+					data: {
+						request: {
+							playerId: $gameStore.playerId,
+							treasureId: treasureId,
+							requestedAmount: reqAmount
+						}
+					}
+				});
+			}}
+			onDonate={(treasureId: string, amount: number, donateTo: string) => {
+				sendMessage({
+					type: Events.DonateTreasure,
+					data: {
+						request: {
+							from: $gameStore.playerId,
+							to: donateTo,
+							treasureId: treasureId,
+							donatedAmount: amount
+						}
+					}
+				});
+			}}
 			onClaim={(t) => {
 				mapTreasures = mapTreasures.filter((tr) => tr.instanceId !== t.instanceId);
 				gameStore.addTreasure(t);

@@ -4,12 +4,18 @@
 
 	let {
 		treasureId,
+		reqAmount,
+		recAmount,
+		donateTo,
 		onCancel,
 		onDonate
 	}: {
 		treasureId: string;
+		reqAmount: number;
+		recAmount: number;
+		donateTo: string;
 		onCancel: () => void;
-		onDonate: (treasureId: string, amount: number) => void;
+		onDonate: (treasureId: string, amount: number, donateTo: string) => void;
 	} = $props();
 
 	let treasure = $derived(rawTreasures.find((t) => t.id === treasureId));
@@ -34,7 +40,7 @@
 
 	function submit(event: SubmitEvent) {
 		event.preventDefault();
-		if (canSubmit && donatedAmount) onDonate(treasureId, donatedAmount);
+		if (canSubmit && donatedAmount) onDonate(treasureId, donatedAmount, donateTo);
 	}
 
 	function onKeydown(event: KeyboardEvent) {
@@ -82,7 +88,7 @@
 						</div>
 
 						<div class="mt-1 text-xs text-base-content/60">
-							{treasure.points} points · You have {treasureCount}
+							{treasure.points} points · You have {treasureCount} · Needs {reqAmount - recAmount}
 						</div>
 					</div>
 				</div>
@@ -107,7 +113,9 @@
 						<button
 							type="button"
 							class="btn join-item btn-outline"
-							onclick={() => (donatedAmount = treasureCount)}
+							onclick={() =>
+								(donatedAmount =
+									treasureCount < reqAmount - recAmount ? treasureCount : reqAmount - recAmount)}
 						>
 							Max
 						</button>

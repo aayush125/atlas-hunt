@@ -13,11 +13,15 @@
 
 	let {
 		treasures,
+		onRequest,
+		onDonate,
 		onClaim,
 		onFail,
 		onLeaveGame
 	}: {
 		treasures: Treasure[];
+		onRequest: (treasureId: string, amount: number) => void;
+		onDonate: (treasureId: string, amount: number, donateTo: string) => void;
 		onClaim: (t: Treasure) => void;
 		onFail: (t: Treasure) => void;
 		onLeaveGame: () => Promise<void>;
@@ -145,6 +149,11 @@
 				onclick={() => (activeTab = 'donations')}
 			>
 				Requests
+				{#if Object.keys($gameStore.treasureRequests).length > 0}
+					&ThickSpace;<span class="badge badge-sm badge-info"
+						>{Object.keys($gameStore.treasureRequests).length}</span
+					>
+				{/if}
 			</button>
 		</div>
 
@@ -161,35 +170,7 @@
 			{:else if activeTab == 'players'}
 				<PlayerList players={$gameStore.otherPlayers} />
 			{:else}
-				<Requests
-					requests={{
-						player_001: {
-							treasureId: 'ng02',
-							requestedAmount: 100,
-							amountReceived: 35
-						},
-						player_002: {
-							treasureId: 'st05',
-							requestedAmount: 250,
-							amountReceived: 120
-						},
-						player_003: {
-							treasureId: 'hc07',
-							requestedAmount: 150,
-							amountReceived: 150
-						},
-						player_004: {
-							treasureId: 'fd07',
-							requestedAmount: 500,
-							amountReceived: 275
-						},
-						player_005: {
-							treasureId: 'ae07',
-							requestedAmount: 75,
-							amountReceived: 10
-						}
-					}}
-				/>
+				<Requests requests={$gameStore.treasureRequests} {onRequest} {onDonate} />
 			{/if}
 		</div>
 	</div>
