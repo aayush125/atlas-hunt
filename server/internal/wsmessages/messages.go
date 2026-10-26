@@ -42,6 +42,8 @@ const (
 
 	TreasureDonatedSuccessfully  = WSEvent("game:treasuredonate:successful")          // server->client
 	TreasureReceivedSuccessfully = WSEvent("game:treasurerequest:receive:successful") // server->client
+
+	DeleteTreasureRequest = WSEvent("game:treasurerequest:delete") // client->server
 )
 
 type WSMessageOut struct {

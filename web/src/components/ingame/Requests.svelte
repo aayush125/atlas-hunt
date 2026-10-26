@@ -8,11 +8,13 @@
 	let {
 		requests,
 		onRequest,
-		onDonate
+		onDonate,
+		onRequestDelete
 	}: {
 		requests: TreasureRequests;
 		onRequest: (treasureId: string, amount: number) => void;
 		onDonate: (treasureId: string, amount: number, donateTo: string) => void;
+		onRequestDelete: () => void;
 	} = $props();
 
 	let showRequestModal = $state(false);
@@ -94,6 +96,10 @@
 							}}
 						>
 							Donate
+						</button>
+					{:else}
+						<button class="btn shrink-0 btn-sm btn-warning" onclick={onRequestDelete}>
+							Delete Request
 						</button>
 					{/if}
 				</div>

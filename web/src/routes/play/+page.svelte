@@ -386,42 +386,6 @@
 					gameStore.setupGame(game, player, members);
 				}}
 			/>
-			<!-- <GamePlay
-				treasures={mapTreasures}
-				onRequest={(treasureId: string, reqAmount: number) => {
-					sendMessage({
-						type: Events.RequestTreasure,
-						data: {
-							request: {
-								playerId: $gameStore.playerId,
-								treasureId: treasureId,
-								requestedAmount: reqAmount
-							}
-						}
-					});
-				}}
-				onDonate={(treasureId: string, amount: number, donateTo: string) => {
-					sendMessage({
-						type: Events.DonateTreasure,
-						data: {
-							request: {
-								from: $gameStore.playerId,
-								to: donateTo,
-								treasureId: treasureId,
-								donatedAmount: amount
-							}
-						}
-					});
-				}}
-				onClaim={(t) => {
-					mapTreasures = mapTreasures.filter((tr) => tr.instanceId !== t.instanceId);
-					gameStore.addTreasure(t);
-				}}
-				onFail={(t) => {
-					mapTreasures = mapTreasures.filter((tr) => tr.instanceId !== t.instanceId);
-				}}
-				onLeaveGame={leaveGameHandler}
-			/> -->
 		{:else}
 			<CreateGame
 				onJoinGame={() => (gate = 'join')}
@@ -444,6 +408,12 @@
 							requestedAmount: reqAmount
 						}
 					}
+				});
+			}}
+			onRequestDelete={() => {
+				sendMessage({
+					type: Events.DeleteTreasureRequest,
+					data: null
 				});
 			}}
 			onDonate={(treasureId: string, amount: number, donateTo: string) => {

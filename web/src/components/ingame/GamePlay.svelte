@@ -17,7 +17,8 @@
 		onDonate,
 		onClaim,
 		onFail,
-		onLeaveGame
+		onLeaveGame,
+		onRequestDelete
 	}: {
 		treasures: Treasure[];
 		onRequest: (treasureId: string, amount: number) => void;
@@ -25,6 +26,7 @@
 		onClaim: (t: Treasure) => void;
 		onFail: (t: Treasure) => void;
 		onLeaveGame: () => Promise<void>;
+		onRequestDelete: () => void;
 	} = $props();
 
 	let showInfoModal = $state(false);
@@ -170,7 +172,7 @@
 			{:else if activeTab == 'players'}
 				<PlayerList players={$gameStore.otherPlayers} />
 			{:else}
-				<Requests requests={$gameStore.treasureRequests} {onRequest} {onDonate} />
+				<Requests requests={$gameStore.treasureRequests} {onRequest} {onDonate} {onRequestDelete} />
 			{/if}
 		</div>
 	</div>
