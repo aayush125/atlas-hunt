@@ -148,11 +148,7 @@ func (c *Client) canReceiveTreasure(amount int) bool {
 	c.mu.Lock()
 	defer c.mu.Unlock()
 
-	if inventorySize-len(c.inventory) < amount {
-		return false
-	}
-
-	return true
+	return inventorySize-len(c.inventory) >= amount
 }
 
 func (c *Client) TryClaimTreasure(treasureInstanceID uuid.UUID, questionID, selectedAnswer string) (bool, error) {
@@ -335,6 +331,8 @@ func (c *Client) handleMessage(message []byte) {
 			return
 		}
 		c.room.treasureDonationChan <- req
+	case wsmessages.DeleteTreasureRequest:
+		c.room.deleteTreasureRequestChan <- c
 	default:
 		c.logger.Warn("unrecognized message from client", "clientSession", c.session, "message", msg)
 	}

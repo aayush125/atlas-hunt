@@ -197,11 +197,11 @@ func (r *Room) validateDonationRequest(donation treasureDonationPayload) (*Clien
 
 func (r *Room) constructTreasureSetAndDonate(donation treasureDonationPayload, donor, receiver *Client) {
 	treasureInfo := r.engine.GetTreasureInfoFromId(donation.TreasureId)
-	req, _ := r.treasureRequests[donation.To]
+	req := r.treasureRequests[donation.To]
 
 	// construct the treasure set
 	set := []gamedata.InventoryItem{}
-	for _ = range donation.DonatedAmount {
+	for range donation.DonatedAmount {
 		treasure_uuid, err := uuid.NewRandom()
 		if err != nil {
 			r.logger.Error("error generating uuid for donated treasure item", "error", err, "donatingPlayerId", donation.From)
@@ -295,6 +295,29 @@ func (r *Room) constructTreasureSetAndDonate(donation treasureDonationPayload, d
 		},
 		"error sending TreasureReceivedSuccessfully message",
 	)
+
+	r.broadcastMessage(
+		&wsmessages.WSMessageOut{
+			Type: wsmessages.UpdateTreasureRequests,
+			Data: map[string]any{
+				"requests": r.treasureRequests,
+			},
+		},
+		func(online bool, player *Client) bool {
+			return !online
+		},
+		"error sending UpdateTreasureRequests message to player",
+	)
+}
+
+func (r *Room) deleteTreasureRequestForPlayer(player *Client) {
+	_, ok := r.treasureRequests[player.id]
+	if !ok {
+		r.logger.Error("received treasure request delete for non-existent request")
+		return
+	}
+
+	delete(r.treasureRequests, player.id)
 
 	r.broadcastMessage(
 		&wsmessages.WSMessageOut{

@@ -34,7 +34,9 @@ export const Events = {
 	InsufficientInventorySpace: 'player:insufficient:inventory',
 
 	TreasureDonatedSuccessfully: 'game:treasuredonate:successful',
-	TreasureReceivedSuccessfully: 'game:treasurerequest:receive:successful'
+	TreasureReceivedSuccessfully: 'game:treasurerequest:receive:successful',
+
+	DeleteTreasureRequest: 'game:treasurerequest:delete'
 } as const;
 
 export type Event = (typeof Events)[keyof typeof Events];

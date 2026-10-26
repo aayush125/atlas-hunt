@@ -64,36 +64,37 @@ type Game interface {
 }
 
 type Room struct {
-	Players               map[*Client]bool
-	Register              chan *Client
-	Unregister            chan *Client
-	StartGame             chan *Client
-	NextRound             chan *Client
-	NewGame               chan *Client
-	Shutdown              chan struct{}
-	ResumeGame            chan *Client
-	GameModel             Game
-	PlayerModel           Player
-	Code                  string
-	State                 data.GameState
-	lastMap               data.GameMap
-	currentMap            data.GameMap
-	logger                *slog.Logger
-	maxPlayers            int
-	Broadcast             chan *wsmessages.WSMessageOut
-	engine                *engine.Engine
-	PlayerLookup          chan playerLookupRequest
-	NotifyTreasureClaimed chan playerNotification
-	NotifyBonusClaimed    chan playerNotification
-	timer                 *time.Timer
-	resetTimer            chan roundStartData
-	backupTimer           *time.Timer
-	roundEndTime          int64
-	onExit                func(code string)
-	roundTime             time.Duration
-	backupTime            time.Duration
-	ttlResetPeriod        time.Duration
-	treasureRequests      map[string]treasureRequestState // requesting player ID -> treasure request state
-	treasureRequestChan   chan treasureRequestPayload
-	treasureDonationChan  chan treasureDonationPayload
+	Players                   map[*Client]bool
+	Register                  chan *Client
+	Unregister                chan *Client
+	StartGame                 chan *Client
+	NextRound                 chan *Client
+	NewGame                   chan *Client
+	Shutdown                  chan struct{}
+	ResumeGame                chan *Client
+	GameModel                 Game
+	PlayerModel               Player
+	Code                      string
+	State                     data.GameState
+	lastMap                   data.GameMap
+	currentMap                data.GameMap
+	logger                    *slog.Logger
+	maxPlayers                int
+	Broadcast                 chan *wsmessages.WSMessageOut
+	engine                    *engine.Engine
+	PlayerLookup              chan playerLookupRequest
+	NotifyTreasureClaimed     chan playerNotification
+	NotifyBonusClaimed        chan playerNotification
+	timer                     *time.Timer
+	resetTimer                chan roundStartData
+	backupTimer               *time.Timer
+	roundEndTime              int64
+	onExit                    func(code string)
+	roundTime                 time.Duration
+	backupTime                time.Duration
+	ttlResetPeriod            time.Duration
+	treasureRequests          map[string]treasureRequestState // requesting player ID -> treasure request state
+	treasureRequestChan       chan treasureRequestPayload
+	treasureDonationChan      chan treasureDonationPayload
+	deleteTreasureRequestChan chan *Client
 }

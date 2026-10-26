@@ -53,9 +53,10 @@ func NewRoom(
 		backupTime:     backupTime,
 		ttlResetPeriod: ttlResetPeriod,
 
-		treasureRequests:     make(map[string]treasureRequestState),
-		treasureRequestChan:  make(chan treasureRequestPayload),
-		treasureDonationChan: make(chan treasureDonationPayload),
+		treasureRequests:          make(map[string]treasureRequestState),
+		treasureRequestChan:       make(chan treasureRequestPayload),
+		treasureDonationChan:      make(chan treasureDonationPayload),
+		deleteTreasureRequestChan: make(chan *Client),
 	}
 }
 
@@ -219,6 +220,8 @@ func (r *Room) Run() {
 			}
 
 			r.constructTreasureSetAndDonate(donation, donor, receiver)
+		case player := <-r.deleteTreasureRequestChan:
+			r.deleteTreasureRequestForPlayer(player)
 		}
 	}
 }
