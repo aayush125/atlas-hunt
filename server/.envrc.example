@@ -1,0 +1,5 @@
+export CC_REDIS_ADDR=
+export CC_REDIS_PASSWORD=
+export CC_ENVIRONMENT=
+export CC_PORT=
+export CC_ORIGIN=

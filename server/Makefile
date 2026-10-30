@@ -14,7 +14,7 @@ confirm:
 ## run/server: run the cmd/server application
 .PHONY: run/server
 run/server:
-@go run ./cmd/server -port=${CC_PORT} -env=${CC_ENVIRONMENT} -origin=${CC_ORIGIN} -redis-addr=${CC_REDIS_ADDR} -redis-password=${CC_REDIS_PASSWORD}
+	@go run ./cmd/server -port=${CC_PORT} -env=${CC_ENVIRONMENT} -origin=${CC_ORIGIN} -redis-addr=${CC_REDIS_ADDR} -redis-password=${CC_REDIS_PASSWORD}
 
 ## run/race: run the cmd/api application with the Go race detector
 .PHONY: run/race
