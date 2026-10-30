@@ -19,9 +19,9 @@ func (app *application) websocketHandler(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	conn, err := ws.UpgradeToWebsocket(w, r)
+	conn, err := ws.UpgradeToWebsocket(w, r, app.wsupgrader)
 	if err != nil {
-		app.serverErrorResponse(w, r, err)
+		app.logger.Error("error upgrading to websocket", "error", err)
 		return
 	}
 

@@ -12,12 +12,14 @@ import (
 	"atlas.sageyutta.com/internal/engine"
 	"atlas.sageyutta.com/internal/validator"
 	"atlas.sageyutta.com/internal/ws"
+	"github.com/gorilla/websocket"
 	"github.com/redis/go-redis/v9"
 )
 
 type config struct {
 	port          int
 	env           string
+	origin        string
 	redisAddr     string
 	redisPassword string
 }
@@ -32,6 +34,7 @@ type application struct {
 	shuttingDown bool
 	gameRooms    map[string]*ws.Room
 	engine       *engine.Engine
+	wsupgrader   websocket.Upgrader
 }
 
 func main() {
@@ -39,6 +42,7 @@ func main() {
 
 	flag.IntVar(&cfg.port, "port", 4000, "API server port")
 	flag.StringVar(&cfg.env, "env", "development", "Environment (development|staging|production)")
+	flag.StringVar(&cfg.origin, "origin", "http://localhost:5173", "Allowed WebSocket origin")
 	flag.StringVar(&cfg.redisAddr, "redis-addr", "localhost:6379", "Redis address")
 	flag.StringVar(&cfg.redisPassword, "redis-password", "", "Redis password")
 
@@ -77,6 +81,7 @@ func main() {
 		shuttingDown: false,
 		gameRooms:    make(map[string]*ws.Room),
 		engine:       engine.NewEngine(logger),
+		wsupgrader:   ws.NewUpgrader(cfg.origin),
 	}
 
 	err := app.serve()

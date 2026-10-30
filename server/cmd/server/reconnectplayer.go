@@ -20,7 +20,7 @@ func (app *application) reconnectPlayerHandler(w http.ResponseWriter, r *http.Re
 		return
 	}
 
-	conn, err := ws.UpgradeToWebsocket(w, r)
+	conn, err := ws.UpgradeToWebsocket(w, r, app.wsupgrader)
 	if err != nil {
 		app.serverErrorResponse(w, r, err)
 		return

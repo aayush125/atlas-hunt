@@ -11,4 +11,4 @@ FROM scratch
 COPY --from=builder /app/server /server
 EXPOSE 4000
 ENTRYPOINT ["/server"]
-CMD ["-port", "4000", "-env", "production", "-redis-addr", "redis:6379"]
+CMD ["-port", "4000", "-env", "production", "-origin", "https://atlas.sageyutta.com", "-redis-addr", "redis:6379"]
