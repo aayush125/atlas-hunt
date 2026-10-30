@@ -57,3 +57,8 @@ func GetBonusPoints(treasureID string, treasureCount int) (int, error) {
 		return 0, fmt.Errorf("unknown treasure rarity")
 	}
 }
+
+func TreasureExists(treasureId string) bool {
+	_, ok := treasureMap[treasureId]
+	return ok
+}

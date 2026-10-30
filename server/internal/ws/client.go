@@ -323,6 +323,7 @@ func (c *Client) handleMessage(message []byte) {
 			c.logger.Error("ws message unmarshal error", "error", err.Error(), "client", c.session)
 			return
 		}
+		req.PlayerId = c.id
 		c.room.treasureRequestChan <- req
 	case wsmessages.DonateTreasure:
 		var req treasureDonationPayload
@@ -330,6 +331,7 @@ func (c *Client) handleMessage(message []byte) {
 			c.logger.Error("ws message unmarshal error", "error", err.Error(), "client", c.session)
 			return
 		}
+		req.From = c.id
 		c.room.treasureDonationChan <- req
 	case wsmessages.DeleteTreasureRequest:
 		c.room.deleteTreasureRequestChan <- c

@@ -23,7 +23,7 @@ func (r *Room) validateTreasureRequest(request treasureRequestPayload) *Client {
 		return nil
 	}
 
-	if request.RequestedAmount <= 0 {
+	if !gamedata.TreasureExists(request.TreasureId) || request.RequestedAmount <= 0 {
 		r.sendMessageToPlayer(
 			requester,
 			wsmessages.WSMessageOut{
@@ -100,7 +100,7 @@ func (r *Room) validateDonationRequest(donation treasureDonationPayload) (*Clien
 		return nil, nil
 	}
 
-	if donation.DonatedAmount < 0 {
+	if donation.DonatedAmount <= 0 {
 		r.sendMessageToPlayer(
 			donor,
 			wsmessages.WSMessageOut{
@@ -140,6 +140,20 @@ func (r *Room) validateDonationRequest(donation treasureDonationPayload) (*Clien
 				},
 			},
 			"error sending ErrorTreasureRequestNotFound message",
+		)
+		return nil, nil
+	}
+
+	if donation.TreasureId != req.TreasureId {
+		r.sendMessageToPlayer(
+			donor,
+			wsmessages.WSMessageOut{
+				Type: wsmessages.ErrorInvalidTreasureDonateRequest,
+				Data: map[string]any{
+					"request": donation,
+				},
+			},
+			"error sending ErrorInvalidTreasureDonateRequest message",
 		)
 		return nil, nil
 	}
