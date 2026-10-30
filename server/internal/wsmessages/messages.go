@@ -32,10 +32,10 @@ const (
 	DonateTreasure  = WSEvent("game:treasure:donate")  // client->server
 
 	ErrorDonatingTreasure              = WSEvent("game:treasuredonate:error")                           // server->client
-	ErrorInvalidTreasureRequest        = WSEvent("game:treasuredonate:invalid:request")                 // server->client
+	ErrorInvalidTreasureRequest        = WSEvent("game:treasurerequest:invalid:request")                // server->client
 	ErrorInvalidTreasureDonateRequest  = WSEvent("game:treasuredonate:invalid:request")                 // server->client
 	ErrorTreasureRequestNotFound       = WSEvent("game:treasuredonate:request:notfound")                // server->client
-	ErrorDonationSlotsInsufficient     = WSEvent("game:treasuredonate:slots:insufficient ")             // server->client
+	ErrorDonationSlotsInsufficient     = WSEvent("game:treasuredonate:slots:insufficient")              // server->client
 	ErrorInsufficientBalance           = WSEvent("game:treasuredonate:insufficient:balance")            // server->client
 	TreasureRequestAlreadyExists       = WSEvent("game:treasurerequest:exists")                         // server->client
 	ErrorReceiverInventoryInsufficient = WSEvent("game:treasuredonate:receiver:inventory:insufficient") // server->client

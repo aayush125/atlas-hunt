@@ -27,7 +27,7 @@ export const Events = {
 	ErrorInvalidTreasureRequest: 'game:treasurerequest:invalid:request',
 	ErrorInvalidTreasureDonateRequest: 'game:treasuredonate:invalid:request',
 	ErrorTreasureRequestNotFound: 'game:treasuredonate:request:notfound',
-	ErrorDonationSlotsInsufficient: 'game:treasuredonate:slots:insufficient ',
+	ErrorDonationSlotsInsufficient: 'game:treasuredonate:slots:insufficient',
 	ErrorInsufficientBalance: 'game:treasuredonate:insufficient:balance',
 	TreasureRequestAlreadyExists: 'game:treasurerequest:exists',
 	ErrorReceiverInventoryInsufficient: 'game:treasuredonate:receiver:inventory:insufficient',
