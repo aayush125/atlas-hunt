@@ -21,6 +21,15 @@ run/server:
 run/race:
 	@go run -race ./cmd/server -port=${CC_PORT} -env=${CC_ENVIRONMENT} -origin=${CC_ORIGIN} -redis-addr=${CC_REDIS_ADDR} -redis-password=${CC_REDIS_PASSWORD}
 
+# variables for test/server
+PKG ?= ./...
+ARGS ?=
+
+## test/server: run all test files; all `go test` flags supported
+.PHONY: test/server
+test/server:
+	@go test -race -shuffle=on -count=1 $(ARGS) $(PKG)
+
 ## build/server: build the game server
 .PHONY: build/server
 build/server:

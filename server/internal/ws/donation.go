@@ -10,16 +10,7 @@ func (r *Room) validateTreasureRequest(request treasureRequestPayload) *Client {
 	// basic validation
 	requester := r.getPlayerClientFromId(request.PlayerId)
 	if requester == nil {
-		r.sendMessageToPlayer(
-			requester,
-			wsmessages.WSMessageOut{
-				Type: wsmessages.ErrorDonatingTreasure,
-				Data: map[string]any{
-					"request": request,
-				},
-			},
-			"error sending ErrorDonatingTreasure message",
-		)
+		r.logger.Error("received treasure request from non-existent player", "playerId", request.PlayerId)
 		return nil
 	}
 
