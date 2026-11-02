@@ -7,112 +7,162 @@ import (
 	"atlas.sageyutta.com/internal/wsmessages"
 )
 
-func TestTreasureRequestValidation(t *testing.T) {
+func TestTreasureDonationValidation(t *testing.T) {
 	validTreasureID := gamedata.GetAllTreasures()[0].ID
 
 	tests := []struct {
-		name        string
-		setup       func(t *testing.T, p *Client)
-		request     func(p *Client) treasureRequestPayload
-		wantClient  bool
-		wantMsgType wsmessages.WSEvent
+		name            string
+		treasureRequest func(receiver, donor *Client) (string, treasureRequestState)
+		donationRequest func(donor, receiver *Client) treasureDonationPayload
+		receiverSetup   func(t *testing.T, p *Client)
+		wantReturns     bool
+		wantDonorMsg    wsmessages.WSEvent
 	}{
 		{
-			name: "valid treasure",
-			request: func(p *Client) treasureRequestPayload {
-				return treasureRequestPayload{PlayerId: p.id, TreasureId: validTreasureID, RequestedAmount: 10}
+			name: "valid donation",
+			treasureRequest: func(receiver, donor *Client) (string, treasureRequestState) {
+				return receiver.id, treasureRequestState{TreasureId: validTreasureID, RequestedAmount: 10, AmountReceived: 0}
 			},
-			wantClient: true,
+			donationRequest: func(donor, receiver *Client) treasureDonationPayload {
+				return treasureDonationPayload{From: donor.id, To: receiver.id, TreasureId: validTreasureID, DonatedAmount: 10}
+			},
+			wantReturns: true,
 		},
 		{
-			name: "invalid player",
-			request: func(p *Client) treasureRequestPayload {
-				return treasureRequestPayload{PlayerId: "non-existent-player", TreasureId: validTreasureID, RequestedAmount: 10}
+			name: "invalid donor",
+			treasureRequest: func(receiver, donor *Client) (string, treasureRequestState) {
+				return receiver.id, treasureRequestState{TreasureId: validTreasureID, RequestedAmount: 10, AmountReceived: 0}
 			},
+			donationRequest: func(donor, receiver *Client) treasureDonationPayload {
+				return treasureDonationPayload{From: "invalid-donor-id", To: receiver.id, TreasureId: validTreasureID, DonatedAmount: 10}
+			},
+		},
+		{
+			name: "invalid receiver",
+			treasureRequest: func(receiver, donor *Client) (string, treasureRequestState) {
+				return receiver.id, treasureRequestState{TreasureId: validTreasureID, RequestedAmount: 10, AmountReceived: 0}
+			},
+			donationRequest: func(donor, receiver *Client) treasureDonationPayload {
+				return treasureDonationPayload{From: donor.id, To: "invalid-receiver-id", TreasureId: validTreasureID, DonatedAmount: 10}
+			},
+			wantDonorMsg: wsmessages.ErrorInvalidTreasureDonateRequest,
+		},
+		{
+			name: "invalid donor and receiver",
+			treasureRequest: func(receiver, donor *Client) (string, treasureRequestState) {
+				return receiver.id, treasureRequestState{TreasureId: validTreasureID, RequestedAmount: 10, AmountReceived: 0}
+			},
+			donationRequest: func(donor, receiver *Client) treasureDonationPayload {
+				return treasureDonationPayload{From: "invalid-donor-id", To: "invalid-receiver-id", TreasureId: validTreasureID, DonatedAmount: 10}
+			},
+		},
+		{
+			name: "negative donation amount",
+			treasureRequest: func(receiver, donor *Client) (string, treasureRequestState) {
+				return receiver.id, treasureRequestState{TreasureId: validTreasureID, RequestedAmount: 10, AmountReceived: 0}
+			},
+			donationRequest: func(donor, receiver *Client) treasureDonationPayload {
+				return treasureDonationPayload{From: donor.id, To: receiver.id, TreasureId: validTreasureID, DonatedAmount: -1}
+			},
+			wantDonorMsg: wsmessages.ErrorInvalidTreasureDonateRequest,
+		},
+		{
+			name: "zero donation amount",
+			treasureRequest: func(receiver, donor *Client) (string, treasureRequestState) {
+				return receiver.id, treasureRequestState{TreasureId: validTreasureID, RequestedAmount: 10, AmountReceived: 0}
+			},
+			donationRequest: func(donor, receiver *Client) treasureDonationPayload {
+				return treasureDonationPayload{From: donor.id, To: receiver.id, TreasureId: validTreasureID, DonatedAmount: 0}
+			},
+			wantDonorMsg: wsmessages.ErrorInvalidTreasureDonateRequest,
+		},
+		{
+			name: "donating to self",
+			treasureRequest: func(receiver, donor *Client) (string, treasureRequestState) {
+				return donor.id, treasureRequestState{TreasureId: validTreasureID, RequestedAmount: 10, AmountReceived: 0}
+			},
+			donationRequest: func(donor, receiver *Client) treasureDonationPayload {
+				return treasureDonationPayload{From: donor.id, To: donor.id, TreasureId: validTreasureID, DonatedAmount: 10}
+			},
+			wantDonorMsg: wsmessages.ErrorInvalidTreasureDonateRequest,
+		},
+		{
+			name: "non-existent treasure request",
+			donationRequest: func(donor, receiver *Client) treasureDonationPayload {
+				return treasureDonationPayload{From: donor.id, To: receiver.id, TreasureId: validTreasureID, DonatedAmount: 10}
+			},
+			wantDonorMsg: wsmessages.ErrorTreasureRequestNotFound,
 		},
 		{
 			name: "invalid treasure id",
-			request: func(p *Client) treasureRequestPayload {
-				return treasureRequestPayload{PlayerId: p.id, TreasureId: "fk10", RequestedAmount: 10}
+			treasureRequest: func(receiver, donor *Client) (string, treasureRequestState) {
+				return receiver.id, treasureRequestState{TreasureId: validTreasureID, RequestedAmount: 10, AmountReceived: 0}
 			},
-			wantMsgType: wsmessages.ErrorInvalidTreasureRequest,
+			donationRequest: func(donor, receiver *Client) treasureDonationPayload {
+				return treasureDonationPayload{From: donor.id, To: receiver.id, TreasureId: "invalid-treasure-id", DonatedAmount: 10}
+			},
+			wantDonorMsg: wsmessages.ErrorInvalidTreasureDonateRequest,
 		},
 		{
-			name: "empty treasure id",
-			request: func(p *Client) treasureRequestPayload {
-				return treasureRequestPayload{PlayerId: p.id, TreasureId: "", RequestedAmount: 10}
+			name: "insufficient receiver inventory",
+			treasureRequest: func(receiver, donor *Client) (string, treasureRequestState) {
+				return receiver.id, treasureRequestState{TreasureId: validTreasureID, RequestedAmount: 10, AmountReceived: 0}
 			},
-			wantMsgType: wsmessages.ErrorInvalidTreasureRequest,
-		},
-		{
-			name: "insufficient inventory space",
-			setup: func(t *testing.T, p *Client) {
+			donationRequest: func(donor, receiver *Client) treasureDonationPayload {
+				return treasureDonationPayload{From: donor.id, To: receiver.id, TreasureId: validTreasureID, DonatedAmount: 10}
+			},
+			receiverSetup: func(t *testing.T, p *Client) {
 				p.inventory = makeFakeInventory(t, inventorySize)
 			},
-			request: func(p *Client) treasureRequestPayload {
-				return treasureRequestPayload{PlayerId: p.id, TreasureId: validTreasureID, RequestedAmount: 1}
-			},
-			wantMsgType: wsmessages.InsufficientInventorySpace,
+			wantDonorMsg: wsmessages.ErrorReceiverInventoryInsufficient,
 		},
 		{
-			name: "negative amount",
-			request: func(p *Client) treasureRequestPayload {
-				return treasureRequestPayload{PlayerId: p.id, TreasureId: validTreasureID, RequestedAmount: -1}
+			name: "insufficient slots in treasure request",
+			treasureRequest: func(receiver, donor *Client) (string, treasureRequestState) {
+				return receiver.id, treasureRequestState{TreasureId: validTreasureID, RequestedAmount: 10, AmountReceived: 5}
 			},
-			wantMsgType: wsmessages.ErrorInvalidTreasureRequest,
-		},
-		{
-			name: "zero amount",
-			request: func(p *Client) treasureRequestPayload {
-				return treasureRequestPayload{PlayerId: p.id, TreasureId: validTreasureID, RequestedAmount: 0}
+			donationRequest: func(donor, receiver *Client) treasureDonationPayload {
+				return treasureDonationPayload{From: donor.id, To: receiver.id, TreasureId: validTreasureID, DonatedAmount: 10}
 			},
-			wantMsgType: wsmessages.ErrorInvalidTreasureRequest,
-		},
-		{
-			name: "one treasure requested for one free inventory slot",
-			setup: func(t *testing.T, p *Client) {
-				p.inventory = makeFakeInventory(t, inventorySize-1)
-			},
-			request: func(p *Client) treasureRequestPayload {
-				return treasureRequestPayload{PlayerId: p.id, TreasureId: validTreasureID, RequestedAmount: 1}
-			},
-			wantClient: true,
-		},
-		{
-			name: "two treasures requested for one free inventory slot",
-			setup: func(t *testing.T, p *Client) {
-				p.inventory = makeFakeInventory(t, inventorySize-1)
-			},
-			request: func(p *Client) treasureRequestPayload {
-				return treasureRequestPayload{PlayerId: p.id, TreasureId: validTreasureID, RequestedAmount: 2}
-			},
-			wantMsgType: wsmessages.InsufficientInventorySpace,
+			wantDonorMsg: wsmessages.ErrorDonationSlotsInsufficient,
 		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			room, _ := initializeFakeRoom(t)
-			player := initializeFakeClient(t, room, "player", false)
-			room.Players[player] = true
+			receiver := initializeFakeClient(t, room, "receiver", false)
+			donor := initializeFakeClient(t, room, "donor", false)
+			room.Players[receiver] = true
+			room.Players[donor] = true
 
-			if tt.setup != nil {
-				tt.setup(t, player)
+			if tt.treasureRequest != nil {
+				id, state := tt.treasureRequest(receiver, donor)
+				room.treasureRequests[id] = state
 			}
 
-			got := room.validateTreasureRequest(tt.request(player))
-
-			if (got == player) != tt.wantClient {
-				t.Errorf("validateTreasureRequest returned %v; wantClient=%v", got, tt.wantClient)
+			if tt.receiverSetup != nil {
+				tt.receiverSetup(t, receiver)
 			}
 
-			if tt.wantMsgType == "" {
-				expectNoMsg(t, player)
-			} else if msg := recvMsg(t, player); msg.Type != tt.wantMsgType {
-				t.Errorf("player got %v; want %v", msg.Type, tt.wantMsgType)
+			donorClient, receiverClient := room.validateDonationRequest(tt.donationRequest(donor, receiver))
+
+			if tt.wantReturns {
+				if donorClient != donor || receiverClient != receiver {
+					t.Errorf("got %p & %p; want %p & %p", donorClient, receiverClient, donor, receiver)
+				}
+			} else if donorClient != nil || receiverClient != nil {
+				t.Errorf("expected nil, nil on failure; got %p & %p", donorClient, receiverClient)
 			}
 
-			expectNoMsg(t, player)
+			if tt.wantDonorMsg == "" {
+				expectNoMsg(t, donor)
+			} else if msg := recvMsg(t, donor); msg.Type != tt.wantDonorMsg {
+				t.Errorf("donor got %v; want %v", msg.Type, tt.wantDonorMsg)
+			}
+
+			expectNoMsg(t, donor)
+			expectNoMsg(t, receiver)
 		})
 	}
 }

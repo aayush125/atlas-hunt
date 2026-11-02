@@ -88,6 +88,18 @@ func (r *Room) validateDonationRequest(donation treasureDonationPayload) (*Clien
 
 	if donor == nil || receiver == nil {
 		r.logger.Error("receiver or donor nil")
+		if donor != nil {
+			r.sendMessageToPlayer(
+				donor,
+				wsmessages.WSMessageOut{
+					Type: wsmessages.ErrorInvalidTreasureDonateRequest,
+					Data: map[string]any{
+						"request": donation,
+					},
+				},
+				"error sending ErrorInvalidTreasureDonateRequest message",
+			)
+		}
 		return nil, nil
 	}
 
